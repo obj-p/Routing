@@ -17,8 +17,11 @@ public class Routing {
     public init() {}
     
     public func add(route: String, handler: RouteHandler) -> Void {
-        let rm = { [weak self] (string: String) -> (RouteHandler?, [String : String]?) in
-            let _ = self?.matchers(string)
+        let rm = { [weak self] (aRoute: String) -> (RouteHandler?, [String : String]?) in
+            let patterns = self?.patterns(route)
+            
+            let ranges = patterns?.regex
+                .map{ self?.ranges(aRoute, regex: $0) }
             
             return (nil, nil)
         }
@@ -38,12 +41,10 @@ public class Routing {
         return false
     }
     
-    func matchers(route: String) -> (regex: String?, keys: [String]?) {
+    func patterns(route: String) -> (regex: String?, keys: [String]?) {
         var regex: String! = "^\(route)/?$"
         
-        let ranges = (try? NSRegularExpression(pattern: ":[a-zA-Z0-9-_]+", options: .CaseInsensitive))
-            .map { $0.matchesInString(regex, options: [], range: NSMakeRange(0, regex.characters.count)) }?
-            .map { $0.range }
+        let ranges = self.ranges(regex, regex: ":[a-zA-Z0-9-_]+")
         
         let parameters = ranges?
             .map { (regex as NSString).substringWithRange($0) }
@@ -55,6 +56,12 @@ public class Routing {
             .reduce(regex) { $0.stringByReplacingOccurrencesOfString($1, withString: "([^/]+)") }
         
         return (regex, keys)
+    }
+    
+    func ranges(string: String, regex: String) -> [NSRange]? {
+        return (try? NSRegularExpression(pattern: regex, options: .CaseInsensitive))
+            .map { $0.matchesInString(string, options: [], range: NSMakeRange(0, string.characters.count)) }?
+            .map { $0.range }
     }
     
 }
