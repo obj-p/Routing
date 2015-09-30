@@ -17,22 +17,21 @@ public struct Routing {
     
     public init() {}
     
-    public func route(matcher: String, handler: RouteHandler...) -> Void {
-        
-    }
+    public func route(matcher: String, handler: RouteHandler) -> Void { }
     
     public func open(URL: NSURL) -> Bool {
         let route = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
             .map { "/" + ($0.host ?? "") + ($0.path ?? "") }
         
         if let matched = route.map({ (route) -> [(RouteHandler?, [String : String]?)] in self.matchers.map { ($0.0(route), $0.1(route)) } }) {
-            for case (let handler, let parameters) in matched where handler != nil {
-                handler!(parameters: parameters ?? [:]); return true
-            }
+            for case (let handler, let parameters) in matched where handler != nil { handler!(parameters: parameters ?? [:]) }
+            return true
         }
         
         return false
     }
+    
+    func regex(string: String) -> String? { return nil }
 }
 
 
