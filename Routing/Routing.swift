@@ -25,12 +25,12 @@ public struct Routing {
         let route = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
             .map { "/" + ($0.host ?? "") + ($0.path ?? "") }
         
-        let matched = route.map { (route) -> [(RouteHandler?, [String : String]?)] in self.matchers.map { ($0.0(route), $0.1(route)) } }?
-            .filter { $0.0 != nil }
-        if matched == nil { return false }
+        if let matched = route.map({ (route) -> [(RouteHandler?, [String : String]?)] in self.matchers.map { ($0.0(route), $0.1(route)) } })?
+            .filter({ $0.0 != nil }) {
+                for case (let handler, let parameters) in matched { handler!(parameters: parameters ?? [:]); return true }
+        }
         
-        for case (let handler, let parameters) in matched! { handler!(parameters: parameters ?? [:]) }
-        return true
+        return false
     }
 }
 
