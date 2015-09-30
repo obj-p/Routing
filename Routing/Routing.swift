@@ -12,25 +12,25 @@ public class Routing {
     public typealias RouteHandler = (parameters: [String : String]) -> Void
     public typealias RouteMatcher = (String) -> (RouteHandler?, [String : String]?)
     
-    public var matchers: [RouteMatcher] = [RouteMatcher]()
+    public var routes: [RouteMatcher] = [RouteMatcher]()
     
     public init() {}
     
-    public func route(matcher: String, handler: RouteHandler) -> Void {
+    public func add(route: String, handler: RouteHandler) -> Void {
         let rm = { [weak self] (string: String) -> (RouteHandler?, [String : String]?) in
-            let _ = self?.regexAndKeys(string)
+            let _ = self?.matchers(string)
             
             return (nil, nil)
         }
         
-        self.matchers.append(rm)
+        self.routes.append(rm)
     }
     
     public func open(URL: NSURL) -> Bool {
         let route = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
             .map { "/" + ($0.host ?? "") + ($0.path ?? "") }
         
-        if let matched = route.map({ (route) -> [(RouteHandler?, [String : String]?)] in self.matchers.map { $0(route) } }) {
+        if let matched = route.map({ (route) -> [(RouteHandler?, [String : String]?)] in self.routes.map { $0(route) } }) {
             for case (let handler, let parameters) in matched where handler != nil { handler!(parameters: parameters ?? [:]) }
             return true
         }
@@ -38,7 +38,7 @@ public class Routing {
         return false
     }
     
-    func regexAndKeys(string: String) -> (regex: String?, keys: [String]?) {
+    func matchers(route: String) -> (regex: String?, keys: [String]?) {
         var regex: String! = "^\(route)/?$"
         
         let ranges = (try? NSRegularExpression(pattern: ":[a-zA-Z0-9-_]+", options: .CaseInsensitive))
