@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Routing {
+public class Routing {
     public typealias RouteHandler = (parameters: [String : String]) -> Void
     public typealias RouteMatcher = (String) -> RouteHandler?
     public typealias ParameterMatcher = (String) -> [String : String]?
@@ -17,7 +17,13 @@ public struct Routing {
     
     public init() {}
     
-    public func route(matcher: String, handler: RouteHandler) -> Void { }
+    public func route(matcher: String, handler: RouteHandler) -> Void {
+        let _ = regex(matcher)
+        
+        let rm = { (string: String) -> RouteHandler? in return nil }
+        let pm = { (string: String) -> [String : String]? in return nil }
+        self.matchers.append((rm, pm))
+    }
     
     public func open(URL: NSURL) -> Bool {
         let route = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
