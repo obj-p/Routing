@@ -17,7 +17,9 @@ public class Routing {
     public init() {}
     
     public func route(matcher: String, handler: RouteHandler) -> Void {
-        let rm = { (string: String) -> (RouteHandler?, [String : String]?) in
+        let rm = { [weak self] (string: String) -> (RouteHandler?, [String : String]?) in
+            let _ = self?.regexAndKeys(string)
+            
             return (nil, nil)
         }
         
@@ -36,7 +38,7 @@ public class Routing {
         return false
     }
     
-    func matchers(string: String) -> (regex: String?, keys: [String]?) {
+    func regexAndKeys(string: String) -> (regex: String?, keys: [String]?) {
         var regex: String! = "^\(route)/?$"
         
         let ranges = (try? NSRegularExpression(pattern: ":[a-zA-Z0-9-_]+", options: .CaseInsensitive))
