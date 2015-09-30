@@ -17,10 +17,11 @@ public class Routing {
     public init() {}
     
     public func route(matcher: String, handler: RouteHandler) -> Void {
-//        let (_, _) = matchers(matcher)
-//        let rm = { (String) -> RouteMatcher? in return nil }
-//        
-//        self.matchers.append(rm)
+        let rm = { (string: String) -> (RouteHandler?, [String : String]?) in
+            return (nil, nil)
+        }
+        
+        self.matchers.append(rm)
     }
     
     public func open(URL: NSURL) -> Bool {
@@ -34,9 +35,6 @@ public class Routing {
         
         return false
     }
-
-    static let urlParameterPattern = "([^/]+)"
-    let urlParameter: NSRegularExpression = try! NSRegularExpression(pattern: urlParameterPattern, options: .CaseInsensitive)
     
     func matchers(string: String) -> (regex: String?, keys: [String]?) {
         var regex: String! = "^\(route)/?$"
