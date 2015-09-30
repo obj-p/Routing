@@ -11,9 +11,9 @@ import Foundation
 public struct Routing {
     public typealias RouteHandler = (parameters: [String : String]) -> Void
     public typealias RouteMatcher = (String) -> RouteHandler?
-    public typealias VariableMatcher = (String) -> [String : String]?
+    public typealias ParameterMatcher = (String) -> [String : String]?
     
-    public var matchers: [(RouteMatcher, VariableMatcher)] = [(RouteMatcher, VariableMatcher)]()
+    public var matchers: [(RouteMatcher, ParameterMatcher)] = [(RouteMatcher, ParameterMatcher)]()
     
     public init() {}
     
@@ -25,9 +25,10 @@ public struct Routing {
         let route = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
             .map { "/" + ($0.host ?? "") + ($0.path ?? "") }
         
-        if let matched = route.map({ (route) -> [(RouteHandler?, [String : String]?)] in self.matchers.map { ($0.0(route), $0.1(route)) } })?
-            .filter({ $0.0 != nil }) {
-                for case (let handler, let parameters) in matched { handler!(parameters: parameters ?? [:]); return true }
+        if let matched = route.map({ (route) -> [(RouteHandler?, [String : String]?)] in self.matchers.map { ($0.0(route), $0.1(route)) } }) {
+            for case (let handler, let parameters) in matched where handler != nil {
+                handler!(parameters: parameters ?? [:]); return true
+            }
         }
         
         return false
