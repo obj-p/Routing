@@ -36,8 +36,17 @@ public class Routing {
         
         return false
     }
+
+    static let urlParameterPattern = "([^/]+)"
+    let urlParameter: NSRegularExpression = try! NSRegularExpression(pattern: urlParameterPattern, options: .CaseInsensitive)
     
-    func regex(string: String) -> String? { return nil }
+    func regex(string: String) -> String? {
+        let _ = (try? NSRegularExpression(pattern: ":[a-zA-Z0-9-_]+", options: .CaseInsensitive))
+            .map { $0.matchesInString("^\(string)/?$", options: [], range: NSMakeRange(0, string.characters.count))}
+        
+        return nil
+    }
+    
 }
 
 
