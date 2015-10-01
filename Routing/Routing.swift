@@ -24,13 +24,13 @@ public class Routing {
                 .map { self?.matchResults(aRoute, regex: $0)?.first }?
                 .flatMap { $0 }
 
-            if let m = match {
-                for i in 1 ..< m.numberOfRanges {
-                    let _ = patterns!.1![i-1]
-                    let _ = (aRoute as NSString).substringWithRange(m.rangeAtIndex(i))
+            if let m = match, let keys = patterns?.keys {
+                var parameters: [String : String] = [:]
+                for i in 1 ..< m.numberOfRanges where keys.count == m.numberOfRanges - 1 {
+                    parameters.updateValue((aRoute as NSString).substringWithRange(m.rangeAtIndex(i)), forKey: keys[i-1])
                 }
                 
-                return (handler, nil)
+                return (handler, parameters)
             }
             
             return (nil, nil)

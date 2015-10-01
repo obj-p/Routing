@@ -29,13 +29,11 @@ let match = patterns?.0
     .map { matchResults(aRoute, regex: $0)?.first }?
     .flatMap { $0 }
 
-var values: [(String, String)] = []
-if let m = match  {
-    for i in 1 ..< m.numberOfRanges {
-        let name = patterns!.1![i-1]
-        let value = (aRoute as NSString).substringWithRange(match!.rangeAtIndex(i))
-        values.append((name, value))
+var p: [String : String] = [:]
+if let m = match, let k = patterns?.1  {
+    for i in 1 ..< m.numberOfRanges where k.count == m.numberOfRanges - 1 {
+        p.updateValue((aRoute as NSString).substringWithRange(match!.rangeAtIndex(i)), forKey: k[i-1])
     }
 }
 
-print(values)
+print(p)
