@@ -30,7 +30,7 @@ public class Routing {
                     let _ = (aRoute as NSString).substringWithRange(m.rangeAtIndex(i))
                 }
                 
-                return (RouteHandler, nil)
+                return (handler, nil)
             }
             
             return (nil, nil)
@@ -51,7 +51,7 @@ public class Routing {
         return false
     }
     
-    func patterns(route: String) -> (regex: String?, keys: [String]?) {
+    private func patterns(route: String) -> (regex: String?, keys: [String]?) {
         var regex: String! = "^\(route)/?$"
         
         let ranges = self.matchResults(regex, regex: ":[a-zA-Z0-9-_]+")?
@@ -69,7 +69,7 @@ public class Routing {
         return (regex, keys)
     }
     
-    func matchResults(string: String, regex: String) -> [NSTextCheckingResult]? {
+    private func matchResults(string: String, regex: String) -> [NSTextCheckingResult]? {
         return (try? NSRegularExpression(pattern: regex, options: .CaseInsensitive))
             .map { $0.matchesInString(string, options: [], range: NSMakeRange(0, string.characters.count)) }
     }
