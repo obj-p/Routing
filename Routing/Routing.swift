@@ -9,6 +9,11 @@
 import Foundation
 
 public class Routing {
+    public typealias ProxyHandler = ([String : String]) -> Void
+    public typealias ProxyMatcher = (String) -> (ProxyHandler?, [String : String])
+    
+    private var proxies: [ProxyMatcher] = [ProxyMatcher]()
+    
     public typealias RouteHandler = ([String : String]) -> Void
     public typealias RouteMatcher = (String) -> (RouteHandler?, [String : String])
     
@@ -38,6 +43,8 @@ public class Routing {
         
         self.routes.append(rm)
     }
+    
+    public func proxy(route: String, handler: ProxyHandler) -> Void {}
     
     public func open(URL: NSURL) -> Bool {
         let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
