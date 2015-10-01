@@ -12,7 +12,7 @@ public class Routing {
     public typealias RouteHandler = (parameters: [String : String]) -> Void
     public typealias RouteMatcher = (String) -> (RouteHandler?, [String : String]?)
     
-    public var routes: [RouteMatcher] = [RouteMatcher]()
+    private var routes: [RouteMatcher] = [RouteMatcher]()
     
     public init() {}
     
