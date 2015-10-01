@@ -9,7 +9,7 @@
 import Foundation
 
 public class Routing {
-    public typealias RouteHandler = (parameters: [String : String]) -> Void
+    public typealias RouteHandler = ([String : String]) -> Void
     public typealias RouteMatcher = (String) -> (RouteHandler?, [String : String])
     
     private var routes: [RouteMatcher] = [RouteMatcher]()
@@ -53,7 +53,7 @@ public class Routing {
         if let matched = route.map({ (route) -> [(RouteHandler?, [String : String])] in self.routes.map { $0(route) } }) {
             for case (let handler, var parameters) in matched where handler != nil {
                 for item in queryItems { parameters[item.0] = item.1 }
-                handler!(parameters: parameters)
+                handler!(parameters)
             }
             
             return true
