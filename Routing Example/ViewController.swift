@@ -12,7 +12,9 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    }
+    
+    @IBAction func openURL(sender: AnyObject) {
         UIApplication.sharedApplication().openURL(NSURL(string: "routingexample://route/one/1234")!)
     }
 

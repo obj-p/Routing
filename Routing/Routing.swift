@@ -23,7 +23,7 @@ public class Routing {
             let match = patterns?.regex
                 .map { self?.matchResults(aRoute, regex: $0)?.first }?
                 .flatMap { $0 }
-
+            
             if let m = match, let keys = patterns?.keys {
                 var parameters: [String : String] = [:]
                 for i in 1 ..< m.numberOfRanges where keys.count == m.numberOfRanges - 1 {
@@ -50,16 +50,14 @@ public class Routing {
             .reduce([String : String]()) { (var dict, item) in dict.updateValue((item.value ?? ""), forKey: item.name); return dict }
             ?? [:]
         
-        if let matched = route.map({ (route) -> [(RouteHandler?, [String : String])] in self.routes.map { $0(route) } }) {
-            for case (let handler, var parameters) in matched where handler != nil {
+        return route
+            .map { (route) -> [(RouteHandler?, [String : String])] in self.routes.map { $0(route) } }?
+            .filter { $0.0 != nil }
+            .map { (handler, var parameters) -> (RouteHandler, [String : String]) in
                 for item in queryItems { parameters[item.0] = item.1 }
                 handler!(parameters)
-            }
-            
-            return true
-        }
-        
-        return false
+                return (handler!, parameters)
+            }.isEmpty == false ?? false
     }
     
     private func patterns(route: String) -> (regex: String?, keys: [String]?) {
@@ -84,5 +82,5 @@ public class Routing {
         return (try? NSRegularExpression(pattern: regex, options: .CaseInsensitive))
             .map { $0.matchesInString(string, options: [], range: NSMakeRange(0, string.characters.count)) }
     }
-
+    
 }
