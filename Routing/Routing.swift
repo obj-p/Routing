@@ -10,14 +10,14 @@ import Foundation
 
 public class Routing {
     public typealias RouteHandler = (parameters: [String : String]) -> Void
-    public typealias RouteMatcher = (String) -> (RouteHandler?, [String : String]?)
+    public typealias RouteMatcher = (String) -> (RouteHandler?, [String : String])
     
     private var routes: [RouteMatcher] = [RouteMatcher]()
     
     public init() {}
     
     public func add(route: String, handler: RouteHandler) -> Void {
-        let rm = { [weak self] (aRoute: String) -> (RouteHandler?, [String : String]?) in
+        let rm = { [weak self] (aRoute: String) -> (RouteHandler?, [String : String]) in
             let patterns = self?.patterns(route)
             
             let match = patterns?.regex
@@ -33,7 +33,7 @@ public class Routing {
                 return (handler, parameters)
             }
             
-            return (nil, nil)
+            return (nil, [:])
         }
         
         self.routes.append(rm)
@@ -53,10 +53,9 @@ public class Routing {
                 return dict
         }
         
-        if let matched = route.map({ (route) -> [(RouteHandler?, [String : String]?)] in self.routes.map { $0(route) } }) {
+        if let matched = route.map({ (route) -> [(RouteHandler?, [String : String])] in self.routes.map { $0(route) } }) {
             for case (let handler, let parameters) in matched where handler != nil {
-                
-                handler!(parameters: parameters ?? [:])
+                handler!(parameters: parameters)
             }
             return true
         }
