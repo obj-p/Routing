@@ -46,17 +46,18 @@ public class Routing {
             .map { "/" + ($0.host ?? "") + ($0.path ?? "") }
         
         let queryItems = components
-            .map { $0.queryItems }?
-            .flatMap { $0 }?
+            .map { $0.queryItems }??
             .reduce([String : String]()) { (var dict, query) in
                 dict.updateValue((query.value ?? ""), forKey: query.name)
                 return dict
-        }
+            } ?? [:]
         
         if let matched = route.map({ (route) -> [(RouteHandler?, [String : String])] in self.routes.map { $0(route) } }) {
-            for case (let handler, let parameters) in matched where handler != nil {
+            for case (let handler, var parameters) in matched where handler != nil {
+                for item in queryItems { parameters[item.0] = item.1 }
                 handler!(parameters: parameters)
             }
+            
             return true
         }
         
