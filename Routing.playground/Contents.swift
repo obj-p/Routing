@@ -1,8 +1,20 @@
 import Foundation
 
-let string = NSURLComponents(URL: NSURL(string:"http://google/api/:id/:foo")!, resolvingAgainstBaseURL: false)
+let components = NSURLComponents(URL: NSURL(string:"http://google/api/:id/:foo?bar=1&baz=2")!, resolvingAgainstBaseURL: false)
+
+let string = components
     .map { "/" + ($0.host ?? "") + ($0.path ?? "") }
     ?? ""
+
+let queryItems = components
+    .map { $0.queryItems }?
+    .flatMap { $0 }?
+    .reduce([String : String?]()) { (var dict, query) in
+        dict.updateValue(query.value, forKey: query.name)
+        return dict
+}
+
+print(queryItems)
 
 let route = "/route/one/:id/:foo"
 var regex: String! = "^\(route)/?$"

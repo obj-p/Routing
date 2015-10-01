@@ -40,11 +40,24 @@ public class Routing {
     }
     
     public func open(URL: NSURL) -> Bool {
-        let route = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
+        let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
+        
+        let route = components
             .map { "/" + ($0.host ?? "") + ($0.path ?? "") }
         
+        let queryItems = components
+            .map { $0.queryItems }?
+            .flatMap { $0 }?
+            .reduce([String : String]()) { (var dict, query) in
+                dict.updateValue((query.value ?? ""), forKey: query.name)
+                return dict
+        }
+        
         if let matched = route.map({ (route) -> [(RouteHandler?, [String : String]?)] in self.routes.map { $0(route) } }) {
-            for case (let handler, let parameters) in matched where handler != nil { handler!(parameters: parameters ?? [:]) }
+            for case (let handler, let parameters) in matched where handler != nil {
+                
+                handler!(parameters: parameters ?? [:])
+            }
             return true
         }
         
