@@ -9,7 +9,7 @@
 import Foundation
 
 public class Routing {
-    public typealias ProxyHandler = ([String : String]) -> Void
+    public typealias ProxyHandler = (String, [String : String]) -> (String, [String : String])
     public typealias ProxyMatcher = (String) -> (ProxyHandler?, [String : String])
     
     private var proxies: [ProxyMatcher] = [ProxyMatcher]()
