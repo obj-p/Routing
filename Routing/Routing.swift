@@ -8,18 +8,20 @@
 
 import Foundation
 
+public typealias ProxyHandler = (String, [String : String]) -> (String, [String : String])
+private typealias ProxyMatcher = (String) -> (ProxyHandler?, [String : String])
+
+public typealias RouteHandler = ([String : String]) -> Void
+private typealias RouteMatcher = (String) -> (RouteHandler?, [String : String])
+
 public class Routing {
-    private typealias ProxyMatcher = (String) -> (ProxyHandler?, [String : String])
     private var proxies: [ProxyMatcher] = [ProxyMatcher]()
-    private typealias RouteMatcher = (String) -> (RouteHandler?, [String : String])
     private var routes: [RouteMatcher] = [RouteMatcher]()
     
     public init() {}
     
-    public typealias RouteHandler = ([String : String]) -> Void
     public func add(route: String, handler: RouteHandler) -> Void { self.routes.append(self.routingMatcher(route, handler: handler)) }
     
-    public typealias ProxyHandler = (String, [String : String]) -> (String, [String : String])
     public func proxy(route: String, handler: ProxyHandler) -> Void { self.proxies.append(self.routingMatcher(route, handler: handler)) }
     
     public func open(URL: NSURL) -> Bool {
@@ -33,17 +35,27 @@ public class Routing {
             .reduce([String : String]()) { (var dict, item) in dict.updateValue((item.value ?? ""), forKey: item.name); return dict }
             ?? [:]
         
-        return route
-            .map { (route) -> [(RouteHandler?, [String : String])] in self.routes.map { $0(route) } }?
+        let proxy = route
+            .map { (route) -> [(ProxyHandler?, [String : String])] in self.proxies.map { $0(route) } }?
             .filter { $0.0 != nil }
-            .map { (handler, var parameters) -> (RouteHandler, [String : String]) in
+            .first
+            .map { (handler, var parameters) -> (String, [String : String]) in
                 for item in queryItems { parameters[item.0] = item.1 }
-                handler!(parameters)
-                return (handler!, parameters)
-            }.isEmpty == false ?? false
+                return handler!(route!, parameters)
+            }
+        
+        return route
+            .map { (route) -> [(RouteHandler?, [String : String])] in self.routes.map { $0(proxy?.0 ?? route) } }?
+            .filter { $0.0 != nil }
+            .first
+            .map { (handler, var parameters) -> (RouteHandler, [String : String]) in
+                for item in queryItems where proxy?.1 == nil { parameters[item.0] = item.1 }
+                handler!(proxy?.1 ?? parameters)
+                return (handler!, proxy?.1 ?? parameters)
+            } != nil
     }
     
-    func routingMatcher<RoutingHandler>(route: String, handler: RoutingHandler) -> ((String) -> (RoutingHandler?, [String : String])) {
+    private func routingMatcher<RoutingHandler>(route: String, handler: RoutingHandler) -> ((String) -> (RoutingHandler?, [String : String])) {
         return { [weak self] (aRoute: String) -> (RoutingHandler?, [String : String]) in
             let patterns = self?.patterns(route)
             
