@@ -9,18 +9,15 @@
 import Foundation
 
 public class Routing {
-    public typealias ProxyHandler = (String, [String : String]) -> (String, [String : String])
     public typealias ProxyMatcher = (String) -> (ProxyHandler?, [String : String])
-    
     private var proxies: [ProxyMatcher] = [ProxyMatcher]()
     
-    public typealias RouteHandler = ([String : String]) -> Void
     public typealias RouteMatcher = (String) -> (RouteHandler?, [String : String])
-    
     private var routes: [RouteMatcher] = [RouteMatcher]()
     
     public init() {}
     
+    public typealias RouteHandler = ([String : String]) -> Void
     public func add(route: String, handler: RouteHandler) -> Void {
         let rm = { [weak self] (aRoute: String) -> (RouteHandler?, [String : String]) in
             let patterns = self?.patterns(route)
@@ -29,8 +26,8 @@ public class Routing {
                 .map { self?.matchResults(aRoute, regex: $0)?.first }?
                 .flatMap { $0 }
             
+            var parameters: [String : String] = [:]
             if let m = match, let keys = patterns?.keys {
-                var parameters: [String : String] = [:]
                 for i in 1 ..< m.numberOfRanges where keys.count == m.numberOfRanges - 1 {
                     parameters.updateValue((aRoute as NSString).substringWithRange(m.rangeAtIndex(i)), forKey: keys[i-1])
                 }
@@ -38,12 +35,13 @@ public class Routing {
                 return (handler, parameters)
             }
             
-            return (nil, [:])
+            return (nil, parameters)
         }
         
         self.routes.append(rm)
     }
     
+    public typealias ProxyHandler = (String, [String : String]) -> (String, [String : String])
     public func proxy(route: String, handler: ProxyHandler) -> Void {}
     
     public func open(URL: NSURL) -> Bool {
