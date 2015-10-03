@@ -7,16 +7,36 @@
 //
 
 import UIKit
+import Routing
 
 class ViewController: UIViewController {
-
+    
+    @IBOutlet weak var button: UIButton!
+    
+    var enableProxy = false
+    var router = Routing.sharedRouter
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        router.proxy("/route/one/:color") { [weak self] (route, var parameters) in
+            if self?.enableProxy == true { parameters["color"] = "blue" }
+            return (route, parameters)
+        }
     }
     
     @IBAction func openURL(sender: AnyObject) {
-        UIApplication.sharedApplication().openURL(NSURL(string: "routingexample://route/one/1234")!)
+        UIApplication.sharedApplication().openURL(NSURL(string: "routingexample://route/one/red")!)
     }
 
+    @IBAction func Proxy(sender: AnyObject) {
+        self.enableProxy = self.enableProxy == false
+        if self.enableProxy {
+            self.button.setTitle("Disable Proxy", forState: UIControlState.Normal)
+        } else {
+            self.button.setTitle("Enable Proxy", forState: UIControlState.Normal)
+        }
+    }
+    
 }
 
