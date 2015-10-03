@@ -8,22 +8,21 @@
 
 import Foundation
 
-public typealias ProxyHandler = (String, [String : String]) -> (String, [String : String])
-private typealias ProxyMatcher = (String) -> (ProxyHandler?, [String : String])
-
-public typealias RouteHandler = ([String : String]) -> Void
-private typealias RouteMatcher = (String) -> (RouteHandler?, [String : String])
-
 public class Routing {
+    private typealias ProxyMatcher = (String) -> (ProxyHandler?, [String : String])
     private var proxies: [ProxyMatcher] = [ProxyMatcher]()
+
+    private typealias RouteMatcher = (String) -> (RouteHandler?, [String : String])
     private var routes: [RouteMatcher] = [RouteMatcher]()
     
     public init() {}
-    
-    public func add(route: String, handler: RouteHandler) -> Void { self.routes.append(self.routingMatcher(route, handler: handler)) }
-    
+
+    public typealias ProxyHandler = (String, [String : String]) -> (String, [String : String])
     public func proxy(route: String, handler: ProxyHandler) -> Void { self.proxies.append(self.routingMatcher(route, handler: handler)) }
-    
+
+    public typealias RouteHandler = ([String : String]) -> Void
+    public func add(route: String, handler: RouteHandler) -> Void { self.routes.append(self.routingMatcher(route, handler: handler)) }
+
     public func open(URL: NSURL) -> Bool {
         let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
         
