@@ -9,18 +9,20 @@
 import Foundation
 
 public class Routing {
-    private typealias ProxyMatcher = (String) -> (ProxyHandler?, [String : String])
+    public typealias Parameters = [String : String]
+    
+    private typealias ProxyMatcher = (String) -> (ProxyHandler?, Parameters)
     private var proxies: [ProxyMatcher] = [ProxyMatcher]()
 
-    private typealias RouteMatcher = (String) -> (RouteHandler?, [String : String])
+    private typealias RouteMatcher = (String) -> (RouteHandler?, Parameters)
     private var routes: [RouteMatcher] = [RouteMatcher]()
     
     public init() {}
 
-    public typealias ProxyHandler = (String, [String : String]) -> (String, [String : String])
+    public typealias ProxyHandler = (String, Parameters) -> (String, Parameters)
     public func proxy(route: String, handler: ProxyHandler) -> Void { self.proxies.append(self.routingMatcher(route, handler: handler)) }
 
-    public typealias RouteHandler = ([String : String]) -> Void
+    public typealias RouteHandler = (Parameters) -> Void
     public func add(route: String, handler: RouteHandler) -> Void { self.routes.append(self.routingMatcher(route, handler: handler)) }
 
     public func open(URL: NSURL) -> Bool {
@@ -30,39 +32,39 @@ public class Routing {
             .map { "/" + ($0.host ?? "") + ($0.path ?? "") }
         
         let queryItems = components
-            .map { $0.queryItems }??
-            .reduce([String : String]()) { (var dict, item) in dict.updateValue((item.value ?? ""), forKey: item.name); return dict }
+            .flatMap { $0.queryItems }?
+            .reduce(Parameters()) { (var dict, item) in dict.updateValue((item.value ?? ""), forKey: item.name); return dict }
             ?? [:]
         
         let proxy = route
-            .map { (route) -> [(ProxyHandler?, [String : String])] in self.proxies.map { $0(route) } }?
+            .map { (route) -> [(ProxyHandler?, Parameters)] in self.proxies.map { $0(route) } }?
             .filter { $0.0 != nil }
             .first
-            .map { (handler, var parameters) -> (String, [String : String]) in
+            .map { (handler, var parameters) -> (String, Parameters) in
                 for item in queryItems { parameters[item.0] = item.1 }
                 return handler!(route!, parameters)
             }
         
         return route
-            .map { (route) -> [(RouteHandler?, [String : String])] in self.routes.map { $0(proxy?.0 ?? route) } }?
+            .map { (route) -> [(RouteHandler?, Parameters)] in self.routes.map { $0(proxy?.0 ?? route) } }?
             .filter { $0.0 != nil }
             .first
-            .map { (handler, var parameters) -> (RouteHandler, [String : String]) in
+            .map { (handler, var parameters) -> (RouteHandler, Parameters) in
                 for item in queryItems where proxy?.1 == nil { parameters[item.0] = item.1 }
                 handler!(proxy?.1 ?? parameters)
                 return (handler!, proxy?.1 ?? parameters)
             } != nil
     }
     
-    private func routingMatcher<RoutingHandler>(route: String, handler: RoutingHandler) -> ((String) -> (RoutingHandler?, [String : String])) {
-        return { [weak self] (aRoute: String) -> (RoutingHandler?, [String : String]) in
+    private func routingMatcher<RoutingHandler>(route: String, handler: RoutingHandler) -> ((String) -> (RoutingHandler?, Parameters)) {
+        return { [weak self] (aRoute: String) -> (RoutingHandler?, Parameters) in
             let patterns = self?.patterns(route)
             
             let match = patterns?.regex
-                .map { self?.matchResults(aRoute, regex: $0)?.first }?
-                .flatMap { $0 }
+                .flatMap { self?.matchResults(aRoute, regex: $0) }?
+                .first
             
-            var parameters: [String : String] = [:]
+            var parameters: Parameters = [:]
             if let m = match, let keys = patterns?.keys {
                 for i in 1 ..< m.numberOfRanges where keys.count == m.numberOfRanges - 1 {
                     parameters.updateValue((aRoute as NSString).substringWithRange(m.rangeAtIndex(i)), forKey: keys[i-1])
