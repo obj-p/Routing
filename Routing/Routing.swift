@@ -11,6 +11,13 @@ import Foundation
 public class Routing {
     public typealias Parameters = [String : String]
     
+    enum Matcher {
+        case Proxy((String) -> (ProxyHandler?, Parameters))
+        case Route((String) -> (RouteHandler?, Parameters))
+    }
+    
+    private var matchers: [Matcher] = [Matcher]()
+    
     private typealias ProxyMatcher = (String) -> (ProxyHandler?, Parameters)
     private var proxies: [ProxyMatcher] = [ProxyMatcher]()
 
@@ -20,10 +27,10 @@ public class Routing {
     public init() {}
 
     public typealias ProxyHandler = (String, Parameters) -> (String, Parameters)
-    public func proxy(route: String, handler: ProxyHandler) -> Void { self.proxies.append(self.routingMatcher(route, handler: handler)) }
+    public func proxy(route: String, handler: ProxyHandler) -> Void { self.proxies.append(self.matcher(route, handler: handler)) }
 
     public typealias RouteHandler = (Parameters) -> Void
-    public func add(route: String, handler: RouteHandler) -> Void { self.routes.append(self.routingMatcher(route, handler: handler)) }
+    public func add(route: String, handler: RouteHandler) -> Void { self.routes.append(self.matcher(route, handler: handler)) }
 
     public func open(URL: NSURL) -> Bool {
         let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
@@ -56,8 +63,8 @@ public class Routing {
             } != nil
     }
     
-    private func routingMatcher<RoutingHandler>(route: String, handler: RoutingHandler) -> ((String) -> (RoutingHandler?, Parameters)) {
-        return { [weak self] (aRoute: String) -> (RoutingHandler?, Parameters) in
+    private func matcher<H>(route: String, handler: H) -> ((String) -> (H?, Parameters)) {
+        return { [weak self] (aRoute: String) -> (H?, Parameters) in
             let patterns = self?.patterns(route)
             
             let match = patterns?.regex
