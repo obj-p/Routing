@@ -11,49 +11,51 @@ import Foundation
 public class Routing {
     public typealias Parameters = [String : String]
     
-    enum Matcher {
+    public typealias ProxyHandler = (String, Parameters) -> (String, Parameters)
+    public typealias RouteHandler = (Parameters) -> Void
+    
+    enum RouteClosures {
         case Proxy((String) -> (ProxyHandler?, Parameters))
         case Route((String) -> (RouteHandler?, Parameters))
     }
     
-    private var matchers: [Matcher] = [Matcher]()
-    
-    private typealias ProxyMatcher = (String) -> (ProxyHandler?, Parameters)
-    private var proxies: [ProxyMatcher] = [ProxyMatcher]()
-
-    private typealias RouteMatcher = (String) -> (RouteHandler?, Parameters)
-    private var routes: [RouteMatcher] = [RouteMatcher]()
+    private var routes: [RouteClosures] = [RouteClosures]()
     
     public init() {}
-
-    public typealias ProxyHandler = (String, Parameters) -> (String, Parameters)
-    public func proxy(route: String, handler: ProxyHandler) -> Void { self.proxies.append(self.matcher(route, handler: handler)) }
-
-    public typealias RouteHandler = (Parameters) -> Void
-    public func add(route: String, handler: RouteHandler) -> Void { self.routes.append(self.matcher(route, handler: handler)) }
-
+    
+    public func proxy(pattern: String, handler: ProxyHandler) -> Void { self.routes.append(.Proxy(self.matcher(pattern, handler: handler))) }
+    public func route(pattern: String, handler: RouteHandler) -> Void { self.routes.append(.Route(self.matcher(pattern, handler: handler))) }
+    
     public func open(URL: NSURL) -> Bool {
         let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
         
-        let route = components
+        let route: String! = components
             .map { "/" + ($0.host ?? "") + ($0.path ?? "") }
+        
+        if route == nil { return false }
         
         let queryItems = components
             .flatMap { $0.queryItems }?
             .reduce(Parameters()) { (var dict, item) in dict.updateValue((item.value ?? ""), forKey: item.name); return dict }
             ?? [:]
         
-        let proxy = route
-            .map { (route) -> [(ProxyHandler?, Parameters)] in self.proxies.map { $0(route) } }?
+        let proxy = self.routes
+            .map { closure -> (ProxyHandler?, Parameters) in
+                if case let .Proxy(f) = closure { return f(route) }
+                else { return (nil, [String : String]())}
+            }
             .filter { $0.0 != nil }
             .first
             .map { (handler, var parameters) -> (String, Parameters) in
                 for item in queryItems { parameters[item.0] = item.1 }
                 return handler!(route!, parameters)
-            }
+        }
         
-        return route
-            .map { (route) -> [(RouteHandler?, Parameters)] in self.routes.map { $0(proxy?.0 ?? route) } }?
+        return self.routes
+            .map { closure -> (RouteHandler?, Parameters) in
+                if case let .Route(f) = closure { return f(proxy?.0 ?? route) }
+                else { return (nil, [String : String]())}
+            }
             .filter { $0.0 != nil }
             .first
             .map { (handler, var parameters) -> (RouteHandler, Parameters) in

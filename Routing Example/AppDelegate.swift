@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var vc = UIViewController()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        router.add("/route/one/:color") { (parameters) in
+        router.route("/route/one/:color") { (parameters) in
             self.vc.view.bounds = self.window!.frame
             
             switch parameters["color"]! {
