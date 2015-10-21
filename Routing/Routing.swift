@@ -14,15 +14,18 @@ public class Routing {
     public typealias ProxyHandler = (String, Parameters) -> (String, Parameters)
     public typealias RouteHandler = (Parameters) -> Void
     
-    enum RouteClosures {
+    enum Routes {
         case Proxy((String) -> (ProxyHandler?, Parameters))
         case Route((String) -> (RouteHandler?, Parameters))
     }
     
-    private var routes: [RouteClosures] = [RouteClosures]()
+    private var routes: [Routes] = [Routes]()
     
     public init() {}
     
+    // TODO: Consider making proxy async callback
+    // Follow ember.js route redirecting/async/promises 
+    // Maybe refactor accordingly
     public func proxy(pattern: String, handler: ProxyHandler) -> Void { self.routes.append(.Proxy(self.matcher(pattern, handler: handler))) }
     public func route(pattern: String, handler: RouteHandler) -> Void { self.routes.append(.Route(self.matcher(pattern, handler: handler))) }
     
