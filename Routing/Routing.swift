@@ -24,7 +24,7 @@ public class Routing {
     public init() {}
     
     public func proxy(pattern: String, handler: ProxyHandler) -> Void { self.routes.append(.Proxy(self.matcher(pattern, handler: handler))) }
-    public func route(pattern: String, handler: RouteHandler) -> Void { self.routes.append(.Route(self.matcher(pattern, handler: handler))) }
+    public func map(pattern: String, handler: RouteHandler) -> Void { self.routes.append(.Route(self.matcher(pattern, handler: handler))) }
     
     public func open(URL: NSURL) -> Bool {
         let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
@@ -68,10 +68,7 @@ public class Routing {
     private func matcher<H>(route: String, handler: H) -> ((String) -> (H?, Parameters)) {
         return { [weak self] (aRoute: String) -> (H?, Parameters) in
             let patterns = self?.patterns(route)
-            
-            let match = patterns?.regex
-                .flatMap { self?.matchResults(aRoute, regex: $0) }?
-                .first
+            let match = patterns?.regex.flatMap { self?.matchResults(aRoute, regex: $0) }?.first
             
             var parameters: Parameters = [:]
             if let m = match, let keys = patterns?.keys {
@@ -88,18 +85,11 @@ public class Routing {
     
     private func patterns(route: String) -> (regex: String?, keys: [String]?) {
         var regex: String! = "^\(route)/?$"
+        let ranges = self.matchResults(regex, regex: ":[a-zA-Z0-9-_]+")?.map { $0.range }
+        let parameters = ranges?.map { (regex as NSString).substringWithRange($0) }
         
-        let ranges = self.matchResults(regex, regex: ":[a-zA-Z0-9-_]+")?
-            .map { $0.range }
-        
-        let parameters = ranges?
-            .map { (regex as NSString).substringWithRange($0) }
-        
-        let keys = parameters?
-            .map { $0.stringByReplacingOccurrencesOfString(":", withString: "") }
-        
-        regex = parameters?
-            .reduce(regex) { $0.stringByReplacingOccurrencesOfString($1, withString: "([^/]+)") }
+        regex = parameters?.reduce(regex) { $0.stringByReplacingOccurrencesOfString($1, withString: "([^/]+)") }
+        let keys = parameters?.map { $0.stringByReplacingOccurrencesOfString(":", withString: "") }
         
         return (regex, keys)
     }
