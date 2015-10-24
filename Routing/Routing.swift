@@ -29,10 +29,9 @@ public class Routing {
     public func open(URL: NSURL) -> Bool {
         let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
         
-        let route: String! = components
-            .map { "/" + ($0.host ?? "") + ($0.path ?? "") }
-        
-        if route == nil { return false }
+        guard let route = components.map({ "/" + ($0.host ?? "") + ($0.path ?? "") }) else {
+            return false
+        }
         
         let queryItems = components
             .flatMap { $0.queryItems }?
@@ -48,7 +47,7 @@ public class Routing {
             .first
             .map { (handler, var parameters) -> (String, Parameters) in
                 for item in queryItems { parameters[item.0] = item.1 }
-                return handler!(route!, parameters)
+                return handler!(route, parameters)
         }
         
         return self.routes
@@ -70,16 +69,16 @@ public class Routing {
             let patterns = self?.patterns(route)
             let match = patterns?.regex.flatMap { self?.matchResults(aRoute, regex: $0) }?.first
             
-            var parameters: Parameters = [:]
-            if let m = match, let keys = patterns?.keys {
-                for i in 1 ..< m.numberOfRanges where keys.count == m.numberOfRanges - 1 {
-                    parameters.updateValue((aRoute as NSString).substringWithRange(m.rangeAtIndex(i)), forKey: keys[i-1])
-                }
-                
-                return (handler, parameters)
+            guard let m = match, let keys = patterns?.keys else {
+                return (nil, [:])
             }
             
-            return (nil, parameters)
+            var parameters: Parameters = [:]
+            for i in 1 ..< m.numberOfRanges where keys.count == m.numberOfRanges - 1 {
+                parameters.updateValue((aRoute as NSString).substringWithRange(m.rangeAtIndex(i)), forKey: keys[i-1])
+            }
+            
+            return (handler, parameters)
         }
     }
     
