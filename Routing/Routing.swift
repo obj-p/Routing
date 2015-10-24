@@ -69,13 +69,13 @@ public class Routing {
             let patterns = self?.patterns(route)
             let match = patterns?.regex.flatMap { self?.matchResults(aRoute, regex: $0) }?.first
             
-            guard let m = match, let keys = patterns?.keys else {
+            guard let m = match, let keys = patterns?.keys where keys.count == m.numberOfRanges - 1 else {
                 return (nil, [:])
             }
             
-            var parameters: Parameters = [:]
-            for i in 1 ..< m.numberOfRanges where keys.count == m.numberOfRanges - 1 {
-                parameters.updateValue((aRoute as NSString).substringWithRange(m.rangeAtIndex(i)), forKey: keys[i-1])
+            let parameters = [Int](1 ..< m.numberOfRanges).reduce(Parameters()) { (var p, i) in
+                p[keys[i-1]] = (aRoute as NSString).substringWithRange(m.rangeAtIndex(i))
+                return p
             }
             
             return (handler, parameters)
