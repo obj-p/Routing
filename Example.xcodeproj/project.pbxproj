@@ -56,7 +56,7 @@
 
 /* Begin PBXFileReference section */
 		924DA8321BBD6DDB00F059CE /* Routing.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Routing.xcodeproj; sourceTree = "<group>"; };
-		92E79B7A1BBD6D3500069929 /* Routing Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Routing Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		92E79B7A1BBD6D3500069929 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E79B7D1BBD6D3500069929 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92E79B7F1BBD6D3500069929 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		92E79B821BBD6D3500069929 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 		92E79B711BBD6D3500069929 = {
 			isa = PBXGroup;
 			children = (
-				92E79B7C1BBD6D3500069929 /* Routing Example */,
+				92E79B7C1BBD6D3500069929 /* Example */,
 				92E79B7B1BBD6D3500069929 /* Products */,
 				924DA8321BBD6DDB00F059CE /* Routing.xcodeproj */,
 			);
@@ -98,12 +98,12 @@
 		92E79B7B1BBD6D3500069929 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				92E79B7A1BBD6D3500069929 /* Routing Example.app */,
+				92E79B7A1BBD6D3500069929 /* Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		92E79B7C1BBD6D3500069929 /* Routing Example */ = {
+		92E79B7C1BBD6D3500069929 /* Example */ = {
 			isa = PBXGroup;
 			children = (
 				92E79B7D1BBD6D3500069929 /* AppDelegate.swift */,
@@ -113,15 +113,15 @@
 				92E79B861BBD6D3500069929 /* LaunchScreen.storyboard */,
 				92E79B891BBD6D3500069929 /* Info.plist */,
 			);
-			path = "Routing Example";
+			path = Example;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		92E79B791BBD6D3500069929 /* Routing Example */ = {
+		92E79B791BBD6D3500069929 /* Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 92E79B8C1BBD6D3500069929 /* Build configuration list for PBXNativeTarget "Routing Example" */;
+			buildConfigurationList = 92E79B8C1BBD6D3500069929 /* Build configuration list for PBXNativeTarget "Example" */;
 			buildPhases = (
 				92E79B761BBD6D3500069929 /* Sources */,
 				92E79B771BBD6D3500069929 /* Frameworks */,
@@ -133,9 +133,9 @@
 			dependencies = (
 				924DA83E1BBD6DE300F059CE /* PBXTargetDependency */,
 			);
-			name = "Routing Example";
+			name = Example;
 			productName = "Routing Example";
-			productReference = 92E79B7A1BBD6D3500069929 /* Routing Example.app */;
+			productReference = 92E79B7A1BBD6D3500069929 /* Example.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -152,7 +152,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 92E79B751BBD6D3500069929 /* Build configuration list for PBXProject "Routing Example" */;
+			buildConfigurationList = 92E79B751BBD6D3500069929 /* Build configuration list for PBXProject "Example" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -171,7 +171,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				92E79B791BBD6D3500069929 /* Routing Example */,
+				92E79B791BBD6D3500069929 /* Example */,
 			);
 		};
 /* End PBXProject section */
@@ -334,9 +334,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				INFOPLIST_FILE = "Routing Example/Info.plist";
+				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.Routing-Example";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -346,9 +346,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				INFOPLIST_FILE = "Routing Example/Info.plist";
+				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.Routing-Example";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -356,7 +356,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		92E79B751BBD6D3500069929 /* Build configuration list for PBXProject "Routing Example" */ = {
+		92E79B751BBD6D3500069929 /* Build configuration list for PBXProject "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				92E79B8A1BBD6D3500069929 /* Debug */,
@@ -365,7 +365,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		92E79B8C1BBD6D3500069929 /* Build configuration list for PBXNativeTarget "Routing Example" */ = {
+		92E79B8C1BBD6D3500069929 /* Build configuration list for PBXNativeTarget "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				92E79B8D1BBD6D3500069929 /* Debug */,

@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  Routing Example
+//  Example
 //
 //  Created by Jason Prasad on 10/1/15.
 //  Copyright © 2015 Routing. All rights reserved.
@@ -24,11 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         router.map("/route/one/:color") { (parameters) in
             self.vc.view.bounds = self.window!.frame
             
+            let textField = UITextField()
+            textField.text = "Tap to dismiss view"
+            textField.frame.origin = CGPointMake(10,20)
+            textField.sizeToFit()
+            self.vc.view.addSubview(textField)
+            
             switch parameters["color"]! {
             case "red":
                 self.vc.view.backgroundColor = UIColor.redColor()
-            case "blue":
-                self.vc.view.backgroundColor = UIColor.blueColor()
             default:
                 self.vc.view.backgroundColor = UIColor.greenColor()
             }

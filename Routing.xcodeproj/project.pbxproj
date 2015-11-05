@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		92FCFA051BB963CD00DF05C3 /* Routing.h in Headers */ = {isa = PBXBuildFile; fileRef = 92FCFA041BB963CD00DF05C3 /* Routing.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; settings = {ASSET_TAGS = (); }; };
+		92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
 		92FCFA111BB963CD00DF05C3 /* RoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingTests.swift */; };
-		92FCFA1C1BB9658D00DF05C3 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; settings = {ASSET_TAGS = (); }; };
+		92FCFA1C1BB9658D00DF05C3 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,8 +55,8 @@
 		92FCF9F71BB963CD00DF05C3 = {
 			isa = PBXGroup;
 			children = (
-				92FCFA031BB963CD00DF05C3 /* Routing */,
-				92FCFA0F1BB963CD00DF05C3 /* RoutingTests */,
+				92FCFA031BB963CD00DF05C3 /* Source */,
+				92FCFA0F1BB963CD00DF05C3 /* Tests */,
 				92FCFA021BB963CD00DF05C3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -70,23 +70,23 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		92FCFA031BB963CD00DF05C3 /* Routing */ = {
+		92FCFA031BB963CD00DF05C3 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				92FCFA041BB963CD00DF05C3 /* Routing.h */,
 				92FCFA1B1BB9658D00DF05C3 /* Routing.swift */,
 				92FCFA061BB963CD00DF05C3 /* Info.plist */,
 			);
-			path = Routing;
+			path = Source;
 			sourceTree = "<group>";
 		};
-		92FCFA0F1BB963CD00DF05C3 /* RoutingTests */ = {
+		92FCFA0F1BB963CD00DF05C3 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				92FCFA101BB963CD00DF05C3 /* RoutingTests.swift */,
 				92FCFA121BB963CD00DF05C3 /* Info.plist */,
 			);
-			path = RoutingTests;
+			path = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -317,10 +317,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Routing/Info.plist;
+				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.routing.Routing;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -335,10 +335,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Routing/Info.plist;
+				INFOPLIST_FILE = Source/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.routing.Routing;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -347,9 +347,9 @@
 		92FCFA191BB963CD00DF05C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = RoutingTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.routing.RoutingTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -357,9 +357,9 @@
 		92FCFA1A1BB963CD00DF05C3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = RoutingTests/Info.plist;
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.routing.RoutingTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  Routing Example
+//  Example
 //
 //  Created by Jason Prasad on 10/1/15.
 //  Copyright © 2015 Routing. All rights reserved.
@@ -20,7 +20,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         router.proxy("/route/one/:color") { [weak self] (route, var parameters) in
-            if self?.enableProxy == true { parameters["color"] = "blue" }
+            if self?.enableProxy == true { parameters["color"] = "red" }
             return (route, parameters)
         }
     }
