@@ -10,9 +10,10 @@ import Foundation
 
 public class Routing {
     public typealias Parameters = [String : String]
+    public typealias Completed = () -> Void
     
     public typealias ProxyHandler = (String, Parameters) -> (String, Parameters)
-    public typealias RouteHandler = (Parameters) -> Void
+    public typealias RouteHandler = (Parameters, Completed) -> Void
     
     enum Routes {
         case Proxy((String) -> (ProxyHandler?, Parameters))
@@ -50,18 +51,28 @@ public class Routing {
                 return handler!(route, parameters)
         }
         
-        return self.routes
-            .map { closure -> (RouteHandler?, Parameters) in
-                if case let .Route(f) = closure { return f(proxy?.0 ?? route) }
-                else { return (nil, [String : String]())}
-            }
-            .filter { $0.0 != nil }
-            .first
-            .map { (handler, var parameters) -> (RouteHandler, Parameters) in
-                for item in queryItems where proxy?.1 == nil { parameters[item.0] = item.1 }
-                handler!(proxy?.1 ?? parameters)
-                return (handler!, proxy?.1 ?? parameters)
-            } != nil
+        let semaphore = dispatch_semaphore_create(0)
+        var result = false
+        dispatch_async(dispatch_queue_create("Router Queue", nil)) { () -> Void in
+            result = self.routes
+                .map { closure -> (RouteHandler?, Parameters) in
+                    if case let .Route(f) = closure { return f(proxy?.0 ?? route) }
+                    else { return (nil, [String : String]())}
+                }
+                .filter { $0.0 != nil }
+                .first
+                .map { (handler, var parameters) -> (RouteHandler, Parameters) in
+                    for item in queryItems where proxy?.1 == nil { parameters[item.0] = item.1 }
+                    handler!(proxy?.1 ?? parameters) {
+                        dispatch_semaphore_signal(semaphore)
+                    }
+                    return (handler!, proxy?.1 ?? parameters)
+                } != nil
+        }
+        
+        let waitUntil = dispatch_time(DISPATCH_TIME_FOREVER, 0)
+        let _ = dispatch_semaphore_wait(semaphore, waitUntil)
+        return result
     }
     
     private func matcher<H>(route: String, handler: H) -> ((String) -> (H?, Parameters)) {

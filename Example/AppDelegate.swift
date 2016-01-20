@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var vc = UIViewController()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        router.map("/route/one/:color") { (parameters) in
+        router.map("/route/one/:color") { (parameters, completed) in
             self.vc.view.bounds = self.window!.frame
             
             let textField = UITextField()
@@ -39,6 +39,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             self.vc.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissVC"))
             self.window?.rootViewController?.showViewController(self.vc, sender: self)
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(10 * Double(NSEC_PER_SEC))), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
+                completed()
+            })
         }
                 
         return true
