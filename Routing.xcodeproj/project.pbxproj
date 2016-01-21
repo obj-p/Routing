@@ -14,6 +14,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		921803AD1C512A7500BC3B1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 921803A81C512A7500BC3B1B /* Example.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 92E79B7A1BBD6D3500069929;
+			remoteInfo = Example;
+		};
 		92FCFA0D1BB963CD00DF05C3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 92FCF9F81BB963CD00DF05C3 /* Project object */;
@@ -24,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		921803A81C512A7500BC3B1B /* Example.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Example.xcodeproj; sourceTree = "<group>"; };
 		92FCFA011BB963CD00DF05C3 /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92FCFA041BB963CD00DF05C3 /* Routing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Routing.h; sourceTree = "<group>"; };
 		92FCFA061BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -52,12 +60,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		921803A91C512A7500BC3B1B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				921803AE1C512A7500BC3B1B /* Example.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		92FCF9F71BB963CD00DF05C3 = {
 			isa = PBXGroup;
 			children = (
 				92FCFA031BB963CD00DF05C3 /* Source */,
 				92FCFA0F1BB963CD00DF05C3 /* Tests */,
 				92FCFA021BB963CD00DF05C3 /* Products */,
+				921803A81C512A7500BC3B1B /* Example.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -167,6 +184,12 @@
 			mainGroup = 92FCF9F71BB963CD00DF05C3;
 			productRefGroup = 92FCFA021BB963CD00DF05C3 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 921803A91C512A7500BC3B1B /* Products */;
+					ProjectRef = 921803A81C512A7500BC3B1B /* Example.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				92FCFA001BB963CD00DF05C3 /* Routing */,
@@ -174,6 +197,16 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		921803AE1C512A7500BC3B1B /* Example.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Example.app;
+			remoteRef = 921803AD1C512A7500BC3B1B /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		92FCF9FF1BB963CD00DF05C3 /* Resources */ = {
