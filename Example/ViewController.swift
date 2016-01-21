@@ -26,7 +26,10 @@ class ViewController: UIViewController {
     }
     
     @IBAction func openURL(sender: AnyObject) {
-        UIApplication.sharedApplication().openURL(NSURL(string: "routingexample://route/one/green")!)
+        router.open(NSURL(string: "routingexample://route/one/green")!)
+        router.open(NSURL(string: "routingexample://route/two")!)
+        router.open(NSURL(string: "routingexample://route/two")!)
+        router.open(NSURL(string: "routingexample://route/two")!)
     }
 
     @IBAction func Proxy(sender: AnyObject) {

@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             let textField = UITextField()
             textField.text = "Tap to dismiss view"
-            textField.frame.origin = CGPointMake(10,20)
+            textField.frame.origin = CGPointMake(10,80)
             textField.sizeToFit()
             self.vc.view.addSubview(textField)
             
@@ -38,12 +38,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
             self.vc.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "dismissVC"))
-            self.window?.rootViewController?.showViewController(self.vc, sender: self)
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(10 * Double(NSEC_PER_SEC))), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), { () -> Void in
-                completed()
-            })
+            let navController = UINavigationController(rootViewController: self.vc)
+            self.window?.rootViewController?.presentViewController(navController, animated: true, completion: completed)
         }
-                
+        
+        router.map("/route/two") { (parameters, completed) in
+            let vc2 = UIViewController()
+            vc2.view.bounds = self.window!.frame
+            vc2.view.backgroundColor = UIColor.blueColor()
+            
+            CATransaction.begin()
+            CATransaction.setCompletionBlock(completed)
+            self.vc.navigationController?.pushViewController(vc2, animated: true)
+            CATransaction.commit()
+        }
+        
         return true
     }
 
