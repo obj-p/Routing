@@ -24,6 +24,7 @@ public class Routing {
     
     public init() {}
     
+    // TODO: make these write operatious barrier asyncs to prevent an open URL from executing while updating routes.
     public func proxy(pattern: String, handler: ProxyHandler) -> Void { self.routes.append(.Proxy(self.matcher(pattern, handler: handler))) }
     public func map(pattern: String, handler: RouteHandler) -> Void { self.routes.append(.Route(self.matcher(pattern, handler: handler))) }
     
