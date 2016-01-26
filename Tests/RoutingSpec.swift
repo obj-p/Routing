@@ -32,7 +32,7 @@ class RoutingSpec: QuickSpec {
                     }
                     
                     Routing.sharedRouter.open(NSURL(string: "routingexample://route/")!)
-                    expect(isOpened).to(equal(true))
+                    expect(isOpened).toEventually(equal(true))
                 }
                 
                 it("should pass url arguments specified in the route in the parameters dictionary") {
@@ -44,19 +44,19 @@ class RoutingSpec: QuickSpec {
                     }
                     
                     Routing.sharedRouter.open(NSURL(string: "routingexample://route/expected")!)
-                    expect(argument).to(equal("expected"))
+                    expect(argument).toEventually(equal("expected"))
                 }
                 
                 it("should pass query parameters specified in the route in the parameters dictionary") {
-                    let route = "/route"
+                    let route = "/routeExpectingQueryParameters"
                     var param: String?
                     Routing.sharedRouter.map(route) { (parameters, completed) in
                         param = parameters["param"]
                         completed()
                     }
                     
-                    Routing.sharedRouter.open(NSURL(string: "routingexample://route?param=expected")!)
-                    expect(param).to(equal("expected"))
+                    Routing.sharedRouter.open(NSURL(string: "routingexample://routeExpectingQueryParameters?param=expected")!)
+                    expect(param).toEventually(equal("expected"))
                 }
                 
             }
