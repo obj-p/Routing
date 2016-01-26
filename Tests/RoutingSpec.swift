@@ -26,8 +26,9 @@ class RoutingSpec: QuickSpec {
                 it("should call the binded closure corresponding to the opened route") {
                     let route = "/route"
                     var isOpened = false
-                    Routing.sharedRouter.map(route) { (parameters) in
+                    Routing.sharedRouter.map(route) { (parameters, completed) in
                         isOpened = true
+                        completed()
                     }
                     
                     Routing.sharedRouter.open(NSURL(string: "routingexample://route/")!)
@@ -37,8 +38,9 @@ class RoutingSpec: QuickSpec {
                 it("should pass url arguments specified in the route in the parameters dictionary") {
                     let route = "/route/:argument"
                     var argument: String?
-                    Routing.sharedRouter.map(route) { (parameters) in
+                    Routing.sharedRouter.map(route) { (parameters, completed) in
                         argument = parameters["argument"]
+                        completed()
                     }
                     
                     Routing.sharedRouter.open(NSURL(string: "routingexample://route/expected")!)
@@ -48,8 +50,9 @@ class RoutingSpec: QuickSpec {
                 it("should pass query parameters specified in the route in the parameters dictionary") {
                     let route = "/route"
                     var param: String?
-                    Routing.sharedRouter.map(route) { (parameters) in
+                    Routing.sharedRouter.map(route) { (parameters, completed) in
                         param = parameters["param"]
+                        completed()
                     }
                     
                     Routing.sharedRouter.open(NSURL(string: "routingexample://route?param=expected")!)
