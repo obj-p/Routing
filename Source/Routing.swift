@@ -15,12 +15,12 @@ public class Routing {
     public typealias ProxyHandler = (String, Parameters) -> (String, Parameters)
     public typealias RouteHandler = (Parameters, Completed) -> Void
     
-    enum Routes {
+    enum RouteType {
         case Proxy((String) -> (ProxyHandler?, Parameters))
         case Route((String) -> (RouteHandler?, Parameters))
     }
     
-    private var routes: [Routes] = [Routes]()
+    private var routes: [RouteType] = [RouteType]()
     
     public init() {}
     
