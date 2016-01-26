@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		92FCFA051BB963CD00DF05C3 /* Routing.h in Headers */ = {isa = PBXBuildFile; fileRef = 92FCFA041BB963CD00DF05C3 /* Routing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
-		92FCFA111BB963CD00DF05C3 /* RoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingTests.swift */; };
+		92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
 		92FCFA1C1BB9658D00DF05C3 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
+		D2F5D0561C570ECB00317401 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F5D0551C570ECB00317401 /* Nimble.framework */; };
+		D2F5D0581C570ECF00317401 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F5D0571C570ECF00317401 /* Quick.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,9 +30,11 @@
 		92FCFA041BB963CD00DF05C3 /* Routing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Routing.h; sourceTree = "<group>"; };
 		92FCFA061BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92FCFA0B1BB963CD00DF05C3 /* RoutingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoutingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		92FCFA101BB963CD00DF05C3 /* RoutingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingTests.swift; sourceTree = "<group>"; };
+		92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingSpec.swift; sourceTree = "<group>"; };
 		92FCFA121BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92FCFA1B1BB9658D00DF05C3 /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
+		D2F5D0551C570ECB00317401 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
+		D2F5D0571C570ECF00317401 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +50,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */,
+				D2F5D0561C570ECB00317401 /* Nimble.framework in Frameworks */,
+				D2F5D0581C570ECF00317401 /* Quick.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,6 +61,7 @@
 		92FCF9F71BB963CD00DF05C3 = {
 			isa = PBXGroup;
 			children = (
+				D2F5D0591C570ED600317401 /* Frameworks */,
 				92FCFA031BB963CD00DF05C3 /* Source */,
 				92FCFA0F1BB963CD00DF05C3 /* Tests */,
 				92FCFA021BB963CD00DF05C3 /* Products */,
@@ -83,10 +90,19 @@
 		92FCFA0F1BB963CD00DF05C3 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				92FCFA101BB963CD00DF05C3 /* RoutingTests.swift */,
+				92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */,
 				92FCFA121BB963CD00DF05C3 /* Info.plist */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		D2F5D0591C570ED600317401 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D2F5D0571C570ECF00317401 /* Quick.framework */,
+				D2F5D0551C570ECB00317401 /* Nimble.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -128,6 +144,7 @@
 				92FCFA071BB963CD00DF05C3 /* Sources */,
 				92FCFA081BB963CD00DF05C3 /* Frameworks */,
 				92FCFA091BB963CD00DF05C3 /* Resources */,
+				D2A0660F1C57159E000F4DC8 /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -192,6 +209,25 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		D2A0660F1C57159E000F4DC8 /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Quick.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Nimble.framework",
+			);
+			name = Carthage;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		92FCF9FC1BB963CD00DF05C3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -205,7 +241,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92FCFA111BB963CD00DF05C3 /* RoutingTests.swift in Sources */,
+				92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +383,10 @@
 		92FCFA191BB963CD00DF05C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
@@ -357,6 +397,10 @@
 		92FCFA1A1BB963CD00DF05C3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
