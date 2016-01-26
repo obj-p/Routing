@@ -1,8 +1,7 @@
-# Mac OS X
 .DS_Store
 
-# Xcode
 build/
+DerivedData
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -14,8 +13,7 @@ build/
 xcuserdata
 *.xccheckout
 *.moved-aside
-DerivedData
-*.hmap
-*.ipa
 *.xcuserstate
 *.xcscmblueprint
+
+Carthage

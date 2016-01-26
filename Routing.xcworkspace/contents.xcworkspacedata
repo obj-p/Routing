@@ -4,4 +4,7 @@
    <FileRef
       location = "container:Routing.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Example.xcodeproj">
+   </FileRef>
 </Workspace>
