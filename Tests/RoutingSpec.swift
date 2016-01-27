@@ -11,52 +11,70 @@ import Quick
 import Nimble
 @testable import Routing
 
-extension Routing {
-    static var sharedRouter = { Routing() }()
-}
-
 class RoutingSpec: QuickSpec {
     
     override func spec() {
         
         describe("Routing") {
+            var router: Routing!
+            beforeEach {
+                router = Routing()
+            }
             
             context("#open") {
                 
                 it("should call the binded closure corresponding to the opened route") {
-                    let route = "/route"
                     var isOpened = false
-                    Routing.sharedRouter.map(route) { (parameters, completed) in
+                    router.map("/route") { (parameters, completed) in
                         isOpened = true
                         completed()
                     }
                     
-                    Routing.sharedRouter.open(NSURL(string: "routingexample://route/")!)
+                    router.open(NSURL(string: "routingexample://route/")!)
                     expect(isOpened).toEventually(equal(true))
                 }
                 
                 it("should pass url arguments specified in the route in the parameters dictionary") {
-                    let route = "/route/:argument"
                     var argument: String?
-                    Routing.sharedRouter.map(route) { (parameters, completed) in
+                    router.map("/route/:argument") { (parameters, completed) in
                         argument = parameters["argument"]
                         completed()
                     }
                     
-                    Routing.sharedRouter.open(NSURL(string: "routingexample://route/expected")!)
+                    router.open(NSURL(string: "routingexample://route/expected")!)
                     expect(argument).toEventually(equal("expected"))
                 }
                 
                 it("should pass query parameters specified in the route in the parameters dictionary") {
-                    let route = "/routeExpectingQueryParameters"
                     var param: String?
-                    Routing.sharedRouter.map(route) { (parameters, completed) in
+                    router.map("/route") { (parameters, completed) in
                         param = parameters["param"]
                         completed()
                     }
                     
-                    Routing.sharedRouter.open(NSURL(string: "routingexample://routeExpectingQueryParameters?param=expected")!)
+                    router.open(NSURL(string: "routingexample://route?param=expected")!)
                     expect(param).toEventually(equal("expected"))
+                }
+                
+                it("should process urls in a serial order") {
+                    var results = [String]()
+                    
+                    router.map("/route/:append") { (parameters, completed) in
+                        results.append(parameters["append"]!)
+                        
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (1 * Int64(NSEC_PER_SEC))), dispatch_queue_create("Serial Test", nil)) {
+                            completed()
+                        }
+                    }
+                    
+                    router.map("/route/two/:append") { (parameters, completed) in
+                        results.append(parameters["append"]!)
+                        completed()
+                    }
+                    
+                    router.open(NSURL(string: "routingexample://route/one")!)
+                    router.open(NSURL(string: "routingexample://route/two/two")!)
+                    expect(results).toEventually(equal(["one", "two"]), timeout: 1.1, pollInterval: 1.1, description: nil)
                 }
                 
             }
