@@ -20,6 +20,7 @@ public class Routing {
         case Route((String) -> (RouteHandler?, Parameters))
     }
     
+    let queue: dispatch_queue_t = dispatch_queue_create("Routing Queue", nil)
     private var routes: [RouteType] = [RouteType]()
     
     public init() {}
@@ -61,7 +62,7 @@ public class Routing {
             .filter { $0.0 != nil }
             .first
         
-        dispatch_async(dispatch_queue_create("Router Queue", nil)) { [weak self] in
+        dispatch_async(queue) { [weak self] in
             if dispatch_semaphore_wait(self!.semaphore, DISPATCH_TIME_FOREVER) == 0 {
                 _ = route.map { (handler, var parameters) -> (RouteHandler, Parameters) in
                     for item in queryItems where proxy?.1 == nil { parameters[item.0] = item.1 }

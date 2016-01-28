@@ -62,9 +62,7 @@ class RoutingSpec: QuickSpec {
                     router.map("/route/:append") { (parameters, completed) in
                         results.append(parameters["append"]!)
                         
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (1 * Int64(NSEC_PER_SEC))), dispatch_queue_create("Serial Test", nil)) {
-                            completed()
-                        }
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (1 * Int64(NSEC_PER_SEC))), dispatch_queue_create("Serial Test", nil), completed)
                     }
                     
                     router.map("/route/two/:append") { (parameters, completed) in
