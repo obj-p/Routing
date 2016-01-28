@@ -20,7 +20,7 @@ class RoutingSpec: QuickSpec {
             var testingQueue: dispatch_queue_t!
             beforeEach {
                 router = Routing()
-                testingQueue = dispatch_queue_create("Testing Queue", nil)
+                testingQueue = dispatch_queue_create("Testing Queue", DISPATCH_QUEUE_CONCURRENT)
             }
             
             context("#open") {
@@ -96,7 +96,13 @@ class RoutingSpec: QuickSpec {
                     router.map("/route") { (parameters, completed) in completed() }
                     
                     dispatch_async(testingQueue) {
-                        for i in 1...1000 {
+                        for i in 1...10000 {
+                            router.map("\(i)") { (_, completed) in completed() }
+                        }
+                    }
+                    
+                    dispatch_async(testingQueue) {
+                        for i in 1...10000 {
                             router.map("\(i)") { (_, completed) in completed() }
                         }
                     }
