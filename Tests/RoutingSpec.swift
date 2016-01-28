@@ -23,6 +23,16 @@ class RoutingSpec: QuickSpec {
             
             context("#open") {
                 
+                it("should return true if it can open the route") {
+                    router.map("/route") { (parameters, completed) in completed() }
+                    
+                    expect(router.open(NSURL(string: "routingexample://route/")!)).to(equal(true))
+                }
+                
+                it("should return true if it can open the route") {
+                    expect(router.open(NSURL(string: "routingexample://route/")!)).to(equal(false))
+                }
+                
                 it("should call the binded closure corresponding to the opened route") {
                     var isOpened = false
                     router.map("/route") { (parameters, completed) in

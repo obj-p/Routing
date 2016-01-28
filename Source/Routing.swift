@@ -25,20 +25,25 @@ public class Routing {
     
     public init() {}
     
+    deinit {
+        // TODO: GCD is throwing an error because the count 1 is not restored before
+        // the object is dealloced, resulting in the bad access.
+        dispatch_semaphore_signal(semaphore)
+    }
+    
     // TODO: make these write operatious barrier asyncs to prevent an open URL from executing while updating routes.
     public func proxy(pattern: String, handler: ProxyHandler) -> Void { self.routes.append(.Proxy(self.matcher(pattern, handler: handler))) }
     public func map(pattern: String, handler: RouteHandler) -> Void { self.routes.append(.Route(self.matcher(pattern, handler: handler))) }
     
     let semaphore = dispatch_semaphore_create(1)
     public func open(URL: NSURL) -> Bool {
-        let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
-        
-        guard let path = components.map({ "/" + ($0.host ?? "") + ($0.path ?? "") }) else {
+        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) else {
             return false
         }
         
-        let queryItems = components
-            .flatMap { $0.queryItems }?
+        let path = "/" + (components.host ?? "") + (components.path ?? "")
+        
+        let queryItems = components.queryItems?
             .reduce(Parameters()) { (var dict, item) in dict.updateValue((item.value ?? ""), forKey: item.name); return dict }
             ?? [:]
         
@@ -62,16 +67,18 @@ public class Routing {
             .filter { $0.0 != nil }
             .first
         
-        dispatch_async(queue) { [weak self] in
-            if dispatch_semaphore_wait(self!.semaphore, DISPATCH_TIME_FOREVER) == 0 {
-                _ = route.map { (handler, var parameters) -> (RouteHandler, Parameters) in
-                    for item in queryItems where proxy?.1 == nil { parameters[item.0] = item.1 }
-                    dispatch_async(dispatch_get_main_queue()) {
-                        handler!(proxy?.1 ?? parameters) {
-                            dispatch_semaphore_signal(self!.semaphore)
+        defer {
+            dispatch_async(queue) { [weak self] in
+                if let semaphore = self?.semaphore where dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER) == 0 {
+                    _ = route.map { (handler, var parameters) -> (RouteHandler, Parameters) in
+                        for item in queryItems where proxy?.1 == nil { parameters[item.0] = item.1 }
+                        dispatch_async(dispatch_get_main_queue()) {
+                            handler!(proxy?.1 ?? parameters) {
+                                dispatch_semaphore_signal(semaphore)
+                            }
                         }
+                        return (handler!, proxy?.1 ?? parameters)
                     }
-                    return (handler!, proxy?.1 ?? parameters)
                 }
             }
         }
