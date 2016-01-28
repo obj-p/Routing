@@ -9,13 +9,13 @@
 import Foundation
 
 public class Routing {
-    public typealias Parameters = [String : String]
+    public typealias Parameters = [String: String]
     public typealias Completed = () -> Void
     
     public typealias ProxyHandler = (String, Parameters) -> (String, Parameters)
     public typealias RouteHandler = (Parameters, Completed) -> Void
     
-    enum RouteType {
+    private enum RouteType {
         case Proxy((String) -> (ProxyHandler?, Parameters))
         case Route((String) -> (RouteHandler?, Parameters))
     }
@@ -29,6 +29,7 @@ public class Routing {
     public func proxy(pattern: String, handler: ProxyHandler) -> Void { self.routes.append(.Proxy(self.matcher(pattern, handler: handler))) }
     public func map(pattern: String, handler: RouteHandler) -> Void { self.routes.append(.Route(self.matcher(pattern, handler: handler))) }
     
+    // TODO: make reads protected from writes
     public func open(URL: NSURL) -> Bool {
         guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) else {
             return false
@@ -36,9 +37,10 @@ public class Routing {
         
         let path = "/" + (components.host ?? "") + (components.path ?? "")
         
-        let queryItems = components.queryItems?
-            .reduce(Parameters()) { (var dict, item) in dict.updateValue((item.value ?? ""), forKey: item.name); return dict }
-            ?? [:]
+        var queryItems: [String: String] = [:]
+        components.queryItems?.forEach() {
+            queryItems.updateValue(($0.value ?? ""), forKey: $0.name)
+        }
         
         let proxy = self.routes
             .map { closure -> (ProxyHandler?, Parameters) in
@@ -55,7 +57,7 @@ public class Routing {
         let route = self.routes
             .map { closure -> (RouteHandler?, Parameters) in
                 if case let .Route(f) = closure { return f(proxy?.0 ?? path) }
-                else { return (nil, [String : String]())}
+                else { return (nil, [String: String]())}
             }
             .filter { $0.0 != nil }
             .first
