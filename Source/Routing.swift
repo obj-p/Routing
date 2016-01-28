@@ -20,18 +20,30 @@ public class Routing {
         case Route((String) -> (RouteHandler?, Parameters))
     }
     
-    let queue: dispatch_queue_t = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
+    let accessQueue: dispatch_queue_t = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT)
+    let routingQueue: dispatch_queue_t = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
     private var routes: [RouteType] = [RouteType]()
     
     public init() {}
     
-    // TODO: make these write operations asyncs to prevent an open URL from executing while updating routes.
-    public func proxy(pattern: String, handler: ProxyHandler) -> Void { self.routes.append(.Proxy(self.matcher(pattern, handler: handler))) }
-    public func map(pattern: String, handler: RouteHandler) -> Void { self.routes.append(.Route(self.matcher(pattern, handler: handler))) }
+    public func proxy(pattern: String, handler: ProxyHandler) -> Void {
+        dispatch_barrier_async(accessQueue) {
+            self.routes.append(.Proxy(self.matcher(pattern, handler: handler)))
+        }
+    }
+    public func map(pattern: String, handler: RouteHandler) -> Void {
+        dispatch_barrier_async(accessQueue) {
+            self.routes.append(.Route(self.matcher(pattern, handler: handler)))
+        }
+    }
     
-    // TODO: make reads protected from writes
     public func open(URL: NSURL) -> Bool {
-        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) else {
+        var routes: [RouteType]!
+        dispatch_sync(accessQueue) {
+            routes = self.routes
+        }
+        
+        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) where routes.count > 0 else {
             return false
         }
         
@@ -42,7 +54,7 @@ public class Routing {
             queryItems.updateValue(($0.value ?? ""), forKey: $0.name)
         }
         
-        let proxy = self.routes
+        let proxy = routes
             .map { closure -> (ProxyHandler?, Parameters) in
                 if case let .Proxy(f) = closure { return f(path) }
                 else { return (nil, [String : String]())}
@@ -54,7 +66,7 @@ public class Routing {
                 return handler!(path, parameters)
         }
         
-        let route = self.routes
+        let route = routes
             .map { closure -> (RouteHandler?, Parameters) in
                 if case let .Route(f) = closure { return f(proxy?.0 ?? path) }
                 else { return (nil, [String: String]())}
@@ -63,7 +75,7 @@ public class Routing {
             .first
         
         defer {
-            dispatch_async(queue) { [weak self] in
+            dispatch_async(routingQueue) { [weak self] in
                 let semaphore = dispatch_semaphore_create(0)
                 _ = route.map { (handler, var parameters) -> (RouteHandler, Parameters) in
                     for item in queryItems where proxy?.1 == nil { parameters[item.0] = item.1 }

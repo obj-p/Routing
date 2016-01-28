@@ -17,8 +17,10 @@ class RoutingSpec: QuickSpec {
         
         describe("Routing") {
             var router: Routing!
+            var testingQueue: dispatch_queue_t!
             beforeEach {
                 router = Routing()
+                testingQueue = dispatch_queue_create("Testing Queue", nil)
             }
             
             context("#open") {
@@ -29,8 +31,13 @@ class RoutingSpec: QuickSpec {
                     expect(router.open(NSURL(string: "routingexample://route/")!)).to(equal(true))
                 }
                 
-                it("should return true if it can open the route") {
+                it("should return fales if it cannot open the route due to no routes registered") {
                     expect(router.open(NSURL(string: "routingexample://route/")!)).to(equal(false))
+                }
+                
+                it("should return false if it cannot open the route due to no match") {
+                    router.map("/route") { (parameters, completed) in completed() }
+                    expect(router.open(NSURL(string: "routingexample://incorrectroute/")!)).to(equal(false))
                 }
                 
                 it("should call the binded closure corresponding to the opened route") {
@@ -72,7 +79,7 @@ class RoutingSpec: QuickSpec {
                     router.map("/route/:append") { (parameters, completed) in
                         results.append(parameters["append"]!)
                         
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (1 * Int64(NSEC_PER_SEC))), dispatch_queue_create("Serial Test", nil), completed)
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (1 * Int64(NSEC_PER_SEC))), testingQueue, completed)
                     }
                     
                     router.map("/route/two/:append") { (parameters, completed) in
@@ -82,7 +89,19 @@ class RoutingSpec: QuickSpec {
                     
                     router.open(NSURL(string: "routingexample://route/one")!)
                     router.open(NSURL(string: "routingexample://route/two/two")!)
-                    expect(results).toEventually(equal(["one", "two"]), timeout: 1.1, pollInterval: 1.1, description: nil)
+                    expect(results).toEventually(equal(["one", "two"]), timeout: 1.1, pollInterval: 0, description: nil)
+                }
+                
+                it("should be able to open the route despite concurrent read right accesses") {
+                    router.map("/route") { (parameters, completed) in completed() }
+                    
+                    dispatch_async(testingQueue) {
+                        for i in 1...1000 {
+                            router.map("\(i)") { (_, completed) in completed() }
+                        }
+                    }
+                    
+                    expect(router.open(NSURL(string: "routingexample://route/")!)).toEventually(equal(true))
                 }
                 
             }
