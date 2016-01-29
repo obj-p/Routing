@@ -9,11 +9,11 @@
 import Foundation
 
 public class Routing {
+    public typealias ProxyHandler = (String, Parameters, Next) -> (String, Parameters)
+    public typealias Next = (String, Parameters) -> Void
+    public typealias RouteHandler = (Parameters, Completed) -> Void
     public typealias Parameters = [String: String]
     public typealias Completed = () -> Void
-    
-    public typealias ProxyHandler = (String, Parameters) -> (String, Parameters)
-    public typealias RouteHandler = (Parameters, Completed) -> Void
     
     private enum RouteType {
         case Proxy((String) -> (ProxyHandler?, Parameters))
@@ -31,6 +31,7 @@ public class Routing {
             self.routes.append(.Proxy(self.matcher(pattern, handler: handler)))
         }
     }
+    
     public func map(pattern: String, handler: RouteHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
             self.routes.append(.Route(self.matcher(pattern, handler: handler)))
@@ -43,7 +44,8 @@ public class Routing {
             routes = self.routes
         }
         
-        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) where routes.count > 0 else {
+        if routes.count == 0 { return false }
+        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) else {
             return false
         }
         
@@ -63,7 +65,7 @@ public class Routing {
             .first
             .map { (handler, var parameters) -> (String, Parameters) in
                 for item in queryItems { parameters[item.0] = item.1 }
-                return handler!(path, parameters)
+                return handler!(path, parameters) { (_, __) in }
         }
         
         let route = routes
