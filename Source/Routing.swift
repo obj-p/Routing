@@ -56,17 +56,9 @@ public class Routing {
             parameters.updateValue(($0.value ?? ""), forKey: $0.name)
         }
         
-        let proxies = routes
-            .map { closure -> (ProxyHandler?, Parameters) in
-                if case let .Proxy(f) = closure { return f(path) }
-                else { return (nil, [String : String]())}
-            }
-            .filter { $0.0 != nil }
-
-        
         let route = routes
             .map { closure -> (RouteHandler?, Parameters) in
-                if case let .Route(f) = closure { return f(path) }
+                if case let .Route(f) = closure { return f(path) } // TODO: extract this common logic between Proxies and routes
                 else { return (nil, [String: String]())}
             }
             .filter { $0.0 != nil }
@@ -76,15 +68,21 @@ public class Routing {
             dispatch_async(routingQueue) { [weak self] in
                 let semaphore = dispatch_semaphore_create(0)
                 
-                proxies.forEach { (h, p) in
-                    p.forEach { parameters[$0.0] = $0.1 }
-                    dispatch_async(dispatch_get_main_queue()) {
-                        h!(path, p) { (proxiedPath, proxiedParameters) in
-                            (path, parameters) = (proxiedPath, proxiedParameters)
-                            dispatch_semaphore_signal(semaphore)
-                        }
+                routes // Proxies
+                    .map { closure -> (ProxyHandler?, Parameters) in
+                        if case let .Proxy(f) = closure { return f(path) }
+                        else { return (nil, [String : String]())}
                     }
-                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+                    .filter { $0.0 != nil }
+                    .forEach { (h, p) in
+                        p.forEach { parameters[$0.0] = $0.1 }
+                        dispatch_async(dispatch_get_main_queue()) {
+                            h!(path, p) { (proxiedPath, proxiedParameters) in
+                                (path, parameters) = (proxiedPath, proxiedParameters)
+                                dispatch_semaphore_signal(semaphore)
+                            }
+                        }
+                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
                 }
 
                 let proxiedRoute = routes
