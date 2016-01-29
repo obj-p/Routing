@@ -35,7 +35,7 @@ class RoutingSpec: QuickSpec {
                     expect(router.open(NSURL(string: "routingexample://route/")!)).to(equal(true))
                 }
                 
-                it("should return fales if it cannot open the route due to no routes registered") {
+                it("should return false if it cannot open the route due to no routes registered") {
                     expect(router.open(NSURL(string: "routingexample://route/")!)).to(equal(false))
                 }
                 
@@ -53,6 +53,22 @@ class RoutingSpec: QuickSpec {
                     
                     router.open(NSURL(string: "routingexample://route/")!)
                     expect(isOpened).toEventually(equal(true))
+                }
+                
+                xit("should call the latest closure binded to the route") {
+                    var routeCalled: UInt8 = 1
+                    router.map("/route") { (_, completed) in
+                        routeCalled = routeCalled << 1
+                        completed()
+                    }
+                    
+                    router.map("/route") { (_, completed) in
+                        routeCalled = routeCalled << 2
+                        completed()
+                    }
+                    
+                    router.open(NSURL(string: "routingexample://route/")!)
+                    expect(routeCalled).toEventually(equal(4))
                 }
                 
                 it("should pass url arguments specified in the route in the parameters dictionary") {
@@ -117,22 +133,106 @@ class RoutingSpec: QuickSpec {
             }
             
             context("#proxy") {
-                it("should be able to proxy and modify the path") {
-                    var pathCalled: UInt8 = 1
+                
+                it("should be able to proxy and modify the route") {
+                    var routeCalled: UInt8 = 1
                     router.map("/route/one") { (_, completed) in completed()
-                        pathCalled = pathCalled << 1
+                        routeCalled = routeCalled << 1
                     }
                     router.map("/route/two") { (_, completed) in completed()
-                        pathCalled = pathCalled << 2
+                        routeCalled = routeCalled << 2
                     }
                     
-                    router.proxy("/route/one") { (path, parameters, next) -> Void in
+                    router.proxy("/route/one") { (route, parameters, next) -> Void in
                         next("/route/two", parameters)
                     }
                     
                     router.open(NSURL(string: "routingexample://route/one")!)
-                    expect(pathCalled).toEventually(equal(4))
+                    expect(routeCalled).toEventually(equal(4))
                 }
+                
+                xit("should allow for wild card / regex matching") {
+                    router.map("/route/one") { (_, completed) in completed() }
+                    
+                    var isProxied = false
+                    router.proxy("/route/*") { (route, parameters, next) -> Void in
+                        isProxied = true
+                    }
+                    
+                    router.open(NSURL(string: "routingexample://route/one")!)
+                    expect(isProxied).toEventually(equal(true))
+                }
+                
+                xit("should allow for modifying arguments passed in url") {
+                    var argument: String?
+                    router.map("/route/:argument") { (parameters, completed) in
+                        argument = parameters["argument"]
+                        completed()
+                    }
+                    
+                    router.proxy("/route/:argument") { (route, var parameters, next) -> Void in
+                        parameters["argument"] = "two"
+                        next(route, parameters)
+                    }
+                    
+                    router.open(NSURL(string: "routingexample://route/one")!)
+                    expect(argument).toEventually(equal("two"))
+                }
+                
+                it("should allow for modifying query parameters passed in url") {
+                    var query: String?
+                    router.map("/route") { (parameters, completed) in
+                        query = parameters["query"]
+                        completed()
+                    }
+                    
+                    router.proxy("/route") { (route, var parameters, next) -> Void in
+                        parameters["query"] = "bar"
+                        next(route, parameters)
+                    }
+                    
+                    router.open(NSURL(string: "routingexample://route?query=foo")!)
+                    expect(query).toEventually(equal("bar"))
+                }
+                
+                it("should process multiple proxies in a serial order") {
+                    router.map("/route") { (parameters, completed) in completed() }
+                    
+                    var results = [String]()
+                    router.proxy("/route") { (route, parameters, next) in
+                        results.append("one")
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (1 * Int64(NSEC_PER_SEC))), testingQueue) {
+                            next(route, parameters)
+                        }
+                    }
+                    
+                    router.proxy("/route") { (route, parameters, next) in
+                        results.append("two")
+                        next(route, parameters)
+                    }
+                    
+                    router.open(NSURL(string: "routingexample://route")!)
+                    expect(results).toEventually(equal(["one", "two"]), timeout: 1.1, pollInterval: 0, description: nil)
+                }
+                
+                it("should be able to open the route despite concurrent read right accesses") {
+                    router.map("/route") { (_, completed) in completed() }
+                    
+                    dispatch_async(testingQueue) {
+                        for i in 1...10000 {
+                            router.proxy("\(i)") { (route, parameters, next) in next(route, parameters) }
+                        }
+                    }
+                    
+                    dispatch_async(testingQueue) {
+                        for i in 1...10000 {
+                            router.proxy("\(i)") { (route, parameters, next) in next(route, parameters) }
+                        }
+                    }
+                    
+                    expect(router.open(NSURL(string: "routingexample://route/")!)).toEventually(equal(true))
+                }
+                
             }
             
         }
