@@ -9,7 +9,7 @@
 import Foundation
 
 public class Routing {
-    public typealias ProxyHandler = (String, Parameters, Next) -> (String, Parameters)
+    public typealias ProxyHandler = (String, Parameters, Next) -> Void
     public typealias Next = (String, Parameters) -> Void
     public typealias RouteHandler = (Parameters, Completed) -> Void
     public typealias Parameters = [String: String]
@@ -49,28 +49,24 @@ public class Routing {
             return false
         }
         
-        let path = "/" + (components.host ?? "") + (components.path ?? "")
+        var path = "/" + (components.host ?? "") + (components.path ?? "")
         
-        var queryItems: [String: String] = [:]
+        var parameters: [String: String] = [:]
         components.queryItems?.forEach() {
-            queryItems.updateValue(($0.value ?? ""), forKey: $0.name)
+            parameters.updateValue(($0.value ?? ""), forKey: $0.name)
         }
         
-        let proxy = routes
+        let proxies = routes
             .map { closure -> (ProxyHandler?, Parameters) in
                 if case let .Proxy(f) = closure { return f(path) }
                 else { return (nil, [String : String]())}
             }
             .filter { $0.0 != nil }
-            .first
-            .map { (handler, var parameters) -> (String, Parameters) in
-                for item in queryItems { parameters[item.0] = item.1 }
-                return handler!(path, parameters) { (_, __) in }
-        }
+
         
         let route = routes
             .map { closure -> (RouteHandler?, Parameters) in
-                if case let .Route(f) = closure { return f(proxy?.0 ?? path) }
+                if case let .Route(f) = closure { return f(path) }
                 else { return (nil, [String: String]())}
             }
             .filter { $0.0 != nil }
@@ -79,16 +75,36 @@ public class Routing {
         defer {
             dispatch_async(routingQueue) { [weak self] in
                 let semaphore = dispatch_semaphore_create(0)
-                _ = route.map { (handler, var parameters) -> (RouteHandler, Parameters) in
-                    for item in queryItems where proxy?.1 == nil { parameters[item.0] = item.1 }
+                
+                proxies.forEach { (h, p) in
+                    p.forEach { parameters[$0.0] = $0.1 }
                     dispatch_async(dispatch_get_main_queue()) {
-                        handler!(proxy?.1 ?? parameters) {
+                        h!(path, p) { (proxiedPath, proxiedParameters) in
+                            (path, parameters) = (proxiedPath, proxiedParameters)
                             dispatch_semaphore_signal(semaphore)
                         }
                     }
-                    return (handler!, proxy?.1 ?? parameters)
+                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
                 }
-                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+
+                let proxiedRoute = routes
+                    .map { closure -> (RouteHandler?, Parameters) in
+                        if case let .Route(f) = closure { return f(path) }
+                        else { return (nil, [String: String]())}
+                    }
+                    .filter { $0.0 != nil }
+                    .first
+                
+                _ = (proxiedRoute ?? route).map {
+                    (h, p) -> (RouteHandler, Parameters) in
+                    p.forEach { parameters[$0.0] = $0.1 } // TODO: This currrently overrides the proxied parameters
+                    dispatch_async(dispatch_get_main_queue()) {
+                        h!(parameters) {
+                            dispatch_semaphore_signal(semaphore)
+                        }
+                    }
+                    return (h!, p)
+                }
             }
         }
         

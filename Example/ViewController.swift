@@ -19,9 +19,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        router.proxy("/route/one/:color") { [weak self] (route, var parameters) in
+        router.proxy("/route/one/:color") { [weak self] (route, var parameters, next) in
             if self?.enableProxy == true { parameters["color"] = "red" }
-            return (route, parameters)
+            next(route, parameters)
         }
     }
     
