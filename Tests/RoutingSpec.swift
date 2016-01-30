@@ -55,7 +55,7 @@ class RoutingSpec: QuickSpec {
                     expect(isOpened).toEventually(equal(true))
                 }
                 
-                it("should call the latest closure binded to the route") {
+                it("should call the latest closure binded to the route") { // TODO: this behaviour seems counterintuitive, consider reversing
                     var routeCalled: UInt8 = 1
                     router.map("/route") { (_, completed) in
                         routeCalled = routeCalled << 1
