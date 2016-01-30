@@ -14,15 +14,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var router = Routing.sharedRouter
-    var vc = UIViewController()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        router.registerRoutes()
-        router.open(NSURL(string: "routingexample://one?animated=false")!)
-        router.open(NSURL(string: "routingexample://two?animated=false")!)
-        router.open(NSURL(string: "routingexample://two?animated=false")!)
-        router.open(NSURL(string: "routingexample://two?animated=false")!)
-        router.open(NSURL(string: "routingexample://two?animated=false")!)
+        Routing.sharedRouter.registerRoutes()
+        Routing.sharedRouter.open(NSURL(string: "routingexample://one?animated=false")!)
         return true
     }
 

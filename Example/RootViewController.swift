@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  RootViewController.swift
 //  Example
 //
 //  Created by Jason Prasad on 10/1/15.
@@ -9,7 +9,7 @@
 import UIKit
 import Routing
 
-class ViewController: UIViewController {
+class RootViewController: UIViewController {
     
     @IBOutlet weak var button: UIButton!
     
@@ -24,11 +24,11 @@ class ViewController: UIViewController {
     }
 
     @IBAction func Proxy(sender: AnyObject) {
-        self.enableProxy = self.enableProxy == false
-        if self.enableProxy {
-            self.button.setTitle("Disable Proxy", forState: UIControlState.Normal)
+        enableProxy = self.enableProxy == false
+        if enableProxy {
+            button.setTitle("Disable Proxy", forState: UIControlState.Normal)
         } else {
-            self.button.setTitle("Enable Proxy", forState: UIControlState.Normal)
+            button.setTitle("Enable Proxy", forState: UIControlState.Normal)
         }
     }
     
