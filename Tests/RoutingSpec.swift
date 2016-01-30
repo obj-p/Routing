@@ -55,7 +55,7 @@ class RoutingSpec: QuickSpec {
                     expect(isOpened).toEventually(equal(true))
                 }
                 
-                xit("should call the latest closure binded to the route") {
+                it("should call the latest closure binded to the route") {
                     var routeCalled: UInt8 = 1
                     router.map("/route") { (_, completed) in
                         routeCalled = routeCalled << 1
@@ -204,14 +204,14 @@ class RoutingSpec: QuickSpec {
                     
                     var results = [String]()
                     router.proxy("/route") { (route, parameters, next) in
-                        results.append("one")
+                        results.append("two")
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (1 * Int64(NSEC_PER_SEC))), testingQueue) {
                             next(route, parameters)
                         }
                     }
                     
                     router.proxy("/route") { (route, parameters, next) in
-                        results.append("two")
+                        results.append("one")
                         next(route, parameters)
                     }
                     
@@ -237,7 +237,7 @@ class RoutingSpec: QuickSpec {
                     expect(router.open(NSURL(string: "routingexample://route/")!)).toEventually(equal(true))
                 }
 
-                xit("should all to set the callback queue of the proxy") {
+                xit("should allow to set the callback queue of the proxy") {
                     // TODO: perhaps allow for this?
                 }
                 

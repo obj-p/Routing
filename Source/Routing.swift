@@ -28,13 +28,13 @@ public class Routing {
     
     public func proxy(pattern: String, handler: ProxyHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
-            self.routes.append(.Proxy(self.matcher(pattern, handler: handler)))
+            self.routes.insert(.Proxy(self.matcher(pattern, handler: handler)), atIndex: 0)
         }
     }
     
     public func map(pattern: String, handler: RouteHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
-            self.routes.append(.Route(self.matcher(pattern, handler: handler)))
+            self.routes.insert(.Route(self.matcher(pattern, handler: handler)), atIndex: 0)
         }
     }
     
