@@ -58,7 +58,7 @@ public class Routing {
         
         let route = routes
             .map { closure -> (RouteHandler?, Parameters) in
-                if case let .Route(f) = closure { return f(path) } // TODO: extract this common logic between Proxies and routes
+                if case let .Route(f) = closure { return f(path) } 
                 else { return (nil, [String: String]())}
             }
             .filter { $0.0 != nil }
@@ -95,7 +95,7 @@ public class Routing {
                 
                 _ = (proxiedRoute ?? route).map {
                     (h, var p) -> (RouteHandler, Parameters) in
-                    parameters.forEach { p[$0.0] = $0.1 } // TODO: This currrently overrides the proxied parameters
+                    parameters.forEach { p[$0.0] = $0.1 }
                     dispatch_async(dispatch_get_main_queue()) {
                         h!(p) {
                             dispatch_semaphore_signal(semaphore)
