@@ -68,7 +68,7 @@ public class Routing {
             dispatch_async(routingQueue) { [weak self] in
                 let semaphore = dispatch_semaphore_create(0)
                 
-                routes // Proxies
+                routes  /* Proxies */
                     .map { closure -> (ProxyHandler?, Parameters) in
                         if case let .Proxy(f) = closure { return f(path) }
                         else { return (nil, [String : String]())}
@@ -94,10 +94,10 @@ public class Routing {
                     .first
                 
                 _ = (proxiedRoute ?? route).map {
-                    (h, p) -> (RouteHandler, Parameters) in
-                    p.forEach { parameters[$0.0] = $0.1 } // TODO: This currrently overrides the proxied parameters
+                    (h, var p) -> (RouteHandler, Parameters) in
+                    parameters.forEach { p[$0.0] = $0.1 } // TODO: This currrently overrides the proxied parameters
                     dispatch_async(dispatch_get_main_queue()) {
-                        h!(parameters) {
+                        h!(p) {
                             dispatch_semaphore_signal(semaphore)
                         }
                     }

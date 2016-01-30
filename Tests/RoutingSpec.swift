@@ -109,7 +109,7 @@ class RoutingSpec: QuickSpec {
                     
                     router.open(NSURL(string: "routingexample://route/one")!)
                     router.open(NSURL(string: "routingexample://route/two/two")!)
-                    expect(results).toEventually(equal(["one", "two"]), timeout: 1.1, pollInterval: 0, description: nil)
+                    expect(results).toEventually(equal(["one", "two"]), timeout: 1.1, pollInterval: 1.1, description: nil)
                 }
                 
                 it("should be able to open the route despite concurrent read right accesses") {
@@ -167,7 +167,7 @@ class RoutingSpec: QuickSpec {
                     expect(isProxied).toEventually(equal(true))
                 }
                 
-                xit("should allow for modifying arguments passed in url") {
+                it("should allow for modifying arguments passed in url") {
                     var argument: String?
                     router.map("/route/:argument") { (parameters, completed) in
                         argument = parameters["argument"]
@@ -216,7 +216,7 @@ class RoutingSpec: QuickSpec {
                     }
                     
                     router.open(NSURL(string: "routingexample://route")!)
-                    expect(results).toEventually(equal(["one", "two"]), timeout: 1.1, pollInterval: 0, description: nil)
+                    expect(results).toEventually(equal(["one", "two"]), timeout: 1.1, pollInterval: 1.1, description: nil)
                 }
                 
                 it("should be able to open the route despite concurrent read right accesses") {
