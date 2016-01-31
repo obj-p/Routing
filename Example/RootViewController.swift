@@ -11,24 +11,20 @@ import Routing
 
 class RootViewController: UIViewController {
     
-    @IBOutlet weak var button: UIButton!
-    
-    var enableProxy = false
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
     
     @IBAction func openURL(sender: AnyObject) {
-        Routing.sharedRouter.open(NSURL(string: "routingexample://one?animated=true")!)
-    }
-
-    @IBAction func Proxy(sender: AnyObject) {
-        enableProxy = self.enableProxy == false
-        if enableProxy {
-            button.setTitle("Disable Proxy", forState: UIControlState.Normal)
-        } else {
-            button.setTitle("Enable Proxy", forState: UIControlState.Normal)
+        switch sender.tag {
+        case 0:
+            Routing.sharedRouter.open(AppRoutes.urls.first)
+            break
+        case 1:
+            Routing.sharedRouter.open(AppRoutes.urls.second)
+            break
+        default:
+            break
         }
     }
     
