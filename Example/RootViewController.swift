@@ -28,5 +28,24 @@ class RootViewController: UIViewController {
         }
     }
     
+    @IBAction func enableProxy(sender: UIButton) {
+        guard let text = sender.titleLabel?.text else {
+            return
+        }
+        
+        switch text {
+        case "Enable Proxy":
+            sender.setTitle("Disable Proxy", forState: .Normal)
+            Routing.isProxying = true
+            break
+        case "Disable Proxy":
+            sender.setTitle("Enable Proxy", forState: .Normal)
+            Routing.isProxying = false
+            break
+        default:
+            break
+        }
+    }
+    
 }
 

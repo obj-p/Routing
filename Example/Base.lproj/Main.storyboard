@@ -16,45 +16,84 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MPZ-So-Z23">
-                                <rect key="frame" x="224" y="234" width="152" height="132"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Sp3-j9-w7e">
+                                <rect key="frame" x="159" y="165" width="283" height="271"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TKW-eU-QFD">
-                                        <rect key="frame" x="0.0" y="0.0" width="45" height="132"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="45" id="9co-zG-wz8"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="100"/>
-                                        <state key="normal" title="1"/>
-                                        <connections>
-                                            <action selector="openURL:" destination="BYZ-38-t0r" eventType="touchUpInside" id="X4w-v9-KwW"/>
-                                        </connections>
-                                    </button>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OHw-71-cc4" userLabel="Spacer View">
-                                        <rect key="frame" x="45" y="0.0" width="50" height="132"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="50" id="fvA-6P-uS7"/>
-                                        </constraints>
-                                    </view>
-                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jel-1h-ZYe" userLabel="2">
-                                        <rect key="frame" x="95" y="0.0" width="57" height="132"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="57" id="rbj-av-8sl"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="100"/>
-                                        <state key="normal" title="2"/>
-                                        <connections>
-                                            <action selector="openURL:" destination="BYZ-38-t0r" eventType="touchUpInside" id="F5d-ci-Mda"/>
-                                        </connections>
-                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MPZ-So-Z23" userLabel="1&amp;2">
+                                        <rect key="frame" x="66" y="0.0" width="152" height="132"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TKW-eU-QFD">
+                                                <rect key="frame" x="0.0" y="0.0" width="45" height="132"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="45" id="9co-zG-wz8"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="100"/>
+                                                <state key="normal" title="1"/>
+                                                <connections>
+                                                    <action selector="openURL:" destination="BYZ-38-t0r" eventType="touchUpInside" id="X4w-v9-KwW"/>
+                                                </connections>
+                                            </button>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OHw-71-cc4" userLabel="Spacer View">
+                                                <rect key="frame" x="45" y="0.0" width="50" height="132"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="50" id="fvA-6P-uS7"/>
+                                                </constraints>
+                                            </view>
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jel-1h-ZYe" userLabel="2">
+                                                <rect key="frame" x="95" y="0.0" width="57" height="132"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="57" id="rbj-av-8sl"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="100"/>
+                                                <state key="normal" title="2"/>
+                                                <connections>
+                                                    <action selector="openURL:" destination="BYZ-38-t0r" eventType="touchUpInside" id="F5d-ci-Mda"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Hbr-FR-czh" userLabel="Proxy">
+                                        <rect key="frame" x="0.0" y="132" width="283" height="139"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="itv-b5-4G8" userLabel="Spacer">
+                                                <rect key="frame" x="0.0" y="0.0" width="283" height="67"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="67" id="79n-Sy-Q3K"/>
+                                                </constraints>
+                                            </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GeJ-dp-756">
+                                                <rect key="frame" x="0.0" y="67" width="283" height="72"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="72" id="VNT-vd-KAS"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="50"/>
+                                                <state key="normal" title="Enable Proxy"/>
+                                                <connections>
+                                                    <action selector="enableProxy:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8QY-7M-TBh"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enabling proxy will swap routes 1 &amp; 2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TNq-U6-TKv">
+                                <rect key="frame" x="160" y="458" width="281" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="LB3-r1-NNV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="MPZ-So-Z23" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="LRi-o8-cJD"/>
-                            <constraint firstItem="MPZ-So-Z23" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="fD1-OT-AGw"/>
+                            <constraint firstItem="TNq-U6-TKv" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="5Q0-ic-cn6"/>
+                            <constraint firstItem="TNq-U6-TKv" firstAttribute="top" secondItem="Sp3-j9-w7e" secondAttribute="bottom" constant="22" id="HR3-xx-44i"/>
+                            <constraint firstItem="Sp3-j9-w7e" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="jJu-O6-4Hr"/>
+                            <constraint firstItem="Sp3-j9-w7e" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="m9b-RU-qHN"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Root" id="Ohu-zW-q6h"/>

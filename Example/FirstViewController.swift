@@ -12,10 +12,10 @@ import Routing
 class FirstViewController: UIViewController {
 
     override func viewDidLoad() {
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel")
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Dismiss", style: .Plain, target: self, action: "dismiss")
     }
     
-    func cancel() {
+    func dismiss() {
         self.dismissViewControllerAnimated(true) {}
     }
     

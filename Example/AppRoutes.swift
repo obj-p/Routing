@@ -34,8 +34,14 @@ struct AppRoutes {
 internal extension Routing {
     
     static var sharedRouter = { Routing() }()
+    static var isProxying = false
     
     internal func registerRoutes() {
+        
+        Routing.sharedRouter.proxy(AppRoutes.first) { (var route, parameters, next) in
+            if Routing.isProxying { route = AppRoutes.second }
+            next(route, parameters)
+        }
         
         Routing.sharedRouter.map(AppRoutes.first) { (parameters, completed) in
             guard let window = UIApplication.sharedApplication().delegate?.window else {
@@ -49,6 +55,11 @@ internal extension Routing {
             let animated: Bool = parameters["animated"] == nil || parameters["animated"] == "true"
             
             window?.rootViewController?.presentViewController(navController, animated: animated, completion: completed)
+        }
+        
+        Routing.sharedRouter.proxy(AppRoutes.second) { (var route, parameters, next) in
+            if Routing.isProxying { route = AppRoutes.first }
+            next(route, parameters)
         }
         
         Routing.sharedRouter.map(AppRoutes.second) { (parameters, completed) in
