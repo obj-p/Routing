@@ -12,6 +12,33 @@
 
 # About Routing
 
+Routing allows for mapping string patterns to an associated closure.
+
+To map a route with a string pattern.
+
+```swift
+let router = Routing()
+router.map("/route") { (parameters, completed) in
+	...
+	completed() // Must call completed or the router will halt!
+}
+```
+
+To proxy a route with a string pattern.
+
+```swift
+router.proxy("/route") { (var route, var parameters, next) in
+	...
+	next(route, parameters) // Must call next or the router will halt!
+}
+```
+
+To open a URL.
+
+```swift
+router.open(NSURL(string: "host://route/")!) // Will return true or false if there is an associated route
+```
+
 # Installation
 
 # Testing

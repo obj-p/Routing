@@ -64,6 +64,9 @@ public class Routing {
             .filter { $0.0 != nil }
             .first
         
+        // TODO: if route is nil, might as well early exit and ignore proxy?
+        // TODO: allow proxy to abort
+        
         defer {
             dispatch_async(routingQueue) { [weak self] in
                 let semaphore = dispatch_semaphore_create(0)
