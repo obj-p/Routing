@@ -130,7 +130,7 @@ class RoutingSpec: QuickSpec {
                     expect(router.open(NSURL(string: "routingexample://route/")!)).toEventually(equal(true))
                 }
 
-                xit("should all to set the callback queue of the route") {
+                xit("should allow to set the callback queue of the route") {
                     // TODO: perhaps allow for this?
                 }
                 
