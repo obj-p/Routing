@@ -236,6 +236,26 @@ class RoutingSpec: QuickSpec {
                     
                     expect(router.open(NSURL(string: "routingexample://route/")!)).toEventually(equal(true))
                 }
+                
+                it("should maintain the parameters throughout the proxy and the mapped route") {
+                    var proxiedArgument, proxiedQuery: String?
+                    router.proxy("/route/:argument") { (route, parameters, next) in
+                        (proxiedArgument, proxiedQuery) = (parameters["argument"], parameters["query"])
+                        next(route, parameters)
+                    }
+                    
+                    var argument, query: String?
+                    router.map("/route/:argument") { (parameters, completed) in
+                        (argument, query) = (parameters["argument"], parameters["query"])
+                        completed()
+                    }
+                    
+                    router.open(NSURL(string: "routingexample://route/foo?query=bar")!)
+                    expect(proxiedArgument).toEventually(equal("foo"))
+                    expect(argument).toEventually(equal("foo"))
+                    expect(proxiedQuery).toEventually(equal("bar"))
+                    expect(query).toEventually(equal("bar"))
+                }
 
                 xit("should allow to set the callback queue of the proxy") {
                     // TODO: perhaps allow for this?

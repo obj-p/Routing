@@ -74,12 +74,13 @@ public class Routing {
                         else { return (nil, [String : String]())}
                     }
                     .filter { $0.0 != nil }
-                    .forEach { (h, p) in
-                        p.forEach { parameters[$0.0] = $0.1 }
+                    .forEach { (h, var p) in
+                        parameters.forEach { p[$0.0] = $0.1 }
                         dispatch_async(dispatch_get_main_queue()) {
                             h!(path, p) { (proxiedPath, proxiedParameters) in
-                                (path, parameters) = (proxiedPath, proxiedParameters) // TODO: this overwrites parameters / path errorneously
-                                dispatch_semaphore_signal(semaphore)                  // should have tests with both proxy / route & parameters
+                                proxiedParameters.forEach { parameters[$0.0] = $0.1 }
+                                path = proxiedPath
+                                dispatch_semaphore_signal(semaphore)
                             }
                         }
                         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
@@ -93,8 +94,7 @@ public class Routing {
                     .filter { $0.0 != nil }
                     .first
                 
-                _ = (proxiedRoute ?? route).map {
-                    (h, var p) -> (RouteHandler, Parameters) in
+                _ = (proxiedRoute ?? route).map { (h, var p) -> (RouteHandler, Parameters) in
                     parameters.forEach { p[$0.0] = $0.1 }
                     dispatch_async(dispatch_get_main_queue()) {
                         h!(p) {
