@@ -64,12 +64,12 @@ public class Routing {
         components.query = nil
         var URLString = components.string ?? ""
         
-        let route = filterRoute(URLString, routes: routes)
+        let routeComponents = filterRoute(URLString, routes: routes)
             .first
         
-        if let route = route {
+        if let routeComponents = routeComponents {
             defer {
-                process(URLString, parameters: parameters, proxies: proxies, route: route, routes: routes)
+                process(URLString, parameters: parameters, proxies: proxies, routes: routes)
             }
             
             return true
@@ -78,34 +78,33 @@ public class Routing {
         return false
     }
     
-    // TODO: rename some of these variables
-    private func process(var path: String, var parameters: [String: String], proxies: [Proxy], var route: (RouteHandler, Parameters), routes: [Route]) {
+    private func process(var route: String, var parameters: [String: String], proxies: [Proxy], routes: [Route]) {
         dispatch_async(routingQueue) {
             let semaphore = dispatch_semaphore_create(0)
             // TODO: allow proxy to abort
-            self.filterRoute(path, routes: proxies)
+            self.filterRoute(route, routes: proxies)
                 .forEach { (h, var p) in
                     parameters.forEach { p[$0.0] = $0.1 }
                     dispatch_async(self.callbackQueue) {
-                        h(path, p) { (proxiedPath, proxiedParameters) in
+                        h(route, p) { (proxiedRoutes, proxiedParameters) in
                             proxiedParameters.forEach { parameters[$0.0] = $0.1 }
-                            path = proxiedPath
+                            route = proxiedRoutes
                             dispatch_semaphore_signal(semaphore)
                         }
                     }
                     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
             }
 
-            route = self.filterRoute(path, routes: routes)
-                .first ?? route
-            
-            parameters.forEach { route.1[$0.0] = $0.1 }
-            dispatch_async(self.callbackQueue) {
-                route.0(route.1) {
-                    dispatch_semaphore_signal(semaphore)
+            var routeComponents: (RouteHandler, Parameters)! = self.filterRoute(route, routes: routes).first
+            if routeComponents != nil  {
+                parameters.forEach { routeComponents.1[$0.0] = $0.1 }
+                dispatch_async(self.callbackQueue) {
+                    routeComponents.0(routeComponents.1) {
+                        dispatch_semaphore_signal(semaphore)
+                    }
                 }
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
             }
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
         }
     }
     
