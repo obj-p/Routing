@@ -33,19 +33,21 @@ public class Routing {
     
     public func proxy(pattern: String, handler: ProxyHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
-            self.routes.insert(.Proxy(self.prepare(pattern, handler: handler)), atIndex: 0)
+            self.proxies.insert(self.prepare(pattern, handler: handler), atIndex: 0)
         }
     }
     
     public func map(pattern: String, handler: RouteHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
-            self.routes.insert(.Route(self.prepare(pattern, handler: handler)), atIndex: 0)
+            self.routes.insert(self.prepare(pattern, handler: handler), atIndex: 0)
         }
     }
     
     public func open(URL: NSURL) -> Bool {
+        var proxies: [Proxy]!
         var routes: [Route]!
         dispatch_sync(accessQueue) {
+            proxies = self.proxies
             routes = self.routes
         }
         
@@ -70,7 +72,7 @@ public class Routing {
         
         if let route = route {
             defer {
-                process(URLString, parameters: parameters, route: route, routes: routes)
+                process(URLString, parameters: parameters, proxies: proxies, route: route, routes: routes)
             }
             
             return true
@@ -79,12 +81,7 @@ public class Routing {
         return false
     }
     
-    private func process(var path: String, var parameters: [String: String], var route: (RouteHandler, Parameters), routes: [Route]) {
-        var proxies: [Proxy]!
-        dispatch_sync(accessQueue) {
-            proxies = self.proxies
-        }
-        
+    private func process(var path: String, var parameters: [String: String], proxies: [Proxy], var route: (RouteHandler, Parameters), routes: [Route]) {
         dispatch_async(routingQueue) {
             let semaphore = dispatch_semaphore_create(0)
             // TODO: allow proxy to abort
@@ -104,13 +101,12 @@ public class Routing {
                     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
             }
 
-            let proxiedRoute = routes
+            route = routes
                 .map { $0(path) }
                 .filter { $0.0 != nil }
                 .first
-                .map { ($0!, $1) }
+                .map { ($0!, $1) } ?? route
             
-            route = (proxiedRoute ?? route)
             parameters.forEach { route.1[$0.0] = $0.1 }
             dispatch_async(self.callbackQueue) {
                 route.0(route.1) {
