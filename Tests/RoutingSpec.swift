@@ -23,10 +23,6 @@ class RoutingSpec: QuickSpec {
                 testingQueue = dispatch_queue_create("Testing Queue", DISPATCH_QUEUE_CONCURRENT)
             }
             
-            context("#registerHost") {
-                // TODO: perhaps have a means to register a host component for the URL check in #open
-            }
-            
             context("#open") {
                 
                 it("should return true if it can open the route") {
@@ -130,8 +126,19 @@ class RoutingSpec: QuickSpec {
                     expect(router.open(NSURL(string: "routingexample://route")!)).toEventually(equal(true))
                 }
 
-                xit("should allow to set the callback queue of the route") {
-                    // TODO: perhaps allow for this?
+                it("should allow to set the callback queue of the route") {
+                    let callbackQueue = dispatch_queue_create("Testing Call Back Queue", DISPATCH_QUEUE_CONCURRENT)
+                    let expectedQueue: UnsafePointer<Int8> = dispatch_queue_get_label(callbackQueue)
+                    
+                    var actualQueue: UnsafePointer<Int8>?
+                    router = Routing(callbackQueue: callbackQueue)
+                    router.map("routingexample://route") { (_, completed) in
+                        actualQueue = dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)
+                        completed()
+                    }
+                    
+                    router.open(NSURL(string: "routingexample://route")!)
+                    expect(actualQueue).toEventually(equal(expectedQueue))
                 }
                 
             }
@@ -256,9 +263,22 @@ class RoutingSpec: QuickSpec {
                     expect(proxiedQuery).toEventually(equal("bar"))
                     expect(query).toEventually(equal("bar"))
                 }
-
-                xit("should allow to set the callback queue of the proxy") {
-                    // TODO: perhaps allow for this?
+                
+                it("should allow to set the callback queue of the proxy") {
+                    let callbackQueue = dispatch_queue_create("Testing Call Back Queue", DISPATCH_QUEUE_CONCURRENT)
+                    let expectedQueue: UnsafePointer<Int8> = dispatch_queue_get_label(callbackQueue)
+                    
+                    router = Routing(callbackQueue: callbackQueue)
+                    router.map("routingexample://route") { (_, completed) in completed() }
+                    
+                    var actualQueue: UnsafePointer<Int8>?
+                    router.proxy("routingexample://route") { (route, parameters, next) in
+                        actualQueue = dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)
+                        next(route, parameters)
+                    }
+                    
+                    router.open(NSURL(string: "routingexample://route")!)
+                    expect(actualQueue).toEventually(equal(expectedQueue))
                 }
                 
             }
