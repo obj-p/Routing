@@ -70,53 +70,59 @@ public class Routing {
             }
             .filter { $0.0 != nil }
             .first
+            .map { ($0!, $1) }
         
-        // TODO: if route is nil, might as well early exit and ignore proxy?
-        // TODO: allow proxy to abort
+        if let route = route {
+            defer {
+                process(path, parameters: parameters, route: route, routes: routes)
+            }
+            
+            return true
+        }
         
-        defer {
-            dispatch_async(routingQueue) {
-                let semaphore = dispatch_semaphore_create(0)
-                
-                routes  /* Proxies */
-                    .map { closure -> (ProxyHandler?, Parameters) in
-                        if case let .Proxy(f) = closure { return f(path) }
-                        else { return (nil, [String : String]())}
-                    }
-                    .filter { $0.0 != nil }
-                    .forEach { (h, var p) in
-                        parameters.forEach { p[$0.0] = $0.1 }
-                        dispatch_async(self.callbackQueue) {
-                            h!(path, p) { (proxiedPath, proxiedParameters) in
-                                proxiedParameters.forEach { parameters[$0.0] = $0.1 }
-                                path = proxiedPath
-                                dispatch_semaphore_signal(semaphore)
-                            }
-                        }
-                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+        return false
+    }
+    
+    private func process(var path: String, var parameters: [String: String], var route: (RouteHandler, Parameters), routes: [RouteType]) {
+        dispatch_async(routingQueue) {
+            let semaphore = dispatch_semaphore_create(0)
+            // TODO: allow proxy to abort
+            routes  /* Proxies */
+                .map { closure -> (ProxyHandler?, Parameters) in
+                    if case let .Proxy(f) = closure { return f(path) }
+                    else { return (nil, [String : String]())}
                 }
-
-                let proxiedRoute = routes
-                    .map { closure -> (RouteHandler?, Parameters) in
-                        if case let .Route(f) = closure { return f(path) }
-                        else { return (nil, [String: String]())}
-                    }
-                    .filter { $0.0 != nil }
-                    .first
-                
-                _ = (proxiedRoute ?? route).map { (h, var p) -> (RouteHandler, Parameters) in
+                .filter { $0.0 != nil }
+                .forEach { (h, var p) in
                     parameters.forEach { p[$0.0] = $0.1 }
                     dispatch_async(self.callbackQueue) {
-                        h!(p) {
+                        h!(path, p) { (proxiedPath, proxiedParameters) in
+                            proxiedParameters.forEach { parameters[$0.0] = $0.1 }
+                            path = proxiedPath
                             dispatch_semaphore_signal(semaphore)
                         }
                     }
-                    return (h!, p)
+                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+            }
+
+            let proxiedRoute = routes
+                .map { closure -> (RouteHandler?, Parameters) in
+                    if case let .Route(f) = closure { return f(path) }
+                    else { return (nil, [String: String]())}
+                }
+                .filter { $0.0 != nil }
+                .first
+                .map { ($0!, $1) }
+            
+            route = (proxiedRoute ?? route)
+            parameters.forEach { route.1[$0.0] = $0.1 }
+            dispatch_async(self.callbackQueue) {
+                route.0(route.1) {
+                    dispatch_semaphore_signal(semaphore)
                 }
             }
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
         }
-        
-        return route != nil
     }
     
     private func matcher<H>(route: String, handler: H) -> ((String) -> (H?, Parameters)) {
