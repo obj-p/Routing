@@ -15,15 +15,13 @@ public class Routing {
     public typealias Parameters = [String: String]
     public typealias Completed = () -> Void
     
-    private enum RouteType {
-        case Proxy((String) -> (ProxyHandler?, Parameters))
-        case Route((String) -> (RouteHandler?, Parameters))
-    }
-    
     private var accessQueue: dispatch_queue_t!
     private var routingQueue: dispatch_queue_t!
     private var callbackQueue: dispatch_queue_t!
-    private var routes: [RouteType] = [RouteType]()
+    private typealias Proxy = (String) -> (ProxyHandler?, Parameters)
+    private var proxies: [Proxy] = [Proxy]()
+    private typealias Route = (String) -> (RouteHandler?, Parameters)
+    private var routes: [Route] = [Route]()
     
     public init(accessQueue: dispatch_queue_t = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT),
         routingQueue: dispatch_queue_t = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL),
@@ -46,7 +44,7 @@ public class Routing {
     }
     
     public func open(URL: NSURL) -> Bool {
-        var routes: [RouteType]!
+        var routes: [Route]!
         dispatch_sync(accessQueue) {
             routes = self.routes
         }
@@ -65,10 +63,7 @@ public class Routing {
         
         // TODO: extract common pattern
         let route = routes
-            .map { closure -> (RouteHandler?, Parameters) in
-                if case let .Route(f) = closure { return f(URLString) }
-                else { return (nil, [String: String]())}
-            }
+            .map { $0(URLString) }
             .filter { $0.0 != nil }
             .first
             .map { ($0!, $1) }
@@ -84,15 +79,17 @@ public class Routing {
         return false
     }
     
-    private func process(var path: String, var parameters: [String: String], var route: (RouteHandler, Parameters), routes: [RouteType]) {
+    private func process(var path: String, var parameters: [String: String], var route: (RouteHandler, Parameters), routes: [Route]) {
+        var proxies: [Proxy]!
+        dispatch_sync(accessQueue) {
+            proxies = self.proxies
+        }
+        
         dispatch_async(routingQueue) {
             let semaphore = dispatch_semaphore_create(0)
             // TODO: allow proxy to abort
-            routes  /* Proxies */
-                .map { closure -> (ProxyHandler?, Parameters) in
-                    if case let .Proxy(f) = closure { return f(path) }
-                    else { return (nil, [String : String]())}
-                }
+            proxies
+                .map { $0(path) }
                 .filter { $0.0 != nil }
                 .map { ($0!, $1) }
                 .forEach { (h, var p) in
@@ -108,10 +105,7 @@ public class Routing {
             }
 
             let proxiedRoute = routes
-                .map { closure -> (RouteHandler?, Parameters) in
-                    if case let .Route(f) = closure { return f(path) }
-                    else { return (nil, [String: String]())}
-                }
+                .map { $0(path) }
                 .filter { $0.0 != nil }
                 .first
                 .map { ($0!, $1) }
