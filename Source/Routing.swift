@@ -9,6 +9,7 @@
 import Foundation
 
 public class Routing {
+    
     public typealias ProxyHandler = (String, Parameters, Next) -> Void
     public typealias Next = (String, Parameters) -> Void
     public typealias RouteHandler = (Parameters, Completed) -> Void
@@ -63,12 +64,8 @@ public class Routing {
         components.query = nil
         var URLString = components.string ?? ""
         
-        // TODO: extract common pattern
-        let route = routes
-            .map { $0(URLString) }
-            .filter { $0.0 != nil }
+        let route = filterRoute(URLString, routes: routes)
             .first
-            .map { ($0!, $1) }
         
         if let route = route {
             defer {
@@ -81,14 +78,12 @@ public class Routing {
         return false
     }
     
+    // TODO: rename some of these variables
     private func process(var path: String, var parameters: [String: String], proxies: [Proxy], var route: (RouteHandler, Parameters), routes: [Route]) {
         dispatch_async(routingQueue) {
             let semaphore = dispatch_semaphore_create(0)
             // TODO: allow proxy to abort
-            proxies
-                .map { $0(path) }
-                .filter { $0.0 != nil }
-                .map { ($0!, $1) }
+            self.filterRoute(path, routes: proxies)
                 .forEach { (h, var p) in
                     parameters.forEach { p[$0.0] = $0.1 }
                     dispatch_async(self.callbackQueue) {
@@ -101,11 +96,8 @@ public class Routing {
                     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
             }
 
-            route = routes
-                .map { $0(path) }
-                .filter { $0.0 != nil }
-                .first
-                .map { ($0!, $1) } ?? route
+            route = self.filterRoute(path, routes: routes)
+                .first ?? route
             
             parameters.forEach { route.1[$0.0] = $0.1 }
             dispatch_async(self.callbackQueue) {
@@ -115,6 +107,13 @@ public class Routing {
             }
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
         }
+    }
+    
+    private func filterRoute<H>(route: String, routes: [(String) -> (H?, Parameters)]) -> [(H, Parameters)] {
+        return routes
+            .map { $0(route) }
+            .filter { $0.0 != nil }
+            .map { ($0!, $1) }
     }
     
     private func prepare<H>(pattern: String, handler: H) -> ((String) -> (H?, Parameters)) {
