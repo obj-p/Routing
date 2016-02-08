@@ -20,11 +20,18 @@ public class Routing {
         case Route((String) -> (RouteHandler?, Parameters))
     }
     
-    let accessQueue: dispatch_queue_t = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT)
-    let routingQueue: dispatch_queue_t = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
+    private var accessQueue: dispatch_queue_t!
+    private var routingQueue: dispatch_queue_t!
+    private var callbackQueue: dispatch_queue_t!
     private var routes: [RouteType] = [RouteType]()
     
-    public init() {}
+    public init(accessQueue: dispatch_queue_t = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT),
+        routingQueue: dispatch_queue_t = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL),
+        callbackQueue: dispatch_queue_t = dispatch_get_main_queue()) {
+            self.accessQueue = accessQueue
+            self.routingQueue = routingQueue
+            self.callbackQueue = callbackQueue
+    }
     
     public func proxy(pattern: String, handler: ProxyHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
@@ -68,7 +75,7 @@ public class Routing {
         // TODO: allow proxy to abort
         
         defer {
-            dispatch_async(routingQueue) { [weak self] in
+            dispatch_async(routingQueue) {
                 let semaphore = dispatch_semaphore_create(0)
                 
                 routes  /* Proxies */
@@ -79,7 +86,7 @@ public class Routing {
                     .filter { $0.0 != nil }
                     .forEach { (h, var p) in
                         parameters.forEach { p[$0.0] = $0.1 }
-                        dispatch_async(dispatch_get_main_queue()) {
+                        dispatch_async(self.callbackQueue) {
                             h!(path, p) { (proxiedPath, proxiedParameters) in
                                 proxiedParameters.forEach { parameters[$0.0] = $0.1 }
                                 path = proxiedPath
@@ -99,7 +106,7 @@ public class Routing {
                 
                 _ = (proxiedRoute ?? route).map { (h, var p) -> (RouteHandler, Parameters) in
                     parameters.forEach { p[$0.0] = $0.1 }
-                    dispatch_async(dispatch_get_main_queue()) {
+                    dispatch_async(self.callbackQueue) {
                         h!(p) {
                             dispatch_semaphore_signal(semaphore)
                         }
