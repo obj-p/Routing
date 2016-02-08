@@ -131,9 +131,7 @@ public class Routing {
             let patterns = (regex: dynamicSegments?.reduce(start) { $0.stringByReplacingOccurrencesOfString($1, withString: "([^/]+)") },
                 keys: dynamicSegments?.map { $0.stringByReplacingOccurrencesOfString(":", withString: "") })
             
-            let match = patterns.regex.flatMap { matchResults(route, $0)?.first }
-            
-            guard let m = match, let keys = patterns.keys where keys.count == m.numberOfRanges - 1 else {
+            guard let m = patterns.regex.flatMap({ matchResults(route, $0)?.first }), let keys = patterns.keys where keys.count == m.numberOfRanges - 1 else {
                 return (nil, [:])
             }
             
