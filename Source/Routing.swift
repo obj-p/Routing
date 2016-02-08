@@ -131,13 +131,13 @@ public class Routing {
             let patterns = (regex: dynamicSegments?.reduce(start) { $0.stringByReplacingOccurrencesOfString($1, withString: "([^/]+)") },
                 keys: dynamicSegments?.map { $0.stringByReplacingOccurrencesOfString(":", withString: "") })
             
-            guard let m = patterns.regex.flatMap({ matchResults(route, $0)?.first }), let keys = patterns.keys where keys.count == m.numberOfRanges - 1 else {
+            guard let matches = patterns.regex.flatMap({ matchResults(route, $0)?.first }), let keys = patterns.keys where keys.count == matches.numberOfRanges - 1 else {
                 return (nil, [:])
             }
             
-            let parameters = [Int](1 ..< m.numberOfRanges).reduce(Parameters()) { (var p, i) in
-                p[keys[i-1]] = (route as NSString).substringWithRange(m.rangeAtIndex(i))
-                return p
+            let parameters = [Int](1 ..< matches.numberOfRanges).reduce(Parameters()) { (var parameters, index) in
+                parameters[keys[index-1]] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
+                return parameters
             }
             
             return (handler, parameters)
