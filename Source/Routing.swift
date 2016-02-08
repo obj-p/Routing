@@ -35,13 +35,13 @@ public class Routing {
     
     public func proxy(pattern: String, handler: ProxyHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
-            self.routes.insert(.Proxy(self.matcher(pattern, handler: handler)), atIndex: 0)
+            self.routes.insert(.Proxy(self.prepare(pattern, handler: handler)), atIndex: 0)
         }
     }
     
     public func map(pattern: String, handler: RouteHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
-            self.routes.insert(.Route(self.matcher(pattern, handler: handler)), atIndex: 0)
+            self.routes.insert(.Route(self.prepare(pattern, handler: handler)), atIndex: 0)
         }
     }
     
@@ -56,16 +56,17 @@ public class Routing {
             return false
         }
         
-        var path = "/" + (components.host ?? "") + (components.path ?? "")
-        
         var parameters: [String: String] = [:]
         components.queryItems?.forEach() {
             parameters.updateValue(($0.value ?? ""), forKey: $0.name)
         }
+        components.query = nil
+        var URLString = components.string ?? ""
         
+        // TODO: extract common pattern
         let route = routes
             .map { closure -> (RouteHandler?, Parameters) in
-                if case let .Route(f) = closure { return f(path) }
+                if case let .Route(f) = closure { return f(URLString) }
                 else { return (nil, [String: String]())}
             }
             .filter { $0.0 != nil }
@@ -74,7 +75,7 @@ public class Routing {
         
         if let route = route {
             defer {
-                process(path, parameters: parameters, route: route, routes: routes)
+                process(URLString, parameters: parameters, route: route, routes: routes)
             }
             
             return true
@@ -93,10 +94,11 @@ public class Routing {
                     else { return (nil, [String : String]())}
                 }
                 .filter { $0.0 != nil }
+                .map { ($0!, $1) }
                 .forEach { (h, var p) in
                     parameters.forEach { p[$0.0] = $0.1 }
                     dispatch_async(self.callbackQueue) {
-                        h!(path, p) { (proxiedPath, proxiedParameters) in
+                        h(path, p) { (proxiedPath, proxiedParameters) in
                             proxiedParameters.forEach { parameters[$0.0] = $0.1 }
                             path = proxiedPath
                             dispatch_semaphore_signal(semaphore)
@@ -125,7 +127,7 @@ public class Routing {
         }
     }
     
-    private func matcher<H>(route: String, handler: H) -> ((String) -> (H?, Parameters)) {
+    private func prepare<H>(route: String, handler: H) -> ((String) -> (H?, Parameters)) {
         return { [weak self] (aRoute: String) -> (H?, Parameters) in
             let patterns = self?.patterns(route)
             let match = patterns?.regex.flatMap { self?.matchResults(aRoute, regex: $0) }?.first

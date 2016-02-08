@@ -13,15 +13,14 @@ struct AppRoutes {
     internal static let urls = URLs()
     internal static let identifiers = Identifiers()
     
-    internal static let host = "routingexample:/"
-    internal static let root = "/root"
-    internal static let first = "/root/first"
-    internal static let second = "/root/first/second"
+    internal static let root = "routingexample://root"
+    internal static let first = "routingexample://root/first"
+    internal static let second = "routingexample://root/first/second"
     
     internal struct URLs {
-        internal let root = NSURL(string: AppRoutes.host + AppRoutes.root)!
-        internal let first = NSURL(string: AppRoutes.host + AppRoutes.first)!
-        internal let second = NSURL(string: AppRoutes.host + AppRoutes.second)!
+        internal let root = NSURL(string: AppRoutes.root)!
+        internal let first = NSURL(string: AppRoutes.first)!
+        internal let second = NSURL(string: AppRoutes.second)!
     }
     
     internal struct Identifiers {

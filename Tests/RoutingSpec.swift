@@ -30,7 +30,7 @@ class RoutingSpec: QuickSpec {
             context("#open") {
                 
                 it("should return true if it can open the route") {
-                    router.map("/route") { (_, completed) in completed() }
+                    router.map("routingexample://route") { (_, completed) in completed() }
                     
                     expect(router.open(NSURL(string: "routingexample://route/")!)).to(equal(true))
                 }
@@ -40,40 +40,40 @@ class RoutingSpec: QuickSpec {
                 }
                 
                 it("should return false if it cannot open the route due to no match") {
-                    router.map("/route") { (_, completed) in completed() }
+                    router.map("routingexample://route") { (_, completed) in completed() }
                     expect(router.open(NSURL(string: "routingexample://incorrectroute/")!)).to(equal(false))
                 }
                 
                 it("should call the binded closure corresponding to the opened route") {
                     var isOpened = false
-                    router.map("/route") { (_, completed) in
+                    router.map("routingexample://route") { (_, completed) in
                         isOpened = true
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route/")!)
+                    router.open(NSURL(string: "routingexample://route")!)
                     expect(isOpened).toEventually(equal(true))
                 }
                 
                 it("should call the latest closure binded to the route") { 
                     var routeCalled: UInt8 = 1
-                    router.map("/route") { (_, completed) in
+                    router.map("routingexample://route") { (_, completed) in
                         routeCalled = routeCalled << 1
                         completed()
                     }
                     
-                    router.map("/route") { (_, completed) in
+                    router.map("routingexample://route") { (_, completed) in
                         routeCalled = routeCalled << 2
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route/")!)
+                    router.open(NSURL(string: "routingexample://route")!)
                     expect(routeCalled).toEventually(equal(4))
                 }
                 
                 it("should pass url arguments specified in the route in the parameters dictionary") {
                     var argument: String?
-                    router.map("/route/:argument") { (parameters, completed) in
+                    router.map("routingexample://route/:argument") { (parameters, completed) in
                         argument = parameters["argument"]
                         completed()
                     }
@@ -84,7 +84,7 @@ class RoutingSpec: QuickSpec {
                 
                 it("should pass query parameters specified in the route in the parameters dictionary") {
                     var param: String?
-                    router.map("/route") { (parameters, completed) in
+                    router.map("routingexample://route") { (parameters, completed) in
                         param = parameters["param"]
                         completed()
                     }
@@ -96,13 +96,13 @@ class RoutingSpec: QuickSpec {
                 it("should process urls in a serial order") {
                     var results = [String]()
                     
-                    router.map("/route/:append") { (parameters, completed) in
+                    router.map("routingexample://route/:append") { (parameters, completed) in
                         results.append(parameters["append"]!)
                         
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (1 * Int64(NSEC_PER_SEC))), testingQueue, completed)
                     }
                     
-                    router.map("/route/two/:append") { (parameters, completed) in
+                    router.map("routingexample://route/two/:append") { (parameters, completed) in
                         results.append(parameters["append"]!)
                         completed()
                     }
@@ -113,7 +113,7 @@ class RoutingSpec: QuickSpec {
                 }
                 
                 it("should be able to open the route despite concurrent read right accesses") {
-                    router.map("/route") { (_, completed) in completed() }
+                    router.map("routingexample://route") { (_, completed) in completed() }
                     
                     dispatch_async(testingQueue) {
                         for i in 1...10000 {
@@ -127,7 +127,7 @@ class RoutingSpec: QuickSpec {
                         }
                     }
                     
-                    expect(router.open(NSURL(string: "routingexample://route/")!)).toEventually(equal(true))
+                    expect(router.open(NSURL(string: "routingexample://route")!)).toEventually(equal(true))
                 }
 
                 xit("should allow to set the callback queue of the route") {
@@ -140,15 +140,15 @@ class RoutingSpec: QuickSpec {
                 
                 it("should be able to proxy and modify the route") {
                     var routeCalled: UInt8 = 1
-                    router.map("/route/one") { (_, completed) in completed()
+                    router.map("routingexample://route/one") { (_, completed) in completed()
                         routeCalled = routeCalled << 1
                     }
-                    router.map("/route/two") { (_, completed) in completed()
+                    router.map("routingexample://route/two") { (_, completed) in completed()
                         routeCalled = routeCalled << 2
                     }
                     
-                    router.proxy("/route/one") { (route, parameters, next) -> Void in
-                        next("/route/two", parameters)
+                    router.proxy("routingexample://route/one") { (route, parameters, next) -> Void in
+                        next("routingexample://route/two", parameters)
                     }
                     
                     router.open(NSURL(string: "routingexample://route/one")!)
@@ -169,12 +169,12 @@ class RoutingSpec: QuickSpec {
                 
                 it("should allow for modifying arguments passed in url") {
                     var argument: String?
-                    router.map("/route/:argument") { (parameters, completed) in
+                    router.map("routingexample://route/:argument") { (parameters, completed) in
                         argument = parameters["argument"]
                         completed()
                     }
                     
-                    router.proxy("/route/:argument") { (route, var parameters, next) -> Void in
+                    router.proxy("routingexample://route/:argument") { (route, var parameters, next) -> Void in
                         parameters["argument"] = "two"
                         next(route, parameters)
                     }
@@ -185,12 +185,12 @@ class RoutingSpec: QuickSpec {
                 
                 it("should allow for modifying query parameters passed in url") {
                     var query: String?
-                    router.map("/route") { (parameters, completed) in
+                    router.map("routingexample://route") { (parameters, completed) in
                         query = parameters["query"]
                         completed()
                     }
                     
-                    router.proxy("/route") { (route, var parameters, next) -> Void in
+                    router.proxy("routingexample://route") { (route, var parameters, next) -> Void in
                         parameters["query"] = "bar"
                         next(route, parameters)
                     }
@@ -200,17 +200,17 @@ class RoutingSpec: QuickSpec {
                 }
                 
                 it("should process multiple proxies in a serial order") {
-                    router.map("/route") { (parameters, completed) in completed() }
+                    router.map("routingexample://route") { (parameters, completed) in completed() }
                     
                     var results = [String]()
-                    router.proxy("/route") { (route, parameters, next) in
+                    router.proxy("routingexample://route") { (route, parameters, next) in
                         results.append("two")
                         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (1 * Int64(NSEC_PER_SEC))), testingQueue) {
                             next(route, parameters)
                         }
                     }
                     
-                    router.proxy("/route") { (route, parameters, next) in
+                    router.proxy("routingexample://route") { (route, parameters, next) in
                         results.append("one")
                         next(route, parameters)
                     }
@@ -220,7 +220,7 @@ class RoutingSpec: QuickSpec {
                 }
                 
                 it("should be able to open the route despite concurrent read right accesses") {
-                    router.map("/route") { (_, completed) in completed() }
+                    router.map("routingexample://route") { (_, completed) in completed() }
                     
                     dispatch_async(testingQueue) {
                         for i in 1...10000 {
@@ -234,18 +234,18 @@ class RoutingSpec: QuickSpec {
                         }
                     }
                     
-                    expect(router.open(NSURL(string: "routingexample://route/")!)).toEventually(equal(true))
+                    expect(router.open(NSURL(string: "routingexample://route")!)).toEventually(equal(true))
                 }
                 
                 it("should maintain the parameters throughout the proxy and the mapped route") {
                     var proxiedArgument, proxiedQuery: String?
-                    router.proxy("/route/:argument") { (route, parameters, next) in
+                    router.proxy("routingexample://route/:argument") { (route, parameters, next) in
                         (proxiedArgument, proxiedQuery) = (parameters["argument"], parameters["query"])
                         next(route, parameters)
                     }
                     
                     var argument, query: String?
-                    router.map("/route/:argument") { (parameters, completed) in
+                    router.map("routingexample://route/:argument") { (parameters, completed) in
                         (argument, query) = (parameters["argument"], parameters["query"])
                         completed()
                     }
