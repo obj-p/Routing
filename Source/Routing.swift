@@ -117,38 +117,33 @@ public class Routing {
         }
     }
     
-    private func prepare<H>(route: String, handler: H) -> ((String) -> (H?, Parameters)) {
-        return { [weak self] (aRoute: String) -> (H?, Parameters) in
-            let patterns = self?.patterns(route)
-            let match = patterns?.regex.flatMap { self?.matchResults(aRoute, regex: $0) }?.first
+    private func prepare<H>(pattern: String, handler: H) -> ((String) -> (H?, Parameters)) {
+        return { (route: String) -> (H?, Parameters) in
+            let start: String! = "^\(pattern)/?$"
             
-            guard let m = match, let keys = patterns?.keys where keys.count == m.numberOfRanges - 1 else {
+            let matchResults = { (string: String, regex: String) -> [NSTextCheckingResult]? in
+                return (try? NSRegularExpression(pattern: regex, options: .CaseInsensitive))
+                    .map { $0.matchesInString(string, options: [], range: NSMakeRange(0, string.characters.count)) }
+            }
+            
+            let ranges = matchResults(start, ":[a-zA-Z0-9-_]+")?.map { $0.range }
+            let dynamicSegments = ranges?.map { (start as NSString).substringWithRange($0) }
+            let patterns = (regex: dynamicSegments?.reduce(start) { $0.stringByReplacingOccurrencesOfString($1, withString: "([^/]+)") },
+                keys: dynamicSegments?.map { $0.stringByReplacingOccurrencesOfString(":", withString: "") })
+            
+            let match = patterns.regex.flatMap { matchResults(route, $0)?.first }
+            
+            guard let m = match, let keys = patterns.keys where keys.count == m.numberOfRanges - 1 else {
                 return (nil, [:])
             }
             
             let parameters = [Int](1 ..< m.numberOfRanges).reduce(Parameters()) { (var p, i) in
-                p[keys[i-1]] = (aRoute as NSString).substringWithRange(m.rangeAtIndex(i))
+                p[keys[i-1]] = (route as NSString).substringWithRange(m.rangeAtIndex(i))
                 return p
             }
             
             return (handler, parameters)
         }
-    }
-    
-    private func patterns(route: String) -> (regex: String?, keys: [String]?) {
-        var regex: String! = "^\(route)/?$"
-        let ranges = self.matchResults(regex, regex: ":[a-zA-Z0-9-_]+")?.map { $0.range }
-        let parameters = ranges?.map { (regex as NSString).substringWithRange($0) }
-        
-        regex = parameters?.reduce(regex) { $0.stringByReplacingOccurrencesOfString($1, withString: "([^/]+)") }
-        let keys = parameters?.map { $0.stringByReplacingOccurrencesOfString(":", withString: "") }
-        
-        return (regex, keys)
-    }
-    
-    private func matchResults(string: String, regex: String) -> [NSTextCheckingResult]? {
-        return (try? NSRegularExpression(pattern: regex, options: .CaseInsensitive))
-            .map { $0.matchesInString(string, options: [], range: NSMakeRange(0, string.characters.count)) }
     }
     
 }
