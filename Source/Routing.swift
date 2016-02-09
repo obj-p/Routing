@@ -103,31 +103,27 @@ public class Routing {
     
     private func prepare<H>(pattern: String, handler: H) -> ((String) -> (H?, Parameters)) {
         return { (route: String) -> (H?, Parameters) in
-            let start: String! = "^\(pattern)/?$"
+            let regex = "^\(pattern)/?$".stringByReplacingOccurrencesOfString(":[a-zA-Z0-9_]+",
+                withString: "([^/]+)",
+                options: [.RegularExpressionSearch, .CaseInsensitiveSearch],
+                range: Range(start: pattern.startIndex, end: pattern.endIndex))
             
-            let matchResults = { (string: String, regex: String) -> [NSTextCheckingResult]? in
-                return (try? NSRegularExpression(pattern: regex, options: .CaseInsensitive))
-                    .map { $0.matchesInString(string, options: [], range: NSMakeRange(0, string.characters.count)) }
-            }
-            
-            let ranges = matchResults(start, ":[a-zA-Z0-9-_]+")?.map { $0.range }
-            let dynamicSegments = ranges?.map { (start as NSString).substringWithRange($0) }
-            let patterns = (regex: dynamicSegments?.reduce(start) { $0.stringByReplacingOccurrencesOfString($1, withString: "([^/]+)") },
-                keys: dynamicSegments?.map { $0.stringByReplacingOccurrencesOfString(":", withString: "") })
+//            let patterns = (regex: dynamicSegments.reduce(start) { $0.stringByReplacingOccurrencesOfString($1, withString: "([^/]+)") },
+//                keys: dynamicSegments?.map { $0.stringByReplacingOccurrencesOfString(":", withString: "") })
             
             
             // TODO: should allow to match without dynamic segments as well.
-            guard let matches = patterns.regex.flatMap({ matchResults(route, $0)?.first }),
-                let keys = patterns.keys where keys.count == matches.numberOfRanges - 1
-                else {
-                    return (nil, [:])
-            }
-            
-            let parameters = [Int](1 ..< matches.numberOfRanges).reduce(Parameters()) { (var parameters, index) in
-                parameters[keys[index-1]] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
-                return parameters
-            }
-            return (handler, parameters)
+//            guard let matches = patterns.regex.flatMap({ matchResults(route, $0)?.first }),
+//                let keys = patterns.keys where keys.count == matches.numberOfRanges - 1
+//                else {
+//                    return (nil, [:])
+//            }
+//            
+//            let parameters = [Int](1 ..< matches.numberOfRanges).reduce(Parameters()) { (var parameters, index) in
+//                parameters[keys[index-1]] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
+//                return parameters
+//            }
+            return (handler, [:])//parameters)
         }
     }
     

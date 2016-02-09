@@ -69,12 +69,12 @@ class RoutingSpec: QuickSpec {
                 
                 it("should pass url arguments specified in the route in the parameters dictionary") {
                     var argument: String?
-                    router.map("routingexample://route/:argument") { (parameters, completed) in
+                    router.map("routingexample://route/:argument/:argument2") { (parameters, completed) in
                         argument = parameters["argument"]
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route/expected")!)
+                    router.open(NSURL(string: "routingexample://route/expected/expected2")!)
                     expect(argument).toEventually(equal("expected"))
                 }
                 
