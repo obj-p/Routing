@@ -113,13 +113,13 @@ class RoutingSpec: QuickSpec {
                     router.map("routingexample://route") { (_, completed) in completed() }
                     
                     dispatch_async(testingQueue) {
-                        for i in 1...10000 {
+                        for i in 1...1000 {
                             router.map("\(i)") { (_, completed) in completed() }
                         }
                     }
                     
                     dispatch_async(testingQueue) {
-                        for i in 1...10000 {
+                        for i in 1...1000 {
                             router.map("\(i)") { (_, completed) in completed() }
                         }
                     }
@@ -232,13 +232,13 @@ class RoutingSpec: QuickSpec {
                     router.map("routingexample://route") { (_, completed) in completed() }
                     
                     dispatch_async(testingQueue) {
-                        for i in 1...10000 {
+                        for i in 1...1000 {
                             router.proxy("\(i)") { (route, parameters, next) in next(route, parameters) }
                         }
                     }
                     
                     dispatch_async(testingQueue) {
-                        for i in 1...10000 {
+                        for i in 1...1000 {
                             router.proxy("\(i)") { (route, parameters, next) in next(route, parameters) }
                         }
                     }
