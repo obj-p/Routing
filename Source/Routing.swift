@@ -10,19 +10,19 @@ import Foundation
 
 public class Routing {
     
+    public typealias MapHandler = (Parameters, Completed) -> Void
+    public typealias Completed = () -> Void
     public typealias ProxyHandler = (String, Parameters, Next) -> Void
     public typealias Next = (String, Parameters) -> Void
-    public typealias RouteHandler = (Parameters, Completed) -> Void
     public typealias Parameters = [String: String]
-    public typealias Completed = () -> Void
     
     private var accessQueue: dispatch_queue_t!
     private var routingQueue: dispatch_queue_t!
     private var callbackQueue: dispatch_queue_t!
+    private typealias Map = (String) -> (MapHandler?, Parameters)
+    private var maps: [Map] = [Map]()
     private typealias Proxy = (String) -> (ProxyHandler?, Parameters)
     private var proxies: [Proxy] = [Proxy]()
-    private typealias Route = (String) -> (RouteHandler?, Parameters)
-    private var routes: [Route] = [Route]()
     
     public init(accessQueue: dispatch_queue_t = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT),
         routingQueue: dispatch_queue_t = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL),
@@ -32,72 +32,62 @@ public class Routing {
             self.callbackQueue = callbackQueue
     }
     
+    public func map(pattern: String, handler: MapHandler) -> Void {
+        dispatch_barrier_async(accessQueue) {
+            self.maps.insert(self.prepare(pattern, handler: handler), atIndex: 0)
+        }
+    }
+    
     public func proxy(pattern: String, handler: ProxyHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
             self.proxies.insert(self.prepare(pattern, handler: handler), atIndex: 0)
         }
     }
     
-    public func map(pattern: String, handler: RouteHandler) -> Void {
-        dispatch_barrier_async(accessQueue) {
-            self.routes.insert(self.prepare(pattern, handler: handler), atIndex: 0)
-        }
-    }
-    
     public func open(URL: NSURL) -> Bool {
+        var maps: [Map]!
         var proxies: [Proxy]!
-        var routes: [Route]!
         dispatch_sync(accessQueue) {
+            maps = self.maps
             proxies = self.proxies
-            routes = self.routes
         }
         
-        if routes.count == 0 { return false }
-        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) else {
-            return false
-        }
+        if maps.count == 0 { return false }
+        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) else { return false }
         
-        var parameters: [String: String] = [:]
-        components.queryItems?.forEach() {
-            parameters.updateValue(($0.value ?? ""), forKey: $0.name)
-        }
+        var queryParameters: [String: String] = [:]
+        components.queryItems?.forEach() { queryParameters.updateValue(($0.value ?? ""), forKey: $0.name) }
         components.query = nil
         var URLString = components.string ?? ""
         
-        let routeComponents = filterRoute(URLString, routes: routes)
-            .first
-        
-        if let routeComponents = routeComponents {
-            defer {
-                process(URLString, parameters: parameters, proxies: proxies, routes: routes)
-            }
-            
+        if let routeComponents = filterRoute(URLString, routes: maps).first {
+            defer { process(URLString, parameters: queryParameters, maps: maps, proxies: proxies) }
             return true
         }
-        
         return false
     }
     
-    private func process(var route: String, var parameters: [String: String], proxies: [Proxy], routes: [Route]) {
+    private func process(route: String, parameters: [String: String], maps: [Map], proxies: [Proxy]) {
         dispatch_async(routingQueue) {
             let semaphore = dispatch_semaphore_create(0)
             // TODO: allow proxy to abort
+            var overwrittenRoute = route, overwrittenParameters = parameters
             self.filterRoute(route, routes: proxies)
-                .forEach { (h, var p) in
-                    parameters.forEach { p[$0.0] = $0.1 }
+                .forEach { (handler, var parameters) in
+                    overwrittenParameters.forEach { parameters[$0.0] = $0.1 }
                     dispatch_async(self.callbackQueue) {
-                        h(route, p) { (proxiedRoutes, proxiedParameters) in
-                            proxiedParameters.forEach { parameters[$0.0] = $0.1 }
-                            route = proxiedRoutes
+                        handler(route, parameters) { (overwrittingRoute, overwrittingParameters) in
+                            overwrittingParameters.forEach { overwrittenParameters[$0.0] = $0.1 }
+                            overwrittenRoute = overwrittingRoute
                             dispatch_semaphore_signal(semaphore)
                         }
                     }
                     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
             }
 
-            var routeComponents: (RouteHandler, Parameters)! = self.filterRoute(route, routes: routes).first
+            var routeComponents: (MapHandler, Parameters)! = self.filterRoute(overwrittenRoute, routes: maps).first
             if routeComponents != nil  {
-                parameters.forEach { routeComponents.1[$0.0] = $0.1 }
+                overwrittenParameters.forEach { routeComponents.1[$0.0] = $0.1 }
                 dispatch_async(self.callbackQueue) {
                     routeComponents.0(routeComponents.1) {
                         dispatch_semaphore_signal(semaphore)
@@ -129,8 +119,10 @@ public class Routing {
             let patterns = (regex: dynamicSegments?.reduce(start) { $0.stringByReplacingOccurrencesOfString($1, withString: "([^/]+)") },
                 keys: dynamicSegments?.map { $0.stringByReplacingOccurrencesOfString(":", withString: "") })
             
-            guard let matches = patterns.regex.flatMap({ matchResults(route, $0)?.first }), let keys = patterns.keys where keys.count == matches.numberOfRanges - 1 else {
-                return (nil, [:])
+            guard let matches = patterns.regex.flatMap({ matchResults(route, $0)?.first }),
+                let keys = patterns.keys where keys.count == matches.numberOfRanges - 1
+                else {
+                    return (nil, [:])
             }
             
             let parameters = [Int](1 ..< matches.numberOfRanges).reduce(Parameters()) { (var parameters, index) in
