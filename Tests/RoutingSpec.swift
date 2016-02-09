@@ -109,7 +109,6 @@ class RoutingSpec: QuickSpec {
                 }
                 
                 it("should be able to open the route despite concurrent read right accesses") {
-                    router = Routing(accessQueue: dispatch_queue_create("Testing Map Access Queue", DISPATCH_QUEUE_CONCURRENT))
                     router.map("routingexample://route") { (_, completed) in completed() }
                     
                     dispatch_async(testingQueue) {
@@ -228,7 +227,6 @@ class RoutingSpec: QuickSpec {
                 }
                 
                 it("should be able to open the route despite concurrent read right accesses") {
-                    router = Routing(accessQueue: dispatch_queue_create("Testing Proxy Access Queue", DISPATCH_QUEUE_CONCURRENT))
                     router.map("routingexample://route") { (_, completed) in completed() }
                     
                     dispatch_async(testingQueue) {
