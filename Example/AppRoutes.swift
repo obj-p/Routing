@@ -81,6 +81,10 @@ internal extension Routing {
             CATransaction.commit()
         }
         
+        Routing.sharedRouter.map("*") { _ ,completed in
+            completed()
+        }
+        
     }
     
 }
