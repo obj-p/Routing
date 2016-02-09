@@ -85,14 +85,10 @@ public class Routing {
                     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
             }
 
-            var routeComponents: (MapHandler, Parameters)! = self.filterRoute(overwrittenRoute, routes: maps).first
-            if routeComponents != nil  {
-                overwrittenParameters.forEach { routeComponents.1[$0.0] = $0.1 }
-                dispatch_async(self.callbackQueue) {
-                    routeComponents.0(routeComponents.1) {
-                        dispatch_semaphore_signal(semaphore)
-                    }
-                }
+            if let (handler, parameters) = self.filterRoute(overwrittenRoute, routes: maps).first {
+                var parameters = parameters
+                overwrittenParameters.forEach { parameters[$0.0] = $0.1 }
+                dispatch_async(self.callbackQueue) { handler(parameters) { dispatch_semaphore_signal(semaphore) } }
                 dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
             }
         }
