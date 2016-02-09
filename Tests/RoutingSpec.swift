@@ -109,6 +109,7 @@ class RoutingSpec: QuickSpec {
                 }
                 
                 it("should be able to open the route despite concurrent read right accesses") {
+                    router = Routing(accessQueue: dispatch_queue_create("Testing Map Access Queue", DISPATCH_QUEUE_CONCURRENT))
                     router.map("routingexample://route") { (_, completed) in completed() }
                     
                     dispatch_async(testingQueue) {
@@ -127,7 +128,7 @@ class RoutingSpec: QuickSpec {
                 }
 
                 it("should allow to set the callback queue of the route") {
-                    let callbackQueue = dispatch_queue_create("Testing Call Back Queue", DISPATCH_QUEUE_CONCURRENT)
+                    let callbackQueue = dispatch_queue_create("Testing Call Back Queue", DISPATCH_QUEUE_SERIAL)
                     let expectedQueue: UnsafePointer<Int8> = dispatch_queue_get_label(callbackQueue)
                     
                     var actualQueue: UnsafePointer<Int8>?
@@ -227,6 +228,7 @@ class RoutingSpec: QuickSpec {
                 }
                 
                 it("should be able to open the route despite concurrent read right accesses") {
+                    router = Routing(accessQueue: dispatch_queue_create("Testing Proxy Access Queue", DISPATCH_QUEUE_CONCURRENT))
                     router.map("routingexample://route") { (_, completed) in completed() }
                     
                     dispatch_async(testingQueue) {
@@ -265,7 +267,7 @@ class RoutingSpec: QuickSpec {
                 }
                 
                 it("should allow to set the callback queue of the proxy") {
-                    let callbackQueue = dispatch_queue_create("Testing Call Back Queue", DISPATCH_QUEUE_CONCURRENT)
+                    let callbackQueue = dispatch_queue_create("Testing Callback Queue", DISPATCH_QUEUE_SERIAL)
                     let expectedQueue: UnsafePointer<Int8> = dispatch_queue_get_label(callbackQueue)
                     
                     router = Routing(callbackQueue: callbackQueue)
