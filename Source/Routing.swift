@@ -125,7 +125,6 @@ public class Routing {
                 parameters[keys[index-1]] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
                 return parameters
             }
-            
             return (handler, parameters)
         }
     }
