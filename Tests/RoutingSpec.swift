@@ -162,7 +162,7 @@ class RoutingSpec: QuickSpec {
                     expect(routeCalled).toEventually(equal(4))
                 }
                 
-                xit("should allow for wild card / regex matching") {
+                it("should allow for wild card / regex matching") {
                     router.map("/route/one") { (_, completed) in completed() }
                     
                     var isProxied = false
