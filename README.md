@@ -50,9 +50,9 @@ router.open(NSURL(string: "routing://route?foo=bar")!) // query paremeters will 
 
 ## Installation
 
-### Cocoapods
+### CocoaPods
 
-Via [Cocoapods](https://cocoapods.org):
+Via [CocoaPods](https://cocoapods.org):
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
