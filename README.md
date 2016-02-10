@@ -37,6 +37,9 @@ router.proxy("routing://route") { route, parameters, next in
 	next(route, parameters) // Must call next or the router will halt!
 	/* alternatively, next(nil, nil) allowing additional proxies to execute */
 }
+
+router.proxy("routing://*") { ... } // Regex, wildcards are supported
+router.proxy("routing://route/:id") { ... } // Dynamic segments are supported
 ```
 
 ### Open
