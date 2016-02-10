@@ -8,24 +8,31 @@
 
 # Table of Contents
 
-- [About Routing](#about-routing)
+- [Usage](#usage)
 - [Installation](#installation)
 - [Example](#example)
 
 # Usage
 
+Routing allows for closures to be associated with a string pattern. 
+
 ## Map
 ```swift
 let router = Routing()
-router.map("/route") { parameters, completed in
+router.map("routing://route") { parameters, completed in
 	...
 	completed() // Must call completed or the router will halt!
 }
+
+// Regex, wildcards are supported
+router.map("routing://*") { ... } 
+// Dynamic segments are supported
+router.map("routing://route/:id") { ... }
 ```
 
 ## Proxy
 ```swift
-router.proxy("/route") { route, parameters, next in
+router.proxy("routing://route") { route, parameters, next in
 	...
 	next(route, parameters) // Must call next or the router will halt!
 	/* or next(nil, nil) will allow additional proxies to execute */
@@ -35,7 +42,9 @@ router.proxy("/route") { route, parameters, next in
 
 ## Open
 ```swift
-router.open(NSURL(string: "host://route/")!) // Will return true or false if there is an associated route
+router.open(NSURL(string: "routing://route/")!) 
+router.open(NSURL(string: "routing://route/0123456789")!) // ex. route/:id
+router.open(NSURL(string: "routing://route?foo=bar")!)
 ```
 
 # Installation
