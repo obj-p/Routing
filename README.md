@@ -6,17 +6,18 @@
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/ReSwift/ReSwift/blob/master/LICENSE.md)
 
-# Table of Contents
+## Table of Contents
 
 - [Usage](#usage)
 - [Installation](#installation)
 - [Example](#example)
 
-# Usage
+## Usage
 
-Routing allows for closures to be associated with a string pattern. 
+Routing associates string patterns to closures. In the event a URL opened by Routing matches a mapped string pattern, its associated closure will be executed. Opened URLs may also be proxied allowing for the addition of middleware.
 
-## Map
+### Map
+
 ```swift
 let router = Routing()
 router.map("routing://route") { parameters, completed in
@@ -24,39 +25,51 @@ router.map("routing://route") { parameters, completed in
 	completed() // Must call completed or the router will halt!
 }
 
-// Regex, wildcards are supported
-router.map("routing://*") { ... } 
-// Dynamic segments are supported
-router.map("routing://route/:id") { ... }
+router.map("routing://*") { ... } // Regex, wildcards are supported
+router.map("routing://route/:id") { ... } // Dynamic segments are supported
 ```
 
-## Proxy
+### Proxy
+
 ```swift
 router.proxy("routing://route") { route, parameters, next in
 	...
 	next(route, parameters) // Must call next or the router will halt!
-	/* or next(nil, nil) will allow additional proxies to execute */
-	
+	/* alternatively, next(nil, nil) allowing additional proxies to execute */
 }
 ```
 
-## Open
+### Open
+
 ```swift
+// Each router.open(...) will return true / false
 router.open(NSURL(string: "routing://route/")!) 
 router.open(NSURL(string: "routing://route/0123456789")!) // ex. route/:id
-router.open(NSURL(string: "routing://route?foo=bar")!)
+router.open(NSURL(string: "routing://route?foo=bar")!) // query paremeters will be passed to mapped closure.
 ```
 
-# Installation
+## Installation
 
-## Cocoapods
+### Cocoapods
 soon!
 
-## Carthage
+Via [Cocoapods](https://cocoapods.org):
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+use_frameworks!
+
+pod 'Routing', '~> 0.0.1'
+```
+
+### Carthage
 Via [Carthage](https://github.com/Carthage/Carthage):
 
-```swift
+```ogdl
 github "jwalapr/ReSwift"
 ```
 
-# Example
+## Example
+
+An example app may be run with the Example scheme to demonstrate how Routing may be used for in app navigation.
