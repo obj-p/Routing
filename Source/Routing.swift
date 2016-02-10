@@ -32,12 +32,39 @@ public final class Routing {
             self.callbackQueue = callbackQueue
     }
     
+    /**
+     Associates a closure to a string pattern. A Routing instance will execute the closure in the event of a matching URL using #open.
+     Routing will only execute the first matching mapped route. This will be the last routed added with #map.
+     
+     ```code
+     let router = Routing()
+     router.map("routing://route") { parameters, completed in
+     completed() // Must call completed or the router will halt!
+     }
+     ```
+     
+     - Parameter key:  A String pattern
+     - Parameter key:  A String pattern
+     */
     public func map(pattern: String, handler: MapHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
             self.maps.insert(self.prepare(pattern, handler: handler), atIndex: 0)
         }
     }
     
+    /**
+     Associates a closure to a string pattern. A Routing instance will execute the closure in the event of a matching URL using #open.
+     Routing will execute all proxies unless passed back either a route or paramters via #next().
+     
+     ```code
+     let router = Routing()
+     router.map("routing://route") { parameters, completed in
+     completed() // Must call completed or the router will halt!
+     }
+     ```
+     
+     - Parameter key:  A String pattern
+     */
     public func proxy(pattern: String, handler: ProxyHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
             self.proxies.insert(self.prepare(pattern, handler: handler), atIndex: 0)
