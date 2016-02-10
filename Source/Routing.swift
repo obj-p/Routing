@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class Routing {
+public final class Routing {
     
     public typealias MapHandler = (Parameters, Completed) -> Void
     public typealias Completed = () -> Void
