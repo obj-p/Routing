@@ -101,29 +101,30 @@ public class Routing {
             .map { ($0!, $1) }
     }
     
-    private func prepare<H>(pattern: String, handler: H) -> ((String) -> (H?, Parameters)) {
+    private func prepare<H>(var pattern: String, handler: H) -> ((String) -> (H?, Parameters)) {
+        var dynamicSegments = [String: String]()
+        while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
+            dynamicSegments[pattern.substringWithRange(range).stringByReplacingOccurrencesOfString(":", withString: "")] = ""
+            pattern.replaceRange(range, with: "([^/]+)")
+        }
+        
         return { (route: String) -> (H?, Parameters) in
-            let regex = "^\(pattern)/?$".stringByReplacingOccurrencesOfString(":[a-zA-Z0-9_]+",
-                withString: "([^/]+)",
-                options: [.RegularExpressionSearch, .CaseInsensitiveSearch],
-                range: Range(start: pattern.startIndex, end: pattern.endIndex))
-            
-//            let patterns = (regex: dynamicSegments.reduce(start) { $0.stringByReplacingOccurrencesOfString($1, withString: "([^/]+)") },
-//                keys: dynamicSegments?.map { $0.stringByReplacingOccurrencesOfString(":", withString: "") })
-            
-            
-            // TODO: should allow to match without dynamic segments as well.
-//            guard let matches = patterns.regex.flatMap({ matchResults(route, $0)?.first }),
-//                let keys = patterns.keys where keys.count == matches.numberOfRanges - 1
-//                else {
-//                    return (nil, [:])
-//            }
-//            
-//            let parameters = [Int](1 ..< matches.numberOfRanges).reduce(Parameters()) { (var parameters, index) in
-//                parameters[keys[index-1]] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
-//                return parameters
-//            }
-            return (handler, [:])//parameters)
+            guard let matches = (try? NSRegularExpression(pattern: pattern, options: .CaseInsensitive))
+                .flatMap({ $0.matchesInString(route, options: [], range: NSMakeRange(0, route.characters.count)) })?
+                .first
+            else {
+                return (nil, [:])
+            }
+
+            if dynamicSegments.count == matches.numberOfRanges - 1 {
+                print(matches.numberOfRanges)
+                [Int](1 ..< matches.numberOfRanges).forEach { (index) in
+                    
+//                    dynamicSegments[] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
+                }
+            }
+
+            return (handler, dynamicSegments)
         }
     }
     
