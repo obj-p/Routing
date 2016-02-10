@@ -17,7 +17,7 @@ env:
     - FRAMEWORK_NAME="Routing"
     - IOS_SDK=iphonesimulator9.2
   matrix:
-    - DESTINATION="OS=9.2,name=iPhone 6S Plus"     SCHEME="Routing"     SDK="$IOS_SDK"     ACTION="build test"
+    - DESTINATION="OS=9.2,name=iPhone 6S Plus"     SCHEME="Routing"     SDK="$IOS_SDK"     ACTION="test"
 
 script:
   - set -o pipefail
