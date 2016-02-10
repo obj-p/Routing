@@ -103,8 +103,8 @@ public final class Routing {
     }
     
     /**
-     Will execute the first mapped closure and any proxies with a matching pattern. Mapped closures
-     are read in a last mapped first executed order.
+     Will execute the first mapped closure and any proxies with matching patterns. Mapped closures
+     are read in a last to be mapped first executed order.
      
      - Parameter URL:  A URL
      - Returns:  A Bool. True if it can open the URL, false otherwise
