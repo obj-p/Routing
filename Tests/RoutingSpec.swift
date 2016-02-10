@@ -206,24 +206,50 @@ class RoutingSpec: QuickSpec {
                     expect(query).toEventually(equal("bar"))
                 }
                 
-                it("should process multiple proxies in a serial order") {
+                it("should continue processing proxies until a proxy to passes a route back") {
                     router.map("routingexample://route") { (parameters, completed) in completed() }
                     
                     var results = [String]()
                     router.proxy("routingexample://route") { (route, parameters, next) in
+                        results.append("three")
+                        next(nil, nil)
+                    }
+                    
+                    router.proxy("routingexample://route") { (route, parameters, next) in
                         results.append("two")
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (1 * Int64(NSEC_PER_SEC))), testingQueue) {
-                            next(route, parameters)
-                        }
+                        next(route, nil)
                     }
                     
                     router.proxy("routingexample://route") { (route, parameters, next) in
                         results.append("one")
-                        next(route, parameters)
+                        next(nil, nil)
                     }
                     
                     router.open(NSURL(string: "routingexample://route")!)
-                    expect(results).toEventually(equal(["one", "two"]), timeout: 1.5)
+                    expect(results).toEventually(equal(["one", "two"]))
+                }
+                
+                it("should continue processing proxies until a proxy to passes parameters back") {
+                    router.map("routingexample://route") { (parameters, completed) in completed() }
+                    
+                    var results = [String]()
+                    router.proxy("routingexample://route") { (route, parameters, next) in
+                        results.append("three")
+                        next(nil, nil)
+                    }
+                    
+                    router.proxy("routingexample://route") { (route, parameters, next) in
+                        results.append("two")
+                        next(nil, parameters)
+                    }
+                    
+                    router.proxy("routingexample://route") { (route, parameters, next) in
+                        results.append("one")
+                        next(nil, nil)
+                    }
+                    
+                    router.open(NSURL(string: "routingexample://route")!)
+                    expect(results).toEventually(equal(["one", "two"]))
                 }
                 
                 it("should be able to open the route despite concurrent read right accesses") {

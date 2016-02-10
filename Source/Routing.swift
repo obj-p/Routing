@@ -8,12 +8,12 @@
 
 import Foundation
 
-public class Routing {
+public final class Routing {
     
     public typealias MapHandler = (Parameters, Completed) -> Void
     public typealias Completed = () -> Void
     public typealias ProxyHandler = (String, Parameters, Next) -> Void
-    public typealias Next = (String, Parameters) -> Void
+    public typealias Next = (String?, Parameters?) -> Void
     public typealias Parameters = [String: String]
     
     private var accessQueue: dispatch_queue_t!
@@ -61,37 +61,34 @@ public class Routing {
         var URLString = components.string ?? ""
         
         if let routeComponents = filterRoute(URLString, routes: maps).first {
-            defer { process(URLString, parameters: queryParameters, maps: maps, proxies: proxies) }
+            defer {
+                dispatch_async(routingQueue) {
+                    let semaphore = dispatch_semaphore_create(0)
+                    var overwrittingRoute: String?, overwrittingParameters: Parameters?
+                    for (handler, var parameters) in self.filterRoute(URLString, routes: proxies) {
+                        queryParameters.forEach { parameters[$0.0] = $0.1 }
+                        dispatch_async(self.callbackQueue) {
+                            handler(URLString, parameters) { (route, parameters) in
+                                overwrittingRoute = route
+                                overwrittingParameters = parameters
+                                dispatch_semaphore_signal(semaphore)
+                            }
+                        }
+                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+                        if overwrittingRoute != nil || overwrittingParameters != nil { break }
+                    }
+
+                    if let (handler, parameters) = (overwrittingRoute.map { self.filterRoute($0, routes: maps).first } ?? routeComponents) {
+                        var parameters = parameters
+                        (overwrittingParameters ?? queryParameters).forEach { parameters[$0.0] = $0.1 }
+                        dispatch_async(self.callbackQueue) { handler(parameters) { dispatch_semaphore_signal(semaphore) } }
+                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+                    }
+                }
+            }
             return true
         }
         return false
-    }
-    
-    private func process(route: String, parameters: [String: String], maps: [Map], proxies: [Proxy]) {
-        dispatch_async(routingQueue) {
-            let semaphore = dispatch_semaphore_create(0)
-            // TODO: allow proxy to abort
-            var overwrittenRoute = route, overwrittenParameters = parameters
-            self.filterRoute(route, routes: proxies)
-                .forEach { (handler, var parameters) in
-                    overwrittenParameters.forEach { parameters[$0.0] = $0.1 }
-                    dispatch_async(self.callbackQueue) {
-                        handler(route, parameters) { (overwrittingRoute, overwrittingParameters) in
-                            overwrittingParameters.forEach { overwrittenParameters[$0.0] = $0.1 }
-                            overwrittenRoute = overwrittingRoute
-                            dispatch_semaphore_signal(semaphore)
-                        }
-                    }
-                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-            }
-
-            if let (handler, parameters) = self.filterRoute(overwrittenRoute, routes: maps).first {
-                var parameters = parameters
-                overwrittenParameters.forEach { parameters[$0.0] = $0.1 }
-                dispatch_async(self.callbackQueue) { handler(parameters) { dispatch_semaphore_signal(semaphore) } }
-                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-            }
-        }
     }
     
     private func filterRoute<H>(route: String, routes: [(String) -> (H?, Parameters)]) -> [(H, Parameters)] {
