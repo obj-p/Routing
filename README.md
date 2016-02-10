@@ -51,7 +51,6 @@ router.open(NSURL(string: "routing://route?foo=bar")!) // query paremeters will 
 ## Installation
 
 ### Cocoapods
-soon!
 
 Via [Cocoapods](https://cocoapods.org):
 
@@ -64,6 +63,7 @@ pod 'Routing', '~> 0.0.1'
 ```
 
 ### Carthage
+
 Via [Carthage](https://github.com/Carthage/Carthage):
 
 ```ogdl
