@@ -102,9 +102,9 @@ public class Routing {
     }
     
     private func prepare<H>(var pattern: String, handler: H) -> ((String) -> (H?, Parameters)) {
-        var dynamicSegments = [String: String]()
+        var dynamicSegments = [String]()
         while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
-            dynamicSegments[pattern.substringWithRange(range).stringByReplacingOccurrencesOfString(":", withString: "")] = ""
+            dynamicSegments.append(pattern.substringWithRange(range).stringByReplacingOccurrencesOfString(":", withString: ""))
             pattern.replaceRange(range, with: "([^/]+)")
         }
         
@@ -116,15 +116,13 @@ public class Routing {
                 return (nil, [:])
             }
 
-            if dynamicSegments.count == matches.numberOfRanges - 1 {
-                print(matches.numberOfRanges)
+            var parameters = Parameters()
+            if dynamicSegments.count > 0 && dynamicSegments.count == matches.numberOfRanges - 1 {
                 [Int](1 ..< matches.numberOfRanges).forEach { (index) in
-                    
-//                    dynamicSegments[] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
+                    parameters[dynamicSegments[index-1]] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
                 }
             }
-
-            return (handler, dynamicSegments)
+            return (handler, parameters)
         }
     }
     

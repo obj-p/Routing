@@ -69,12 +69,12 @@ class RoutingSpec: QuickSpec {
                 
                 it("should pass url arguments specified in the route in the parameters dictionary") {
                     var argument: String?
-                    router.map("routingexample://route/:argument/:argument2") { (parameters, completed) in
+                    router.map("routingexample://route/:argument") { (parameters, completed) in
                         argument = parameters["argument"]
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route/expected/expected2")!)
+                    router.open(NSURL(string: "routingexample://route/expected")!)
                     expect(argument).toEventually(equal("expected"))
                 }
                 
@@ -162,7 +162,7 @@ class RoutingSpec: QuickSpec {
                     expect(routeCalled).toEventually(equal(4))
                 }
                 
-                xit("should allow for wild card / regex matching") {
+                it("should allow for wild card / regex matching") {
                     router.map("/route/one") { (_, completed) in completed() }
                     
                     var isProxied = false
