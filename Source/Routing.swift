@@ -42,6 +42,8 @@ public final class Routing {
     private typealias Proxy = (String) -> (dispatch_queue_t, ProxyHandler?, Parameters)
     private var proxies: [Proxy] = [Proxy]()
     
+    public init(){}
+    
     /**
      Associates a closure to a string pattern. A Routing instance will execute the closure in the event of a matching URL using #open.
      Routing will only execute the first matching mapped route. This will be the last routed added with #map.
@@ -54,6 +56,7 @@ public final class Routing {
      ```
      
      - Parameter pattern:  A String pattern
+     - Parameter queue:  A dispatch queue for the callback
      - Parameter handler:  A MapHandler
      */
     
@@ -76,6 +79,7 @@ public final class Routing {
      ```
      
      - Parameter pattern:  A String pattern
+     - Parameter queue:  A dispatch queue for the callback
      - Parameter handler:  A ProxyHandler
      */
     

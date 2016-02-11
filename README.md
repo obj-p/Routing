@@ -69,7 +69,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
 use_frameworks!
 
-pod 'Routing', '~> 0.1.0'
+pod 'Routing', '~> 0.1.1'
 ```
 
 ### Carthage
