@@ -59,7 +59,7 @@
 
 /* Begin PBXFileReference section */
 		924DA8321BBD6DDB00F059CE /* Routing.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = Routing.xcodeproj; sourceTree = "<group>"; };
-		92E79B7A1BBD6D3500069929 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		92E79B7A1BBD6D3500069929 /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92E79B7D1BBD6D3500069929 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		92E79B7F1BBD6D3500069929 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		92E79B821BBD6D3500069929 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -87,7 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				924DA8381BBD6DDB00F059CE /* Routing.framework */,
-				924DA83A1BBD6DDB00F059CE /* RoutingTests.xctest */,
+				924DA83A1BBD6DDB00F059CE /* Routing iOS Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,7 +104,7 @@
 		92E79B7B1BBD6D3500069929 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				92E79B7A1BBD6D3500069929 /* Example.app */,
+				92E79B7A1BBD6D3500069929 /* iOS Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -128,9 +128,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		92E79B791BBD6D3500069929 /* Example */ = {
+		92E79B791BBD6D3500069929 /* iOS Example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 92E79B8C1BBD6D3500069929 /* Build configuration list for PBXNativeTarget "Example" */;
+			buildConfigurationList = 92E79B8C1BBD6D3500069929 /* Build configuration list for PBXNativeTarget "iOS Example" */;
 			buildPhases = (
 				92E79B761BBD6D3500069929 /* Sources */,
 				92E79B771BBD6D3500069929 /* Frameworks */,
@@ -142,9 +142,9 @@
 			dependencies = (
 				924DA83E1BBD6DE300F059CE /* PBXTargetDependency */,
 			);
-			name = Example;
+			name = "iOS Example";
 			productName = "Routing Example";
-			productReference = 92E79B7A1BBD6D3500069929 /* Example.app */;
+			productReference = 92E79B7A1BBD6D3500069929 /* iOS Example.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -161,7 +161,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 92E79B751BBD6D3500069929 /* Build configuration list for PBXProject "Example" */;
+			buildConfigurationList = 92E79B751BBD6D3500069929 /* Build configuration list for PBXProject "iOS Example" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -180,7 +180,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				92E79B791BBD6D3500069929 /* Example */,
+				92E79B791BBD6D3500069929 /* iOS Example */,
 			);
 		};
 /* End PBXProject section */
@@ -193,10 +193,10 @@
 			remoteRef = 924DA8371BBD6DDB00F059CE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		924DA83A1BBD6DDB00F059CE /* RoutingTests.xctest */ = {
+		924DA83A1BBD6DDB00F059CE /* Routing iOS Tests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = RoutingTests.xctest;
+			path = "Routing iOS Tests.xctest";
 			remoteRef = 924DA8391BBD6DDB00F059CE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -349,7 +349,7 @@
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "iOS Example";
 			};
 			name = Debug;
 		};
@@ -361,14 +361,14 @@
 				INFOPLIST_FILE = Example/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "iOS Example";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		92E79B751BBD6D3500069929 /* Build configuration list for PBXProject "Example" */ = {
+		92E79B751BBD6D3500069929 /* Build configuration list for PBXProject "iOS Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				92E79B8A1BBD6D3500069929 /* Debug */,
@@ -377,7 +377,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		92E79B8C1BBD6D3500069929 /* Build configuration list for PBXNativeTarget "Example" */ = {
+		92E79B8C1BBD6D3500069929 /* Build configuration list for PBXNativeTarget "iOS Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				92E79B8D1BBD6D3500069929 /* Debug */,
