@@ -29,7 +29,7 @@
 		92FCFA011BB963CD00DF05C3 /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92FCFA041BB963CD00DF05C3 /* Routing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Routing.h; sourceTree = "<group>"; };
 		92FCFA061BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		92FCFA0B1BB963CD00DF05C3 /* RoutingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoutingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		92FCFA0B1BB963CD00DF05C3 /* Routing iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Routing iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingSpec.swift; sourceTree = "<group>"; };
 		92FCFA121BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92FCFA1B1BB9658D00DF05C3 /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				92FCFA011BB963CD00DF05C3 /* Routing.framework */,
-				92FCFA0B1BB963CD00DF05C3 /* RoutingTests.xctest */,
+				92FCFA0B1BB963CD00DF05C3 /* Routing iOS Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,9 +119,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		92FCFA001BB963CD00DF05C3 /* Routing */ = {
+		92FCFA001BB963CD00DF05C3 /* Routing iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 92FCFA151BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing" */;
+			buildConfigurationList = 92FCFA151BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing iOS" */;
 			buildPhases = (
 				92FCF9FC1BB963CD00DF05C3 /* Sources */,
 				92FCF9FD1BB963CD00DF05C3 /* Frameworks */,
@@ -132,14 +132,14 @@
 			);
 			dependencies = (
 			);
-			name = Routing;
+			name = "Routing iOS";
 			productName = Routing;
 			productReference = 92FCFA011BB963CD00DF05C3 /* Routing.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		92FCFA0A1BB963CD00DF05C3 /* RoutingTests */ = {
+		92FCFA0A1BB963CD00DF05C3 /* Routing iOS Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 92FCFA181BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "RoutingTests" */;
+			buildConfigurationList = 92FCFA181BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing iOS Tests" */;
 			buildPhases = (
 				92FCFA071BB963CD00DF05C3 /* Sources */,
 				92FCFA081BB963CD00DF05C3 /* Frameworks */,
@@ -151,9 +151,9 @@
 			dependencies = (
 				92FCFA0E1BB963CD00DF05C3 /* PBXTargetDependency */,
 			);
-			name = RoutingTests;
+			name = "Routing iOS Tests";
 			productName = RoutingTests;
-			productReference = 92FCFA0B1BB963CD00DF05C3 /* RoutingTests.xctest */;
+			productReference = 92FCFA0B1BB963CD00DF05C3 /* Routing iOS Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -186,8 +186,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				92FCFA001BB963CD00DF05C3 /* Routing */,
-				92FCFA0A1BB963CD00DF05C3 /* RoutingTests */,
+				92FCFA001BB963CD00DF05C3 /* Routing iOS */,
+				92FCFA0A1BB963CD00DF05C3 /* Routing iOS Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -250,7 +250,7 @@
 /* Begin PBXTargetDependency section */
 		92FCFA0E1BB963CD00DF05C3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 92FCFA001BB963CD00DF05C3 /* Routing */;
+			target = 92FCFA001BB963CD00DF05C3 /* Routing iOS */;
 			targetProxy = 92FCFA0D1BB963CD00DF05C3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -357,7 +357,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Routing;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -375,7 +375,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Routing;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -420,7 +420,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		92FCFA151BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing" */ = {
+		92FCFA151BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				92FCFA161BB963CD00DF05C3 /* Debug */,
@@ -429,7 +429,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		92FCFA181BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "RoutingTests" */ = {
+		92FCFA181BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing iOS Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				92FCFA191BB963CD00DF05C3 /* Debug */,

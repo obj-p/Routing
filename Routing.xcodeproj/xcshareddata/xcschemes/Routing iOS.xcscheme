@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "92FCFA001BB963CD00DF05C3"
                BuildableName = "Routing.framework"
-               BlueprintName = "Routing"
+               BlueprintName = "Routing iOS"
                ReferencedContainer = "container:Routing.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,8 +34,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "92FCFA0A1BB963CD00DF05C3"
-               BuildableName = "RoutingTests.xctest"
-               BlueprintName = "RoutingTests"
+               BuildableName = "Routing iOS Tests.xctest"
+               BlueprintName = "Routing iOS Tests"
                ReferencedContainer = "container:Routing.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -45,7 +45,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "92FCFA001BB963CD00DF05C3"
             BuildableName = "Routing.framework"
-            BlueprintName = "Routing"
+            BlueprintName = "Routing iOS"
             ReferencedContainer = "container:Routing.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -67,7 +67,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "92FCFA001BB963CD00DF05C3"
             BuildableName = "Routing.framework"
-            BlueprintName = "Routing"
+            BlueprintName = "Routing iOS"
             ReferencedContainer = "container:Routing.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -85,7 +85,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "92FCFA001BB963CD00DF05C3"
             BuildableName = "Routing.framework"
-            BlueprintName = "Routing"
+            BlueprintName = "Routing iOS"
             ReferencedContainer = "container:Routing.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
