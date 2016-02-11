@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92FCFA001BB963CD00DF05C3"
+               BlueprintIdentifier = "D295F4141C6C2612003CAC2F"
                BuildableName = "Routing.framework"
-               BlueprintName = "Routing"
+               BlueprintName = "Routing tvOS"
                ReferencedContainer = "container:Routing.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,9 +33,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92FCFA0A1BB963CD00DF05C3"
-               BuildableName = "RoutingTests.xctest"
-               BlueprintName = "RoutingTests"
+               BlueprintIdentifier = "D295F41D1C6C2612003CAC2F"
+               BuildableName = "Routing tvOSTests.xctest"
+               BlueprintName = "Routing tvOSTests"
                ReferencedContainer = "container:Routing.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -43,9 +43,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "92FCFA001BB963CD00DF05C3"
+            BlueprintIdentifier = "D295F4141C6C2612003CAC2F"
             BuildableName = "Routing.framework"
-            BlueprintName = "Routing"
+            BlueprintName = "Routing tvOS"
             ReferencedContainer = "container:Routing.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -65,9 +65,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "92FCFA001BB963CD00DF05C3"
+            BlueprintIdentifier = "D295F4141C6C2612003CAC2F"
             BuildableName = "Routing.framework"
-            BlueprintName = "Routing"
+            BlueprintName = "Routing tvOS"
             ReferencedContainer = "container:Routing.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -83,9 +83,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "92FCFA001BB963CD00DF05C3"
+            BlueprintIdentifier = "D295F4141C6C2612003CAC2F"
             BuildableName = "Routing.framework"
-            BlueprintName = "Routing"
+            BlueprintName = "Routing tvOS"
             ReferencedContainer = "container:Routing.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

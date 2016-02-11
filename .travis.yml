@@ -8,7 +8,7 @@ before_install:
 
 install:
   - gem install xcpretty
-  - carthage bootstrap --no-use-binaries --platform ios
+  - carthage bootstrap --no-use-binaries --platform ios,mac
 
 env:
   global:
@@ -16,8 +16,14 @@ env:
     - LANG=en_US.UTF-8
     - FRAMEWORK_NAME="Routing"
     - IOS_SDK=iphonesimulator9.2
+    - OSX_SDK=macosx10.11
+    - TVOS_SDK=appletvsimulator9.1 
+    - WATCHOS_SDK=watchsimulator2.1
   matrix:
-    - DESTINATION="OS=9.2,name=iPhone 6S Plus"     SCHEME="Routing"     SDK="$IOS_SDK"     ACTION="test"
+    - DESTINATION="OS=9.2,name=iPhone 6S Plus"     SCHEME="iOS"     SDK="$IOS_SDK"     ACTION="test"
+    - DESTINATION="arch=x86_64"                    SCHEME="OSX"     SDK="$OSX_SDK"     ACTION="test"
+    - DESTINATION="OS=9.1,name=Apple TV 1080p"     SCHEME="tvOS"    SDK="$TVOS_SDK"    ACTION="build"
+    - DESTINATION="OS=2.1,name=Apple Watch - 38mm" SCHEME="watchOS" SDK="$WATCHOS_SDK" ACTION="build"
 
 script:
   - set -o pipefail
@@ -25,11 +31,11 @@ script:
   - xcodebuild -showsdks
   - xcodebuild
     -project "$FRAMEWORK_NAME.xcodeproj"
-    -scheme "$SCHEME"
+    -scheme "$FRAMEWORK_NAME $SCHEME"
     -sdk "$SDK"
     -destination "$DESTINATION"
     -configuration Debug
-    -enableCodeCoverage YES
+    ONLY_ACTIVE_ARCH=NO
     "$ACTION"
     | xcpretty -c
 

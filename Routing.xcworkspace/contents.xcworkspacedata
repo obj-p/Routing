@@ -5,6 +5,6 @@
       location = "container:Routing.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Example.xcodeproj">
+      location = "group:iOS Example.xcodeproj">
    </FileRef>
 </Workspace>

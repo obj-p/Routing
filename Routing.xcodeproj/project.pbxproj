@@ -11,6 +11,14 @@
 		92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
 		92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
 		92FCFA1C1BB9658D00DF05C3 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
+		D295F41F1C6C2612003CAC2F /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D295F4151C6C2612003CAC2F /* Routing.framework */; };
+		D295F43B1C6C265D003CAC2F /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D295F4311C6C265D003CAC2F /* Routing.framework */; };
+		D295F44A1C6C27B1003CAC2F /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
+		D295F44B1C6C27B2003CAC2F /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
+		D295F44C1C6C27B4003CAC2F /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
+		D295F44E1C6C27BE003CAC2F /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
+		D295F4501C6C29F5003CAC2F /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D295F44F1C6C29F5003CAC2F /* Quick.framework */; };
+		D295F4521C6C29F7003CAC2F /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D295F4511C6C29F7003CAC2F /* Nimble.framework */; };
 		D2F5D0561C570ECB00317401 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F5D0551C570ECB00317401 /* Nimble.framework */; };
 		D2F5D0581C570ECF00317401 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F5D0571C570ECF00317401 /* Quick.framework */; };
 /* End PBXBuildFile section */
@@ -23,16 +31,37 @@
 			remoteGlobalIDString = 92FCFA001BB963CD00DF05C3;
 			remoteInfo = Routing;
 		};
+		D295F4201C6C2612003CAC2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92FCF9F81BB963CD00DF05C3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D295F4141C6C2612003CAC2F;
+			remoteInfo = "Routing tvOS";
+		};
+		D295F43C1C6C265D003CAC2F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92FCF9F81BB963CD00DF05C3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D295F4301C6C265D003CAC2F;
+			remoteInfo = "Routing OSX";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		92FCFA011BB963CD00DF05C3 /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92FCFA041BB963CD00DF05C3 /* Routing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Routing.h; sourceTree = "<group>"; };
 		92FCFA061BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		92FCFA0B1BB963CD00DF05C3 /* RoutingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoutingTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		92FCFA0B1BB963CD00DF05C3 /* Routing iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Routing iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingSpec.swift; sourceTree = "<group>"; };
 		92FCFA121BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92FCFA1B1BB9658D00DF05C3 /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
+		D295F4081C6C25ED003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D295F4151C6C2612003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D295F41E1C6C2612003CAC2F /* Routing tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Routing tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D295F4311C6C265D003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D295F43A1C6C265D003CAC2F /* Routing OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Routing OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D295F44F1C6C29F5003CAC2F /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/Mac/Quick.framework; sourceTree = "<group>"; };
+		D295F4511C6C29F7003CAC2F /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/Mac/Nimble.framework; sourceTree = "<group>"; };
 		D2F5D0551C570ECB00317401 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		D2F5D0571C570ECF00317401 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -55,6 +84,45 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D295F4041C6C25ED003CAC2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F4111C6C2612003CAC2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F41B1C6C2612003CAC2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D295F41F1C6C2612003CAC2F /* Routing.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F42D1C6C265D003CAC2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F4371C6C265D003CAC2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D295F43B1C6C265D003CAC2F /* Routing.framework in Frameworks */,
+				D295F4501C6C29F5003CAC2F /* Quick.framework in Frameworks */,
+				D295F4521C6C29F7003CAC2F /* Nimble.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -72,7 +140,12 @@
 			isa = PBXGroup;
 			children = (
 				92FCFA011BB963CD00DF05C3 /* Routing.framework */,
-				92FCFA0B1BB963CD00DF05C3 /* RoutingTests.xctest */,
+				92FCFA0B1BB963CD00DF05C3 /* Routing iOS Tests.xctest */,
+				D295F4081C6C25ED003CAC2F /* Routing.framework */,
+				D295F4151C6C2612003CAC2F /* Routing.framework */,
+				D295F41E1C6C2612003CAC2F /* Routing tvOSTests.xctest */,
+				D295F4311C6C265D003CAC2F /* Routing.framework */,
+				D295F43A1C6C265D003CAC2F /* Routing OSXTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -100,6 +173,8 @@
 			isa = PBXGroup;
 			children = (
 				D2F5D0571C570ECF00317401 /* Quick.framework */,
+				D295F44F1C6C29F5003CAC2F /* Quick.framework */,
+				D295F4511C6C29F7003CAC2F /* Nimble.framework */,
 				D2F5D0551C570ECB00317401 /* Nimble.framework */,
 			);
 			name = Frameworks;
@@ -116,12 +191,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D295F4051C6C25ED003CAC2F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F4121C6C2612003CAC2F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F42E1C6C265D003CAC2F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		92FCFA001BB963CD00DF05C3 /* Routing */ = {
+		92FCFA001BB963CD00DF05C3 /* Routing iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 92FCFA151BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing" */;
+			buildConfigurationList = 92FCFA151BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing iOS" */;
 			buildPhases = (
 				92FCF9FC1BB963CD00DF05C3 /* Sources */,
 				92FCF9FD1BB963CD00DF05C3 /* Frameworks */,
@@ -132,14 +228,14 @@
 			);
 			dependencies = (
 			);
-			name = Routing;
+			name = "Routing iOS";
 			productName = Routing;
 			productReference = 92FCFA011BB963CD00DF05C3 /* Routing.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		92FCFA0A1BB963CD00DF05C3 /* RoutingTests */ = {
+		92FCFA0A1BB963CD00DF05C3 /* Routing iOS Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 92FCFA181BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "RoutingTests" */;
+			buildConfigurationList = 92FCFA181BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing iOS Tests" */;
 			buildPhases = (
 				92FCFA071BB963CD00DF05C3 /* Sources */,
 				92FCFA081BB963CD00DF05C3 /* Frameworks */,
@@ -151,9 +247,101 @@
 			dependencies = (
 				92FCFA0E1BB963CD00DF05C3 /* PBXTargetDependency */,
 			);
-			name = RoutingTests;
+			name = "Routing iOS Tests";
 			productName = RoutingTests;
-			productReference = 92FCFA0B1BB963CD00DF05C3 /* RoutingTests.xctest */;
+			productReference = 92FCFA0B1BB963CD00DF05C3 /* Routing iOS Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D295F4071C6C25ED003CAC2F /* Routing watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D295F40F1C6C25ED003CAC2F /* Build configuration list for PBXNativeTarget "Routing watchOS" */;
+			buildPhases = (
+				D295F4031C6C25ED003CAC2F /* Sources */,
+				D295F4041C6C25ED003CAC2F /* Frameworks */,
+				D295F4051C6C25ED003CAC2F /* Headers */,
+				D295F4061C6C25ED003CAC2F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Routing watchOS";
+			productName = "Routing watchOS";
+			productReference = D295F4081C6C25ED003CAC2F /* Routing.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D295F4141C6C2612003CAC2F /* Routing tvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D295F4261C6C2612003CAC2F /* Build configuration list for PBXNativeTarget "Routing tvOS" */;
+			buildPhases = (
+				D295F4101C6C2612003CAC2F /* Sources */,
+				D295F4111C6C2612003CAC2F /* Frameworks */,
+				D295F4121C6C2612003CAC2F /* Headers */,
+				D295F4131C6C2612003CAC2F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Routing tvOS";
+			productName = "Routing tvOS";
+			productReference = D295F4151C6C2612003CAC2F /* Routing.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D295F41D1C6C2612003CAC2F /* Routing tvOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D295F4291C6C2612003CAC2F /* Build configuration list for PBXNativeTarget "Routing tvOSTests" */;
+			buildPhases = (
+				D295F41A1C6C2612003CAC2F /* Sources */,
+				D295F41B1C6C2612003CAC2F /* Frameworks */,
+				D295F41C1C6C2612003CAC2F /* Resources */,
+				D295F4481C6C26EA003CAC2F /* Carthage */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D295F4211C6C2612003CAC2F /* PBXTargetDependency */,
+			);
+			name = "Routing tvOSTests";
+			productName = "Routing tvOSTests";
+			productReference = D295F41E1C6C2612003CAC2F /* Routing tvOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D295F4301C6C265D003CAC2F /* Routing OSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D295F4421C6C265D003CAC2F /* Build configuration list for PBXNativeTarget "Routing OSX" */;
+			buildPhases = (
+				D295F42C1C6C265D003CAC2F /* Sources */,
+				D295F42D1C6C265D003CAC2F /* Frameworks */,
+				D295F42E1C6C265D003CAC2F /* Headers */,
+				D295F42F1C6C265D003CAC2F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Routing OSX";
+			productName = "Routing OSX";
+			productReference = D295F4311C6C265D003CAC2F /* Routing.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		D295F4391C6C265D003CAC2F /* Routing OSXTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D295F4451C6C265D003CAC2F /* Build configuration list for PBXNativeTarget "Routing OSXTests" */;
+			buildPhases = (
+				D295F4361C6C265D003CAC2F /* Sources */,
+				D295F4371C6C265D003CAC2F /* Frameworks */,
+				D295F4381C6C265D003CAC2F /* Resources */,
+				D295F4491C6C2719003CAC2F /* Carthage */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D295F43D1C6C265D003CAC2F /* PBXTargetDependency */,
+			);
+			name = "Routing OSXTests";
+			productName = "Routing OSXTests";
+			productReference = D295F43A1C6C265D003CAC2F /* Routing OSXTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -162,7 +350,7 @@
 		92FCF9F81BB963CD00DF05C3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0700;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Routing;
 				TargetAttributes = {
@@ -171,6 +359,21 @@
 					};
 					92FCFA0A1BB963CD00DF05C3 = {
 						CreatedOnToolsVersion = 7.0;
+					};
+					D295F4071C6C25ED003CAC2F = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+					D295F4141C6C2612003CAC2F = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+					D295F41D1C6C2612003CAC2F = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+					D295F4301C6C265D003CAC2F = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+					D295F4391C6C265D003CAC2F = {
+						CreatedOnToolsVersion = 7.2.1;
 					};
 				};
 			};
@@ -186,8 +389,13 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				92FCFA001BB963CD00DF05C3 /* Routing */,
-				92FCFA0A1BB963CD00DF05C3 /* RoutingTests */,
+				92FCFA001BB963CD00DF05C3 /* Routing iOS */,
+				92FCFA0A1BB963CD00DF05C3 /* Routing iOS Tests */,
+				D295F4301C6C265D003CAC2F /* Routing OSX */,
+				D295F4391C6C265D003CAC2F /* Routing OSXTests */,
+				D295F4141C6C2612003CAC2F /* Routing tvOS */,
+				D295F41D1C6C2612003CAC2F /* Routing tvOSTests */,
+				D295F4071C6C25ED003CAC2F /* Routing watchOS */,
 			);
 		};
 /* End PBXProject section */
@@ -207,9 +415,76 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D295F4061C6C25ED003CAC2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F4131C6C2612003CAC2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F41C1C6C2612003CAC2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F42F1C6C265D003CAC2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F4381C6C265D003CAC2F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		D295F4481C6C26EA003CAC2F /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Quick.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Nimble.framework",
+			);
+			name = Carthage;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+		D295F4491C6C2719003CAC2F /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/Mac/Quick.framework",
+				"$(SRCROOT)/Carthage/Build/Mac/Nimble.framework",
+			);
+			name = Carthage;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
 		D2A0660F1C57159E000F4DC8 /* Carthage */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -245,13 +520,62 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D295F4031C6C25ED003CAC2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D295F44C1C6C27B4003CAC2F /* Routing.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F4101C6C2612003CAC2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D295F44A1C6C27B1003CAC2F /* Routing.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F41A1C6C2612003CAC2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F42C1C6C265D003CAC2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D295F44B1C6C27B2003CAC2F /* Routing.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D295F4361C6C265D003CAC2F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D295F44E1C6C27BE003CAC2F /* RoutingSpec.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		92FCFA0E1BB963CD00DF05C3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 92FCFA001BB963CD00DF05C3 /* Routing */;
+			target = 92FCFA001BB963CD00DF05C3 /* Routing iOS */;
 			targetProxy = 92FCFA0D1BB963CD00DF05C3 /* PBXContainerItemProxy */;
+		};
+		D295F4211C6C2612003CAC2F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D295F4141C6C2612003CAC2F /* Routing tvOS */;
+			targetProxy = D295F4201C6C2612003CAC2F /* PBXContainerItemProxy */;
+		};
+		D295F43D1C6C265D003CAC2F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D295F4301C6C265D003CAC2F /* Routing OSX */;
+			targetProxy = D295F43C1C6C265D003CAC2F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -357,7 +681,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Routing;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -375,7 +699,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Routing;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
@@ -408,6 +732,186 @@
 			};
 			name = Release;
 		};
+		D295F40D1C6C25ED003CAC2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Source/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Routing;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.1;
+			};
+			name = Debug;
+		};
+		D295F40E1C6C25ED003CAC2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Source/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Routing;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 2.1;
+			};
+			name = Release;
+		};
+		D295F4271C6C2612003CAC2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Source/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Routing;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.1;
+			};
+			name = Debug;
+		};
+		D295F4281C6C2612003CAC2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Source/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Routing;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.1;
+			};
+			name = Release;
+		};
+		D295F42A1C6C2612003CAC2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TVOS_DEPLOYMENT_TARGET = 9.1;
+			};
+			name = Debug;
+		};
+		D295F42B1C6C2612003CAC2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TVOS_DEPLOYMENT_TARGET = 9.1;
+			};
+			name = Release;
+		};
+		D295F4431C6C265D003CAC2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Source/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Routing;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		D295F4441C6C265D003CAC2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Source/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = Routing;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		D295F4461C6C265D003CAC2F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		D295F4471C6C265D003CAC2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -420,7 +924,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		92FCFA151BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing" */ = {
+		92FCFA151BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				92FCFA161BB963CD00DF05C3 /* Debug */,
@@ -429,7 +933,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		92FCFA181BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "RoutingTests" */ = {
+		92FCFA181BB963CD00DF05C3 /* Build configuration list for PBXNativeTarget "Routing iOS Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				92FCFA191BB963CD00DF05C3 /* Debug */,
@@ -437,6 +941,46 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		D295F40F1C6C25ED003CAC2F /* Build configuration list for PBXNativeTarget "Routing watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D295F40D1C6C25ED003CAC2F /* Debug */,
+				D295F40E1C6C25ED003CAC2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		D295F4261C6C2612003CAC2F /* Build configuration list for PBXNativeTarget "Routing tvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D295F4271C6C2612003CAC2F /* Debug */,
+				D295F4281C6C2612003CAC2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		D295F4291C6C2612003CAC2F /* Build configuration list for PBXNativeTarget "Routing tvOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D295F42A1C6C2612003CAC2F /* Debug */,
+				D295F42B1C6C2612003CAC2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		D295F4421C6C265D003CAC2F /* Build configuration list for PBXNativeTarget "Routing OSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D295F4431C6C265D003CAC2F /* Debug */,
+				D295F4441C6C265D003CAC2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		D295F4451C6C265D003CAC2F /* Build configuration list for PBXNativeTarget "Routing OSXTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D295F4461C6C265D003CAC2F /* Debug */,
+				D295F4471C6C265D003CAC2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
