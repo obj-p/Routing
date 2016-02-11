@@ -35,29 +35,12 @@ public final class Routing {
     public typealias ProxyHandler = (String, Parameters, Next) -> Void
     public typealias Next = (String?, Parameters?) -> Void
     
-    private var accessQueue: dispatch_queue_t!
-    private var routingQueue: dispatch_queue_t!
-    private var callbackQueue: dispatch_queue_t!
-    private typealias Map = (String) -> (MapHandler?, Parameters)
+    private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT)
+    private var routingQueue = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
+    private typealias Map = (String) -> (dispatch_queue_t, MapHandler?, Parameters)
     private var maps: [Map] = [Map]()
-    private typealias Proxy = (String) -> (ProxyHandler?, Parameters)
+    private typealias Proxy = (String) -> (dispatch_queue_t, ProxyHandler?, Parameters)
     private var proxies: [Proxy] = [Proxy]()
-    
-    /**
-     Intializes a Routing instance with specific queues for its behavior
-     
-     - Parameter accessQueue:  The queue for protecting its internal read and writes
-     - Parameter routingQueue:  The queue for looking up and executing mapped routes and proxies
-     - Parameter callbackQueue:  The queue to call the closure associated with the route or proxy
-     */
-    
-    public init(accessQueue: dispatch_queue_t = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT),
-        routingQueue: dispatch_queue_t = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL),
-        callbackQueue: dispatch_queue_t = dispatch_get_main_queue()) {
-            self.accessQueue = accessQueue
-            self.routingQueue = routingQueue
-            self.callbackQueue = callbackQueue
-    }
     
     /**
      Associates a closure to a string pattern. A Routing instance will execute the closure in the event of a matching URL using #open.
@@ -74,9 +57,9 @@ public final class Routing {
      - Parameter handler:  A MapHandler
      */
     
-    public func map(pattern: String, handler: MapHandler) -> Void {
+    public func map(pattern: String, queue: dispatch_queue_t = dispatch_get_main_queue(), handler: MapHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
-            self.maps.insert(self.prepare(pattern, handler: handler), atIndex: 0)
+            self.maps.insert(self.prepare(pattern, queue: queue, handler: handler), atIndex: 0)
         }
     }
     
@@ -96,9 +79,9 @@ public final class Routing {
      - Parameter handler:  A ProxyHandler
      */
     
-    public func proxy(pattern: String, handler: ProxyHandler) -> Void {
+    public func proxy(pattern: String, queue: dispatch_queue_t = dispatch_get_main_queue(), handler: ProxyHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
-            self.proxies.insert(self.prepare(pattern, handler: handler), atIndex: 0)
+            self.proxies.insert(self.prepare(pattern, queue: queue, handler: handler), atIndex: 0)
         }
     }
     
@@ -131,9 +114,9 @@ public final class Routing {
                 dispatch_async(routingQueue) {
                     let semaphore = dispatch_semaphore_create(0)
                     var overwrittingRoute: String?, overwrittingParameters: Parameters?
-                    for (handler, var parameters) in self.filterRoute(URLString, routes: proxies) {
+                    for (queue, handler, var parameters) in self.filterRoute(URLString, routes: proxies) {
                         queryParameters.forEach { parameters[$0.0] = $0.1 }
-                        dispatch_async(self.callbackQueue) {
+                        dispatch_async(queue) {
                             handler(URLString, parameters) { (route, parameters) in
                                 overwrittingRoute = route
                                 overwrittingParameters = parameters
@@ -144,10 +127,10 @@ public final class Routing {
                         if overwrittingRoute != nil || overwrittingParameters != nil { break }
                     }
 
-                    if let (handler, parameters) = (overwrittingRoute.map { self.filterRoute($0, routes: maps).first } ?? routeComponents) {
+                    if let (queue, handler, parameters) = (overwrittingRoute.map { self.filterRoute($0, routes: maps).first } ?? routeComponents) {
                         var parameters = parameters
                         (overwrittingParameters ?? queryParameters).forEach { parameters[$0.0] = $0.1 }
-                        dispatch_async(self.callbackQueue) { handler(parameters) { dispatch_semaphore_signal(semaphore) } }
+                        dispatch_async(queue) { handler(parameters) { dispatch_semaphore_signal(semaphore) } }
                         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
                     }
                 }
@@ -157,26 +140,26 @@ public final class Routing {
         return false
     }
     
-    private func filterRoute<H>(route: String, routes: [(String) -> (H?, Parameters)]) -> [(H, Parameters)] {
+    private func filterRoute<H>(route: String, routes: [(String) -> (dispatch_queue_t, H?, Parameters)]) -> [(dispatch_queue_t, H, Parameters)] {
         return routes
             .map { $0(route) }
-            .filter { $0.0 != nil }
-            .map { ($0!, $1) }
+            .filter { $0.1 != nil }
+            .map { ($0, $1!, $2) }
     }
     
-    private func prepare<H>(var pattern: String, handler: H) -> ((String) -> (H?, Parameters)) {
+    private func prepare<H>(var pattern: String, queue: dispatch_queue_t, handler: H) -> ((String) -> (dispatch_queue_t, H?, Parameters)) {
         var dynamicSegments = [String]()
         while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
             dynamicSegments.append(pattern.substringWithRange(range).stringByReplacingOccurrencesOfString(":", withString: ""))
             pattern.replaceRange(range, with: "([^/]+)")
         }
         
-        return { (route: String) -> (H?, Parameters) in
+        return { (route: String) -> (dispatch_queue_t, H?, Parameters) in
             guard let matches = (try? NSRegularExpression(pattern: pattern, options: .CaseInsensitive))
                 .flatMap({ $0.matchesInString(route, options: [], range: NSMakeRange(0, route.characters.count)) })?
                 .first
             else {
-                return (nil, [:])
+                return (queue, nil, [:])
             }
 
             var parameters = Parameters()
@@ -185,7 +168,7 @@ public final class Routing {
                     parameters[dynamicSegments[index-1]] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
                 }
             }
-            return (handler, parameters)
+            return (queue, handler, parameters)
         }
     }
     
