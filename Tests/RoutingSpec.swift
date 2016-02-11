@@ -131,8 +131,7 @@ class RoutingSpec: QuickSpec {
                     let expectedQueue: UnsafePointer<Int8> = dispatch_queue_get_label(callbackQueue)
                     
                     var actualQueue: UnsafePointer<Int8>?
-                    router = Routing(callbackQueue: callbackQueue)
-                    router.map("routingexample://route") { (_, completed) in
+                    router.map("routingexample://route", queue: callbackQueue) { (_, completed) in
                         actualQueue = dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)
                         completed()
                     }
@@ -294,11 +293,10 @@ class RoutingSpec: QuickSpec {
                     let callbackQueue = dispatch_queue_create("Testing Callback Queue", DISPATCH_QUEUE_SERIAL)
                     let expectedQueue: UnsafePointer<Int8> = dispatch_queue_get_label(callbackQueue)
                     
-                    router = Routing(callbackQueue: callbackQueue)
                     router.map("routingexample://route") { (_, completed) in completed() }
                     
                     var actualQueue: UnsafePointer<Int8>?
-                    router.proxy("routingexample://route") { (route, parameters, next) in
+                    router.proxy("routingexample://route", queue: callbackQueue) { (route, parameters, next) in
                         actualQueue = dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)
                         next(route, parameters)
                     }

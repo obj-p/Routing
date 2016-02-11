@@ -28,6 +28,9 @@ router.map("routing://route") { parameters, completed in
 
 router.map("routing://*") { ... } // Regex, wildcards are supported
 router.map("routing://route/:id") { ... } // Dynamic segments are supported
+
+let queue = dispatch_queue_create("Callback Queue", DISPATCH_QUEUE_SERIAL)
+router.map("routing://route/", queue: queue) { ... } // Can specify callback queue
 ```
 
 ### Proxy
@@ -41,6 +44,9 @@ router.proxy("routing://route") { route, parameters, next in
 
 router.proxy("routing://*") { ... } // Regex, wildcards are supported
 router.proxy("routing://route/:id") { ... } // Dynamic segments are supported
+
+let queue = dispatch_queue_create("Callback Queue", DISPATCH_QUEUE_SERIAL)
+router.proxy("routing://route/", queue: queue) { ... } // Can specify callback queue
 ```
 
 ### Open

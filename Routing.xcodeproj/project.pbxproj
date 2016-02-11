@@ -949,6 +949,7 @@
 				D295F40E1C6C25ED003CAC2F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D295F4261C6C2612003CAC2F /* Build configuration list for PBXNativeTarget "Routing tvOS" */ = {
 			isa = XCConfigurationList;
@@ -957,6 +958,7 @@
 				D295F4281C6C2612003CAC2F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D295F4291C6C2612003CAC2F /* Build configuration list for PBXNativeTarget "Routing tvOSTests" */ = {
 			isa = XCConfigurationList;
@@ -965,6 +967,7 @@
 				D295F42B1C6C2612003CAC2F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D295F4421C6C265D003CAC2F /* Build configuration list for PBXNativeTarget "Routing OSX" */ = {
 			isa = XCConfigurationList;
@@ -973,6 +976,7 @@
 				D295F4441C6C265D003CAC2F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D295F4451C6C265D003CAC2F /* Build configuration list for PBXNativeTarget "Routing OSXTests" */ = {
 			isa = XCConfigurationList;
@@ -981,6 +985,7 @@
 				D295F4471C6C265D003CAC2F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
