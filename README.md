@@ -71,7 +71,7 @@ pod 'Routing', '~> 0.0.1'
 Via [Carthage](https://github.com/Carthage/Carthage):
 
 ```ogdl
-github "jwalapr/ReSwift"
+github "jwalapr/Routing"
 ```
 
 ## Example
