@@ -51,6 +51,19 @@ internal extension Routing {
             vc.presentViewController(navController, animated: animated, completion: completed)
         }
         
+        Routing.sharedRouter.map(AppRoutes.first) { (parameters, completed) in
+            guard let window = UIApplication.sharedApplication().delegate?.window else {
+                completed()
+                return
+            }
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+            let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.identifiers.first)
+            let navController = UINavigationController(rootViewController: vc)
+            let animated: Bool = parameters["animated"] == nil || parameters["animated"] == "true"
+            window?.rootViewController?.presentViewController(navController, animated: animated, completion: completed)
+        }
+        
         Routing.sharedRouter.proxy(AppRoutes.second) { (var route, parameters, next) in
             if Routing.isProxying { route = AppRoutes.first }
             next(route, parameters)
@@ -76,6 +89,11 @@ internal extension Routing {
             CATransaction.commit()
         }
         
+        Routing.sharedRouter.proxy("/*") {  route, parameters, next in
+            print("Routing route: \(route) with parameters: \(parameters)")
+            next(nil, nil)
+        }
+    
     }
     
 }
