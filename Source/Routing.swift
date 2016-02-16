@@ -35,12 +35,13 @@ public final class Routing {
     public typealias ProxyHandler = (String, Parameters, Next) -> Void
     public typealias Next = (String?, Parameters?) -> Void
     
-    private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT)
+    internal typealias Map = (String) -> (dispatch_queue_t, MapHandler?, Parameters)
+    internal var maps: [Map] = [Map]()
+    internal typealias Proxy = (String) -> (dispatch_queue_t, ProxyHandler?, Parameters)
+    internal var proxies: [Proxy] = [Proxy]()
+    internal var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT)
+    
     private var routingQueue = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
-    private typealias Map = (String) -> (dispatch_queue_t, MapHandler?, Parameters)
-    private var maps: [Map] = [Map]()
-    private typealias Proxy = (String) -> (dispatch_queue_t, ProxyHandler?, Parameters)
-    private var proxies: [Proxy] = [Proxy]()
     
     public init(){}
     
@@ -144,14 +145,7 @@ public final class Routing {
         return false
     }
     
-    private func filterRoute<H>(route: String, routes: [(String) -> (dispatch_queue_t, H?, Parameters)]) -> [(dispatch_queue_t, H, Parameters)] {
-        return routes
-            .map { $0(route) }
-            .filter { $0.1 != nil }
-            .map { ($0, $1!, $2) }
-    }
-    
-    private func prepare<H>(var pattern: String, queue: dispatch_queue_t, handler: H) -> ((String) -> (dispatch_queue_t, H?, Parameters)) {
+    internal func prepare<H>(var pattern: String, queue: dispatch_queue_t, handler: H) -> ((String) -> (dispatch_queue_t, H?, Parameters)) {
         var dynamicSegments = [String]()
         while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
             dynamicSegments.append(pattern.substringWithRange(range).stringByReplacingOccurrencesOfString(":", withString: ""))
@@ -162,10 +156,10 @@ public final class Routing {
             guard let matches = (try? NSRegularExpression(pattern: pattern, options: .CaseInsensitive))
                 .flatMap({ $0.matchesInString(route, options: [], range: NSMakeRange(0, route.characters.count)) })?
                 .first
-            else {
-                return (queue, nil, [:])
+                else {
+                    return (queue, nil, [:])
             }
-
+            
             var parameters = Parameters()
             if dynamicSegments.count > 0 && dynamicSegments.count == matches.numberOfRanges - 1 {
                 [Int](1 ..< matches.numberOfRanges).forEach { (index) in
@@ -174,6 +168,13 @@ public final class Routing {
             }
             return (queue, handler, parameters)
         }
+    }
+    
+    private func filterRoute<H>(route: String, routes: [(String) -> (dispatch_queue_t, H?, Parameters)]) -> [(dispatch_queue_t, H, Parameters)] {
+        return routes
+            .map { $0(route) }
+            .filter { $0.1 != nil }
+            .map { ($0, $1!, $2) }
     }
     
 }
