@@ -10,10 +10,11 @@ import UIKit
 
 public extension Routing {
     
-    public enum NavigationStyle {
+    public enum PresentationStyle {
         case Root
         case Show
         case Present
+        case Custom((presenting: UIViewController, presented: UIViewController, completed: Completed) -> Void)
     }
     
     public typealias NavigateHandler = (Parameters) -> UIViewController
@@ -22,12 +23,12 @@ public extension Routing {
         queue: dispatch_queue_t = dispatch_get_main_queue(),
         controller: UIViewController.Type,
         // TODO: make less verbose?
-        presentationStyle: NavigationStyle = .Show,
+        presentationStyle: PresentationStyle = .Show,
         inNavigationController: Bool = false,
         handler: NavigateHandler) -> Void {
-        dispatch_barrier_async(accessQueue) {
-            self.maps.insert(self.prepareNavigator(pattern, queue: queue, handler: handler), atIndex: 0)
-        }
+            dispatch_barrier_async(accessQueue) {
+                self.maps.insert(self.prepareNavigator(pattern, queue: queue, handler: handler), atIndex: 0)
+            }
     }
     
     internal func prepareNavigator(pattern: String, queue: dispatch_queue_t, handler: NavigateHandler) -> ((String) -> (dispatch_queue_t, MapHandler?, Parameters)) {
