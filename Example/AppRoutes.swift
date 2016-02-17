@@ -9,25 +9,28 @@
 import Foundation
 import Routing
 
-struct AppRoutes {
-    internal static let urls = URLs()
-    internal static let identifiers = Identifiers()
+public struct AppRoutes {
     
-    internal static let root = "routingexample://root"
-    internal static let first = "routingexample://root/first"
-    internal static let second = "routingexample://root/first/second"
+    public static let paths = Paths()
+    public static let urls = URLs()
     
-    internal struct URLs {
-        internal let root = NSURL(string: AppRoutes.root)!
-        internal let first = NSURL(string: AppRoutes.first)!
-        internal let second = NSURL(string: AppRoutes.second)!
+    public static let host = "routingexample://"
+    public static let root = "root"
+    public static let first = "first"
+    public static let second = "second"
+    
+    public struct Paths {
+        public let root = "\(host)\(AppRoutes.root)"
+        public let first = "\(host)\(AppRoutes.root)/\(AppRoutes.first)"
+        public let second = "\(host)\(AppRoutes.root)/\(AppRoutes.second)"
     }
     
-    internal struct Identifiers {
-        internal let root = urls.root.lastPathComponent!
-        internal let first = urls.first.lastPathComponent!
-        internal let second = urls.second.lastPathComponent!
+    public struct URLs {
+        public let root = NSURL(string: AppRoutes.paths.root)!
+        public let first = NSURL(string: AppRoutes.paths.first)!
+        public let second = NSURL(string: AppRoutes.paths.second)!
     }
+    
 }
 
 internal extension Routing {
@@ -37,45 +40,47 @@ internal extension Routing {
     
     internal func registerRoutes() {
         
-        Routing.sharedRouter.proxy(AppRoutes.first) { (var route, parameters, next) in
-            if Routing.isProxying { route = AppRoutes.second }
+        Routing.sharedRouter.proxy(AppRoutes.paths.first) { (var route, parameters, next) in
+            if Routing.isProxying { route = AppRoutes.paths.second }
             next(route, parameters)
         }
         
-        Routing.sharedRouter.navigate(AppRoutes.first, style: .Push) { parameters in
-            let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-            let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.identifiers.first)
-            let navController = UINavigationController(rootViewController: vc)
-
-            return navController
+        Routing.sharedRouter.navigate(AppRoutes.paths.first,
+            controller: FirstViewController.self,
+            inNavigationController: true) { parameters in
+                let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.first)
+                let navController = UINavigationController(rootViewController: vc)
+                
+                return navController
         }
         
-        Routing.sharedRouter.map(AppRoutes.first) { (parameters, completed) in
+        Routing.sharedRouter.map(AppRoutes.paths.first) { (parameters, completed) in
             guard let window = UIApplication.sharedApplication().delegate?.window else {
                 completed()
                 return
             }
             
             let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-            let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.identifiers.first)
+            let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.first)
             let navController = UINavigationController(rootViewController: vc)
             let animated: Bool = parameters["animated"] == nil || parameters["animated"] == "true"
             window?.rootViewController?.presentViewController(navController, animated: animated, completion: completed)
         }
         
-        Routing.sharedRouter.proxy(AppRoutes.second) { (var route, parameters, next) in
-            if Routing.isProxying { route = AppRoutes.first }
+        Routing.sharedRouter.proxy(AppRoutes.paths.second) { (var route, parameters, next) in
+            if Routing.isProxying { route = AppRoutes.paths.first }
             next(route, parameters)
         }
         
-        Routing.sharedRouter.map(AppRoutes.second) { (parameters, completed) in
+        Routing.sharedRouter.map(AppRoutes.paths.second) { (parameters, completed) in
             guard let window = UIApplication.sharedApplication().delegate?.window else {
                 completed()
                 return
             }
             
             let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-            let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.identifiers.second)
+            let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.second)
             let animated: Bool = parameters["animated"] == nil || parameters["animated"] == "true"
             
             CATransaction.begin()
