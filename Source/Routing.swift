@@ -35,6 +35,15 @@ public final class Routing {
     public typealias ProxyHandler = (String, Parameters, Next) -> Void
     public typealias Next = (String?, Parameters?) -> Void
     
+    internal indirect enum NavigatingNode {
+        case Unknown(nodes: [String: NavigatingNode])
+        case Known(controller: UIViewController.Type,
+            style: Routing.PresentationStyle,
+            contained: Bool,
+            nodes: [String: NavigatingNode])
+    }
+    
+    internal var navigatingNodes: [String: NavigatingNode] = [:]
     internal typealias Map = (String) -> (dispatch_queue_t, MapHandler?, Parameters)
     internal var maps: [Map] = [Map]()
     internal typealias Proxy = (String) -> (dispatch_queue_t, ProxyHandler?, Parameters)

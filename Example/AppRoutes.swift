@@ -39,17 +39,38 @@ internal extension Routing {
     static var isProxying = false
     
     internal func registerRoutes() {
-        
         Routing.sharedRouter.proxy(AppRoutes.paths.first) { (var route, parameters, next) in
             if Routing.isProxying { route = AppRoutes.paths.second }
             next(route, parameters)
         }
         
+        Routing.sharedRouter.proxy(AppRoutes.paths.second) { (var route, parameters, next) in
+            if Routing.isProxying { route = AppRoutes.paths.first }
+            next(route, parameters)
+        }
+        
+        Routing.sharedRouter.map(AppRoutes.paths.root,
+            controller: RootViewController.self,
+            style: .Root,
+            contained: true) { parameters in
+                let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.root)
+                return UINavigationController(rootViewController: vc)
+        }
+        
         Routing.sharedRouter.map(AppRoutes.paths.first,
             controller: FirstViewController.self,
-            inNavigationController: true) { parameters in
+            style: .Present,
+            contained: true) { parameters in
                 let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
                 let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.first)
+                return UINavigationController(rootViewController: vc)
+        }
+        
+        Routing.sharedRouter.map(AppRoutes.paths.second,
+            controller: SecondViewController.self) { parameters in
+                let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+                let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.second)
                 return UINavigationController(rootViewController: vc)
         }
         
@@ -64,11 +85,6 @@ internal extension Routing {
             let navController = UINavigationController(rootViewController: vc)
             let animated: Bool = parameters["animated"] == nil || parameters["animated"] == "true"
             window?.rootViewController?.presentViewController(navController, animated: animated, completion: completed)
-        }
-        
-        Routing.sharedRouter.proxy(AppRoutes.paths.second) { (var route, parameters, next) in
-            if Routing.isProxying { route = AppRoutes.paths.first }
-            next(route, parameters)
         }
         
         Routing.sharedRouter.map(AppRoutes.paths.second) { (parameters, completed) in

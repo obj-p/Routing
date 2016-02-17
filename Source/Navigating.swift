@@ -22,26 +22,26 @@ public extension Routing {
     public func map(pattern: String,
         queue: dispatch_queue_t = dispatch_get_main_queue(),
         controller: UIViewController.Type,
-        presentationStyle: PresentationStyle = .Show,
-        inNavigationController: Bool = false,
+        style: PresentationStyle = .Show,
+        contained: Bool = false,
         handler: NavigatingHandler) -> Void {
             dispatch_barrier_async(accessQueue) {
                 self.maps.insert(self.prepareNavigator(pattern,
                     queue: queue,
                     controller: controller,
-                    presentationStyle: presentationStyle,
-                    inNavigationController: inNavigationController,
+                    style: style,
+                    contained: contained,
                     handler: handler), atIndex: 0)
             }
     }
     
-    internal func prepareNavigator(pattern: String,
+    private func prepareNavigator(pattern: String,
         queue: dispatch_queue_t,
         controller: UIViewController.Type,
-        presentationStyle: PresentationStyle,
-        inNavigationController: Bool,
+        style: PresentationStyle,
+        contained: Bool,
         handler: NavigatingHandler) -> ((String) -> (dispatch_queue_t, MapHandler?, Parameters)) {
-            updateNavigationTree(pattern, controller: controller, presentationStyle: presentationStyle, inNavigationController: inNavigationController)
+            updateNavigationTree(pattern, controller: controller, style: style, contained: contained)
             
             let mapHandler: MapHandler = { parameters, completed in
                 // Retrieve Tree
@@ -52,7 +52,7 @@ public extension Routing {
             return self.prepare(pattern, queue: queue, handler: mapHandler)
     }
     
-    private func updateNavigationTree(pattern: String, controller: UIViewController.Type, presentationStyle: PresentationStyle, inNavigationController: Bool) {
+    private func updateNavigationTree(pattern: String, controller: UIViewController.Type, style: PresentationStyle, contained: Bool) {
         // Update navigation structure
     }
     
