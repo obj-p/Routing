@@ -45,14 +45,12 @@ internal extension Routing {
             next(route, parameters)
         }
         
-        Routing.sharedRouter.navigate(AppRoutes.paths.first,
+        Routing.sharedRouter.map(AppRoutes.paths.first,
             controller: FirstViewController.self,
             inNavigationController: true) { parameters in
                 let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
                 let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.first)
-                let navController = UINavigationController(rootViewController: vc)
-                
-                return navController
+                return UINavigationController(rootViewController: vc)
         }
         
         Routing.sharedRouter.map(AppRoutes.paths.first) { (parameters, completed) in
