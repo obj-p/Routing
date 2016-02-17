@@ -42,13 +42,12 @@ internal extension Routing {
             next(route, parameters)
         }
         
-        Routing.sharedRouter.navigate(AppRoutes.first, controller: FirstViewController.self) { parameters, vc, completed in
+        Routing.sharedRouter.navigate(AppRoutes.first, style: .Push) { parameters in
             let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
             let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.identifiers.first)
             let navController = UINavigationController(rootViewController: vc)
-            let animated: Bool = parameters["animated"] == nil || parameters["animated"] == "true"
-            
-            vc.presentViewController(navController, animated: animated, completion: completed)
+
+            return navController
         }
         
         Routing.sharedRouter.map(AppRoutes.first) { (parameters, completed) in

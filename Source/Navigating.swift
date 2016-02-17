@@ -10,9 +10,15 @@ import UIKit
 
 public extension Routing {
     
-    public typealias NavigateHandler = (Parameters, UIViewController, Completed) -> Void
+    public enum NavigationStyle {
+        case Root
+        case Push
+        case Present
+        case Custom((presenting: UIViewController, presented: UIViewController, completed: Completed) -> Void)
+    }
+    public typealias NavigateHandler = (Parameters) -> UIViewController
     
-    public func navigate(pattern: String, queue: dispatch_queue_t = dispatch_get_main_queue(), controller: UIViewController.Type, handler: NavigateHandler) -> Void {
+    public func navigate(pattern: String, queue: dispatch_queue_t = dispatch_get_main_queue(), style: NavigationStyle, handler: NavigateHandler) -> Void {
         dispatch_barrier_async(accessQueue) {
             self.maps.insert(self.prepareNavigator(pattern, queue: queue, handler: handler), atIndex: 0)
         }
