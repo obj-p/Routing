@@ -10,7 +10,7 @@ import Foundation
 import Routing
 
 public struct AppRoutes {
-    
+    public static var sharedRouter = { Navigating() }()
     public static let paths = Paths()
     public static let urls = URLs()
     
@@ -31,25 +31,19 @@ public struct AppRoutes {
         public let second = NSURL(string: AppRoutes.paths.second)!
     }
     
-}
-
-internal extension Routing {
-    
-    static var sharedRouter = { Routing() }()
-    static var isProxying = false
-    
-    internal func registerRoutes() {
-        Routing.sharedRouter.proxy(AppRoutes.paths.first) { (var route, parameters, next) in
-            if Routing.isProxying { route = AppRoutes.paths.second }
+    public static var isProxying = false
+    public static func registerRoutes() {
+        AppRoutes.sharedRouter.proxy(AppRoutes.paths.first) { (var route, parameters, next) in
+            if AppRoutes.isProxying { route = AppRoutes.paths.second }
             next(route, parameters)
         }
         
-        Routing.sharedRouter.proxy(AppRoutes.paths.second) { (var route, parameters, next) in
-            if Routing.isProxying { route = AppRoutes.paths.first }
+        AppRoutes.sharedRouter.proxy(AppRoutes.paths.second) { (var route, parameters, next) in
+            if AppRoutes.isProxying { route = AppRoutes.paths.first }
             next(route, parameters)
         }
         
-        Routing.sharedRouter.map(AppRoutes.paths.root,
+        AppRoutes.sharedRouter.map(AppRoutes.paths.root,
             controller: RootViewController.self,
             style: .Root,
             contained: true) { parameters in
@@ -58,7 +52,7 @@ internal extension Routing {
                 return UINavigationController(rootViewController: vc)
         }
         
-        Routing.sharedRouter.map(AppRoutes.paths.first,
+        AppRoutes.sharedRouter.map(AppRoutes.paths.first,
             controller: FirstViewController.self,
             style: .Present,
             contained: true) { parameters in
@@ -67,14 +61,14 @@ internal extension Routing {
                 return UINavigationController(rootViewController: vc)
         }
         
-        Routing.sharedRouter.map(AppRoutes.paths.second,
+        AppRoutes.sharedRouter.map(AppRoutes.paths.second,
             controller: SecondViewController.self) { parameters in
                 let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
                 let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.second)
                 return UINavigationController(rootViewController: vc)
         }
         
-        Routing.sharedRouter.map(AppRoutes.paths.first) { (parameters, completed) in
+        AppRoutes.sharedRouter.map(AppRoutes.paths.first) { (parameters, completed) in
             guard let window = UIApplication.sharedApplication().delegate?.window else {
                 completed()
                 return
@@ -87,7 +81,7 @@ internal extension Routing {
             window?.rootViewController?.presentViewController(navController, animated: animated, completion: completed)
         }
         
-        Routing.sharedRouter.map(AppRoutes.paths.second) { (parameters, completed) in
+        AppRoutes.sharedRouter.map(AppRoutes.paths.second) { (parameters, completed) in
             guard let window = UIApplication.sharedApplication().delegate?.window else {
                 completed()
                 return
@@ -107,13 +101,10 @@ internal extension Routing {
             CATransaction.commit()
         }
         
-        Routing.sharedRouter.proxy("/*") {  route, parameters, next in
+        AppRoutes.sharedRouter.proxy("/*") {  route, parameters, next in
             print("Routing route: \(route) with parameters: \(parameters)")
             next(nil, nil)
         }
-    
     }
     
 }
-
-

@@ -25,9 +25,10 @@ private indirect enum NavigatingNode {
         nodes: [String: NavigatingNode])
 }
 
-private var navigatingNodes: [String: NavigatingNode] = [:]
-
 public final class Navigating: Routing {
+ 
+    private var navigatingNodes: [String: NavigatingNode] = [:]
+    private var nodesQueue = dispatch_queue_create("Navigating Nodes Queue", DISPATCH_QUEUE_CONCURRENT)
     
     public func map(pattern: String,
         queue: dispatch_queue_t = dispatch_get_main_queue(),
