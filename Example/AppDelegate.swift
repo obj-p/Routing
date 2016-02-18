@@ -18,10 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppRoutes.registerRoutes()
         
         var components = NSURLComponents(URL: AppRoutes.urls.first, resolvingAgainstBaseURL: false)!
-        components.query = "animated=false"
+        components.query = "animated=true"
         AppRoutes.sharedRouter.open(components.URL!)
         components = NSURLComponents(URL: AppRoutes.urls.second, resolvingAgainstBaseURL: false)!
-        components.query = "animated=false"
+        components.query = "animated=true"
         AppRoutes.sharedRouter.open(components.URL!)
         
         return true

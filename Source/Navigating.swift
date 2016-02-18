@@ -12,6 +12,7 @@ public enum PresentationStyle {
     case Root
     case Show
     case Present
+    case Push
     case Custom((presenting: UIViewController, presented: UIViewController, completed: Completed) -> Void)
 }
 
@@ -47,8 +48,13 @@ public final class Navigating: Routing {
             self.map(pattern, handler: mapHandler)
     }
     
-    private func updateNavigationTree(pattern: String, controller: UIViewController.Type, style: PresentationStyle, contained: Bool) {
-        // Update navigation structure
+    private func updateNavigationTree(var pattern: String, controller: UIViewController.Type, style: PresentationStyle, contained: Bool) {
+        if let rangeOfScheme = pattern.rangeOfString("^(.*:)//", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
+            pattern.replaceRange(rangeOfScheme, with: "")
+        }
+        
+        var unknown = pattern.componentsSeparatedByString("/")
+        let known = unknown.popLast()
     }
     
 }
