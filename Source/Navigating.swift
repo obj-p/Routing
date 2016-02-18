@@ -9,10 +9,9 @@
 import UIKit
 
 public enum PresentationStyle {
-    case Root
     case Show
-    case Present
-    case Push
+    case Present(animated: () -> Bool)
+    case Push(animated: () -> Bool)
     case Custom((presenting: UIViewController, presented: UIViewController, completed: Completed) -> Void)
 }
 
@@ -27,9 +26,15 @@ private indirect enum NavigatingNode {
 }
 
 public final class Navigating: Routing {
- 
+    
+    public let rootViewController: UIViewController
     private var navigatingNodes: [String: NavigatingNode] = [:]
     private var nodesQueue = dispatch_queue_create("Navigating Nodes Queue", DISPATCH_QUEUE_CONCURRENT)
+    
+    public init(rootViewController: UIViewController) {
+        self.rootViewController = rootViewController
+        super.init()
+    }
     
     public func map(pattern: String,
         queue: dispatch_queue_t = dispatch_get_main_queue(),

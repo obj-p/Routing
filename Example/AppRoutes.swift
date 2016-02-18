@@ -10,7 +10,7 @@ import Foundation
 import Routing
 
 public struct AppRoutes {
-    public static var sharedRouter = { Navigating() }()
+    public static var sharedRouter: Navigating!
     public static let paths = Paths()
     public static let urls = URLs()
     
@@ -43,18 +43,9 @@ public struct AppRoutes {
             next(route, parameters)
         }
         
-        AppRoutes.sharedRouter.map(AppRoutes.paths.root,
-            controller: RootViewController.self,
-            style: .Root,
-            contained: true) { parameters in
-                let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-                let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.root)
-                return UINavigationController(rootViewController: vc)
-        }
-        
         AppRoutes.sharedRouter.map(AppRoutes.paths.first,
             controller: FirstViewController.self,
-            style: .Present,
+            style: .Present(animated: { true }),
             contained: true) { parameters in
                 let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
                 let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.first)
