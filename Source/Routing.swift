@@ -8,48 +8,39 @@
 
 import Foundation
 
-public final class Routing {
+public typealias Parameters = [String: String]
+
+/**
+ The closure type associated with #map
+ 
+ - Parameter Parameters:  Any query parameters or dynamic segments found in the URL
+ - Parameter Completed: Must be called for Routing to continue processing other routes with #open
+ */
+
+public typealias MapHandler = (Parameters, Completed) -> Void
+public typealias Completed = () -> Void
+
+/**
+ The closure type associated with #proxy
+ 
+ - Parameter String:  The route being opened
+ - Parameter Parameters:  Any query parameters or dynamic segments found in the URL
+ - Parameter Next: Must be called for Routing to continue processing. Calling #Next with
+ nil arguments will continue executing other matching proxies. Calling #Next with non nil
+ arguments will continue to process the route.
+ */
+
+public typealias ProxyHandler = (String, Parameters, Next) -> Void
+public typealias Next = (String?, Parameters?) -> Void
+
+private typealias Map = (String) -> (dispatch_queue_t, MapHandler?, Parameters)
+private typealias Proxy = (String) -> (dispatch_queue_t, ProxyHandler?, Parameters)
+
+public class Routing {
     
-    public typealias Parameters = [String: String]
-    
-    /**
-     The closure type associated with #map
-     
-     - Parameter Parameters:  Any query parameters or dynamic segments found in the URL
-     - Parameter Completed: Must be called for Routing to continue processing other routes with #open
-     */
-    
-    public typealias MapHandler = (Parameters, Completed) -> Void
-    public typealias Completed = () -> Void
-    
-    /**
-     The closure type associated with #proxy
-     
-     - Parameter String:  The route being opened
-     - Parameter Parameters:  Any query parameters or dynamic segments found in the URL
-     - Parameter Next: Must be called for Routing to continue processing. Calling #Next with
-     nil arguments will continue executing other matching proxies. Calling #Next with non nil
-     arguments will continue to process the route.
-     */
-    
-    public typealias ProxyHandler = (String, Parameters, Next) -> Void
-    public typealias Next = (String?, Parameters?) -> Void
-    
-    internal indirect enum NavigatingNode {
-        case Unknown(nodes: [String: NavigatingNode])
-        case Known(controller: UIViewController.Type,
-            style: Routing.PresentationStyle,
-            contained: Bool,
-            nodes: [String: NavigatingNode])
-    }
-    
-    internal var navigatingNodes: [String: NavigatingNode] = [:]
-    internal typealias Map = (String) -> (dispatch_queue_t, MapHandler?, Parameters)
-    internal var maps: [Map] = [Map]()
-    internal typealias Proxy = (String) -> (dispatch_queue_t, ProxyHandler?, Parameters)
-    internal var proxies: [Proxy] = [Proxy]()
-    internal var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT)
-    
+    private var maps: [Map] = [Map]()
+    private var proxies: [Proxy] = [Proxy]()
+    private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT)
     private var routingQueue = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
     
     public init(){}
@@ -154,7 +145,7 @@ public final class Routing {
         return false
     }
     
-    internal func prepare<H>(var pattern: String, queue: dispatch_queue_t, handler: H) -> ((String) -> (dispatch_queue_t, H?, Parameters)) {
+    private func prepare<H>(var pattern: String, queue: dispatch_queue_t, handler: H) -> ((String) -> (dispatch_queue_t, H?, Parameters)) {
         var dynamicSegments = [String]()
         while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
             dynamicSegments.append(pattern.substringWithRange(range).stringByReplacingOccurrencesOfString(":", withString: ""))
