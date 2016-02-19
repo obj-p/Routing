@@ -16,13 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         AppRoutes.registerRoutes()
-        
-        var components = NSURLComponents(URL: AppRoutes.urls.first, resolvingAgainstBaseURL: false)!
-        components.query = "animated=true"
-        AppRoutes.sharedRouter.open(components.URL!)
-        components = NSURLComponents(URL: AppRoutes.urls.second, resolvingAgainstBaseURL: false)!
-        components.query = "animated=true"
-        AppRoutes.sharedRouter.open(components.URL!)
+        AppRoutes.sharedRouter.open(AppRoutes.urls.first)
+        AppRoutes.sharedRouter.open(AppRoutes.urls.second)
         
         return true
     }

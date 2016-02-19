@@ -9,6 +9,7 @@
 import UIKit
 
 public enum PresentationStyle {
+    
     case Root
     case Show
     case ShowDetail
@@ -17,16 +18,29 @@ public enum PresentationStyle {
     case Custom((presenting: UIViewController,
         presented: UIViewController,
         completed: Completed) -> Void)
+    
 }
 
-private indirect enum NavigatingNode {
-    case Unknown(nodes: [String: NavigatingNode]?)
-    case Known(controller: UIViewController.Type,
+private struct NavigatingNode {
+    
+    let controller: UIViewController.Type
+    let style: PresentationStyle
+    let contained: Bool
+    let instance: () -> UIViewController
+    let setup: (UIViewController, Parameters) -> Void
+    
+    init(controller:UIViewController.Type,
         style: PresentationStyle,
         contained: Bool,
         instance: () -> UIViewController,
-        setup: (UIViewController, Parameters) -> Void,
-        nodes: [String: NavigatingNode]?)
+        setup: (UIViewController, Parameters) -> Void) {
+            self.controller = controller
+            self.style = style
+            self.contained = contained
+            self.instance = instance
+            self.setup = setup
+    }
+    
 }
 
 public final class Navigating: Routing {
@@ -80,7 +94,7 @@ public final class Navigating: Routing {
         style: PresentationStyle = .Show,
         instance: () -> UIViewController,
         setup: (UIViewController, Parameters) -> Void) {
-            updateNavigationTree(pattern,
+            updateNavigatingNodes(pattern,
                 controller: controller,
                 style: style,
                 contained: contained,
@@ -88,48 +102,33 @@ public final class Navigating: Routing {
                 setup: setup)
             
             let mapHandler: MapHandler = { parameters, completed in
-                // Retrieve Tree
-                // Climb from root to current and reset root if needed
-                // Call each NavigatingHandler block in tree path
+                print(self.navigatingNodes)
+                // Retrieve nodes
+                // Climb and inspect view hierarchy from root to current VC
+                // Call each NavigatingNode needed to reach requested path
+                completed()
             }
             
             self.map(pattern, handler: mapHandler)
     }
     
-    // TODO: To use or not to use generics here?
-    private func updateNavigationTree(var pattern: String,
+    private func updateNavigatingNodes(var pattern: String,
         controller: UIViewController.Type,
         style: PresentationStyle,
         contained: Bool,
         instance: () -> UIViewController,
         setup: (UIViewController, Parameters) -> Void) {
-            if let rangeOfScheme = pattern.rangeOfString("^(.*:)//", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
-                pattern.replaceRange(rangeOfScheme, with: "")
+            dispatch_barrier_async(nodesQueue) {
+                if let rangeOfScheme = pattern.rangeOfString("^(.*:)//", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
+                    pattern.replaceRange(rangeOfScheme, with: "")
+                }
+                
+                self.navigatingNodes[pattern] = NavigatingNode(controller: controller,
+                    style: style,
+                    contained: contained,
+                    instance: instance,
+                    setup: setup)
             }
-            var unknown = pattern.componentsSeparatedByString("/")
-            var nodes = unknown.popLast().map {
-                return [$0: NavigatingNode
-                    .Known(controller: controller,
-                        style: style,
-                        contained: contained,
-                        instance: instance,
-                        setup: setup,
-                        nodes: nil)]
-            }
-            
-            unknown.reverse().forEach {
-                nodes = [$0: NavigatingNode.Unknown(nodes: nodes)]
-            }
-            
-            if let nodes = nodes {
-                mergeNodes(nodes)
-            }
-    }
-    
-    private func mergeNodes(nodes: [String: NavigatingNode]) {
-        dispatch_barrier_sync(nodesQueue) {
-            
-        }
     }
     
 }
