@@ -1,6 +1,6 @@
 //
 //  RoutingSpec.swift
-//  RoutingSpec
+//  Routing
 //
 //  Created by Jason Prasad on 9/28/15.
 //  Copyright © 2015 Routing. All rights reserved.

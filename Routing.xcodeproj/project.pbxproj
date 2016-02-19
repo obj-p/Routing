@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		92914D771C776840008FC623 /* NavigatingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92914D761C776840008FC623 /* NavigatingSpec.swift */; };
 		92FCFA051BB963CD00DF05C3 /* Routing.h in Headers */ = {isa = PBXBuildFile; fileRef = 92FCFA041BB963CD00DF05C3 /* Routing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
 		92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
@@ -49,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		92914D761C776840008FC623 /* NavigatingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigatingSpec.swift; sourceTree = "<group>"; };
 		92FCFA011BB963CD00DF05C3 /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		92FCFA041BB963CD00DF05C3 /* Routing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Routing.h; sourceTree = "<group>"; };
 		92FCFA061BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 		92FCFA0F1BB963CD00DF05C3 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				92914D761C776840008FC623 /* NavigatingSpec.swift */,
 				92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */,
 				92FCFA121BB963CD00DF05C3 /* Info.plist */,
 			);
@@ -520,6 +523,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92914D771C776840008FC623 /* NavigatingSpec.swift in Sources */,
 				92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -19,32 +19,32 @@ public enum PresentationStyle {
         completed: Completed) -> Void)
 }
 
-public typealias NavigatingHandler = (Parameters) -> UIViewController
-
 private indirect enum NavigatingNode {
-    case Unknown(nodes: [String: NavigatingNode])
+    case Unknown(nodes: [String: NavigatingNode]?)
     case Known(controller: UIViewController.Type,
         style: PresentationStyle,
         contained: Bool,
-        nodes: [String: NavigatingNode])
+        instance: () -> UIViewController,
+        setup: (UIViewController, Parameters) -> Void,
+        nodes: [String: NavigatingNode]?)
 }
 
 public final class Navigating: Routing {
     
-    private var navigatingNodes: [String: NavigatingNode] = [:]
+    private var navigatingNodes: [String: NavigatingNode] = [String: NavigatingNode]()
     private var nodesQueue = dispatch_queue_create("Navigating Nodes Queue", DISPATCH_QUEUE_CONCURRENT)
     
-    public func map<T: UIViewController>(pattern: String,
-        controller: T.Type,
+    public func map(pattern: String,
+        controller: UIViewController.Type,
         contained: Bool = false,
         style: PresentationStyle = .Show,
         storyboard: String,
         identifier: String,
-        setup: (T, Parameters) -> Void) {
-            let instance = { () -> T in
+        setup: (UIViewController, Parameters) -> Void) {
+            let instance = { () -> UIViewController in
                 let bundle = NSBundle(forClass: controller)
                 let storyboard = UIStoryboard(name: storyboard, bundle: bundle)
-                return storyboard.instantiateViewControllerWithIdentifier(identifier) as! T
+                return storyboard.instantiateViewControllerWithIdentifier(identifier)
             }
             map(pattern,
                 controller: controller,
@@ -54,14 +54,14 @@ public final class Navigating: Routing {
                 setup: setup)
     }
     
-    public func map<T: UIViewController>(pattern: String,
-        controller: T.Type,
+    public func map(pattern: String,
+        controller: UIViewController.Type,
         contained: Bool = false,
         style: PresentationStyle = .Show,
         nib: String,
         bundle: String? = nil,
-        setup: (T, Parameters) -> Void) {
-            let instance = { () -> T in
+        setup: (UIViewController, Parameters) -> Void) {
+            let instance = { () -> UIViewController in
                 let bundle = bundle.flatMap { NSBundle(identifier: $0) }
                     ?? NSBundle(forClass: controller)
                 return controller.init(nibName: nib, bundle: bundle)
@@ -74,12 +74,12 @@ public final class Navigating: Routing {
                 setup: setup)
     }
     
-    public func map<T: UIViewController>(pattern: String,
-        controller: T.Type,
+    public func map(pattern: String,
+        controller: UIViewController.Type,
         contained: Bool = false,
         style: PresentationStyle = .Show,
-        instance: () -> T,
-        setup: (T, Parameters) -> Void) {
+        instance: () -> UIViewController,
+        setup: (UIViewController, Parameters) -> Void) {
             updateNavigationTree(pattern,
                 controller: controller,
                 style: style,
@@ -96,18 +96,40 @@ public final class Navigating: Routing {
             self.map(pattern, handler: mapHandler)
     }
     
-    private func updateNavigationTree<T: UIViewController>(var pattern: String,
-        controller: T.Type,
+    // TODO: To use or not to use generics here?
+    private func updateNavigationTree(var pattern: String,
+        controller: UIViewController.Type,
         style: PresentationStyle,
         contained: Bool,
-        instance: () -> T,
-        setup: (T, Parameters) -> Void) {
+        instance: () -> UIViewController,
+        setup: (UIViewController, Parameters) -> Void) {
             if let rangeOfScheme = pattern.rangeOfString("^(.*:)//", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
                 pattern.replaceRange(rangeOfScheme, with: "")
             }
-            
             var unknown = pattern.componentsSeparatedByString("/")
-            let known = unknown.popLast()
+            var nodes = unknown.popLast().map {
+                return [$0: NavigatingNode
+                    .Known(controller: controller,
+                        style: style,
+                        contained: contained,
+                        instance: instance,
+                        setup: setup,
+                        nodes: nil)]
+            }
+            
+            unknown.reverse().forEach {
+                nodes = [$0: NavigatingNode.Unknown(nodes: nodes)]
+            }
+            
+            if let nodes = nodes {
+                mergeNodes(nodes)
+            }
+    }
+    
+    private func mergeNodes(nodes: [String: NavigatingNode]) {
+        dispatch_barrier_sync(nodesQueue) {
+            
+        }
     }
     
 }
