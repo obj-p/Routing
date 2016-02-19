@@ -33,6 +33,12 @@ public struct AppRoutes {
     
     public static var isProxying = false
     public static func registerRoutes() {
+// MARK: Proxies
+        AppRoutes.sharedRouter.proxy("/*") {  route, parameters, next in
+            print("Routing route: \(route) with parameters: \(parameters)")
+            next(nil, nil)
+        }
+        
         AppRoutes.sharedRouter.proxy(AppRoutes.paths.first) { (var route, parameters, next) in
             if AppRoutes.isProxying { route = AppRoutes.paths.second }
             next(route, parameters)
@@ -42,12 +48,14 @@ public struct AppRoutes {
             if AppRoutes.isProxying { route = AppRoutes.paths.first }
             next(route, parameters)
         }
-        
-        AppRoutes.sharedRouter.map(AppRoutes.paths.first,
+
+// MARK: Navigation Routes
+        AppRoutes.sharedRouter.map(AppRoutes.paths.root,
             controller: RootViewController.self,
             contained: true,
             style: .Root,
-            instance: { UIApplication.sharedApplication().keyWindow!.rootViewController as! RootViewController }) { vc, parameters in
+            storyboard: "Main",
+            identifier: AppRoutes.root) { vc, parameters in
                 // Do something with parameters
         }
         
@@ -61,58 +69,13 @@ public struct AppRoutes {
                 // Do something with parameters
         }
 
-        AppRoutes.sharedRouter.map(AppRoutes.paths.first,
-            controller: FirstViewController.self,
+        AppRoutes.sharedRouter.map(AppRoutes.paths.second,
+            controller: SecondViewController.self,
             contained: true,
             style: .Push(animated: animated),
             storyboard: "Main",
             identifier: AppRoutes.second) { vc, parameters in
                 // Do something with parameters
-        }
-        
-        AppRoutes.sharedRouter.map(AppRoutes.paths.second,
-            controller: SecondViewController.self) { parameters in
-                let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-                let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.second)
-                return UINavigationController(rootViewController: vc)
-        }
-        
-        AppRoutes.sharedRouter.map(AppRoutes.paths.first) { (parameters, completed) in
-            guard let window = UIApplication.sharedApplication().delegate?.window else {
-                completed()
-                return
-            }
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-            let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.first)
-            let navController = UINavigationController(rootViewController: vc)
-            let animated: Bool = parameters["animated"] == nil || parameters["animated"] == "true"
-            window?.rootViewController?.presentViewController(navController, animated: animated, completion: completed)
-        }
-        
-        AppRoutes.sharedRouter.map(AppRoutes.paths.second) { (parameters, completed) in
-            guard let window = UIApplication.sharedApplication().delegate?.window else {
-                completed()
-                return
-            }
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-            let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.second)
-            let animated: Bool = parameters["animated"] == nil || parameters["animated"] == "true"
-            
-            CATransaction.begin()
-            CATransaction.setCompletionBlock(completed)
-            if let presented = (window?.rootViewController?.presentedViewController as? UINavigationController) {
-                presented.pushViewController(vc, animated: animated)
-            } else {
-                (window?.rootViewController as? UINavigationController)?.pushViewController(vc, animated: animated)
-            }
-            CATransaction.commit()
-        }
-        
-        AppRoutes.sharedRouter.proxy("/*") {  route, parameters, next in
-            print("Routing route: \(route) with parameters: \(parameters)")
-            next(nil, nil)
         }
     }
     

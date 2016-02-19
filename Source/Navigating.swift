@@ -11,9 +11,12 @@ import UIKit
 public enum PresentationStyle {
     case Root
     case Show
+    case ShowDetail
     case Present(animated: () -> Bool)
     case Push(animated: () -> Bool)
-    case Custom((presenting: UIViewController, presented: UIViewController, completed: Completed) -> Void)
+    case Custom((presenting: UIViewController,
+        presented: UIViewController,
+        completed: Completed) -> Void)
 }
 
 public typealias NavigatingHandler = (Parameters) -> UIViewController
@@ -31,21 +34,44 @@ public final class Navigating: Routing {
     private var navigatingNodes: [String: NavigatingNode] = [:]
     private var nodesQueue = dispatch_queue_create("Navigating Nodes Queue", DISPATCH_QUEUE_CONCURRENT)
     
-    public func map(pattern: String,
-        queue: dispatch_queue_t = dispatch_get_main_queue(),
-        controller: UIViewController.Type,
-        style: PresentationStyle = .Show,
+    public func map<T: UIViewController>(pattern: String,
+        controller: T.Type,
         contained: Bool = false,
-        handler: NavigatingHandler) -> Void {
-            updateNavigationTree(pattern, controller: controller, style: style, contained: contained)
-            
-            let mapHandler: MapHandler = { parameters, completed in
-                // Retrieve Tree
-                // Climb from root to current and reset root if needed
-                // Call each NavigatingHandler block in tree path
+        style: PresentationStyle = .Show,
+        storyboard: String,
+        identifier: String,
+        parameters: (T, Parameters) -> Void) {
+            let instance = { () -> T in
+                let bundle = NSBundle(forClass: controller)
+                let storyboard = UIStoryboard(name: storyboard, bundle: bundle)
+                return storyboard.instantiateViewControllerWithIdentifier(identifier) as! T
             }
-       
-            self.map(pattern, handler: mapHandler)
+            map(pattern,
+                controller: controller,
+                contained: contained,
+                style: style,
+                instance: instance,
+                parameters: parameters)
+    }
+    
+    public func map<T: UIViewController>(pattern: String,
+        controller: T.Type,
+        contained: Bool = false,
+        style: PresentationStyle = .Show,
+        nib: String,
+        bundle: String? = nil,
+        parameters: (T, Parameters) -> Void) {
+            let instance = { () -> T in
+                let bundle = bundle.flatMap { NSBundle(identifier: $0) }
+                    ?? NSBundle(forClass: controller)
+                return controller.init(nibName: nib, bundle: bundle)
+            }
+            map(pattern,
+                controller: controller,
+                contained: contained,
+                style: style,
+                instance: instance,
+                parameters: parameters)
     }
     
     public func map<T: UIViewController>(pattern: String,
@@ -54,33 +80,34 @@ public final class Navigating: Routing {
         style: PresentationStyle = .Show,
         instance: () -> T,
         parameters: (T, Parameters) -> Void) {
+            updateNavigationTree(pattern,
+                controller: controller,
+                style: style,
+                contained: contained,
+                instance: instance,
+                parameters: parameters)
+            
+            let mapHandler: MapHandler = { parameters, completed in
+                // Retrieve Tree
+                // Climb from root to current and reset root if needed
+                // Call each NavigatingHandler block in tree path
+            }
+            
+            self.map(pattern, handler: mapHandler)
     }
     
-    public func map<T: UIViewController>(pattern: String,
+    private func updateNavigationTree<T: UIViewController>(var pattern: String,
         controller: T.Type,
-        contained: Bool = false,
-        style: PresentationStyle = .Show,
-        storyboard: String,
-        identifier: String,
+        style: PresentationStyle,
+        contained: Bool,
+        instance: () -> T,
         parameters: (T, Parameters) -> Void) {
-    }
-    
-    public func map<T: UIViewController>(pattern: String,
-        controller: T.Type,
-        contained: Bool = false,
-        style: PresentationStyle = .Show,
-        bundle: String,
-        nib: String,
-        parameters: (T, Parameters) -> Void) {
-    }
-    
-    private func updateNavigationTree(var pattern: String, controller: UIViewController.Type, style: PresentationStyle, contained: Bool) {
-        if let rangeOfScheme = pattern.rangeOfString("^(.*:)//", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
-            pattern.replaceRange(rangeOfScheme, with: "")
-        }
-        
-        var unknown = pattern.componentsSeparatedByString("/")
-        let known = unknown.popLast()
+            if let rangeOfScheme = pattern.rangeOfString("^(.*:)//", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
+                pattern.replaceRange(rangeOfScheme, with: "")
+            }
+            
+            var unknown = pattern.componentsSeparatedByString("/")
+            let known = unknown.popLast()
     }
     
 }
