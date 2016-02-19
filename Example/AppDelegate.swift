@@ -15,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        AppRoutes.sharedRouter = Navigating(rootViewController: self.window!.rootViewController!)
         AppRoutes.registerRoutes()
         
         var components = NSURLComponents(URL: AppRoutes.urls.first, resolvingAgainstBaseURL: false)!

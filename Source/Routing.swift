@@ -38,6 +38,8 @@ private typealias Proxy = (String) -> (dispatch_queue_t, ProxyHandler?, Paramete
 
 public class Routing {
     
+    public var logger: ((String) -> Void)? 
+    
     private var maps: [Map] = [Map]()
     private var proxies: [Proxy] = [Proxy]()
     private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT)

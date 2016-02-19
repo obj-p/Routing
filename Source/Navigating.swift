@@ -9,6 +9,7 @@
 import UIKit
 
 public enum PresentationStyle {
+    case Root
     case Show
     case Present(animated: () -> Bool)
     case Push(animated: () -> Bool)
@@ -27,14 +28,8 @@ private indirect enum NavigatingNode {
 
 public final class Navigating: Routing {
     
-    public let rootViewController: UIViewController
     private var navigatingNodes: [String: NavigatingNode] = [:]
     private var nodesQueue = dispatch_queue_create("Navigating Nodes Queue", DISPATCH_QUEUE_CONCURRENT)
-    
-    public init(rootViewController: UIViewController) {
-        self.rootViewController = rootViewController
-        super.init()
-    }
     
     public func map(pattern: String,
         queue: dispatch_queue_t = dispatch_get_main_queue(),
@@ -51,6 +46,32 @@ public final class Navigating: Routing {
             }
        
             self.map(pattern, handler: mapHandler)
+    }
+    
+    public func map<T: UIViewController>(pattern: String,
+        controller: T.Type,
+        contained: Bool = false,
+        style: PresentationStyle = .Show,
+        instance: () -> T,
+        parameters: (T, Parameters) -> Void) {
+    }
+    
+    public func map<T: UIViewController>(pattern: String,
+        controller: T.Type,
+        contained: Bool = false,
+        style: PresentationStyle = .Show,
+        storyboard: String,
+        identifier: String,
+        parameters: (T, Parameters) -> Void) {
+    }
+    
+    public func map<T: UIViewController>(pattern: String,
+        controller: T.Type,
+        contained: Bool = false,
+        style: PresentationStyle = .Show,
+        bundle: String,
+        nib: String,
+        parameters: (T, Parameters) -> Void) {
     }
     
     private func updateNavigationTree(var pattern: String, controller: UIViewController.Type, style: PresentationStyle, contained: Bool) {

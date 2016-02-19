@@ -44,12 +44,30 @@ public struct AppRoutes {
         }
         
         AppRoutes.sharedRouter.map(AppRoutes.paths.first,
+            controller: RootViewController.self,
+            contained: true,
+            style: .Root,
+            instance: { UIApplication.sharedApplication().keyWindow!.rootViewController as! RootViewController }) { vc, parameters in
+                // Do something with parameters
+        }
+        
+        let animated = { true }
+        AppRoutes.sharedRouter.map(AppRoutes.paths.first,
             controller: FirstViewController.self,
-            style: .Present(animated: { true }),
-            contained: true) { parameters in
-                let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-                let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.first)
-                return UINavigationController(rootViewController: vc)
+            contained: true,
+            style: .Present(animated: animated),
+            storyboard: "Main",
+            identifier: AppRoutes.first) { vc, parameters in
+                // Do something with parameters
+        }
+
+        AppRoutes.sharedRouter.map(AppRoutes.paths.first,
+            controller: FirstViewController.self,
+            contained: true,
+            style: .Push(animated: animated),
+            storyboard: "Main",
+            identifier: AppRoutes.second) { vc, parameters in
+                // Do something with parameters
         }
         
         AppRoutes.sharedRouter.map(AppRoutes.paths.second,
