@@ -40,7 +40,7 @@ public final class Navigating: Routing {
         style: PresentationStyle = .Show,
         storyboard: String,
         identifier: String,
-        parameters: (T, Parameters) -> Void) {
+        setup: (T, Parameters) -> Void) {
             let instance = { () -> T in
                 let bundle = NSBundle(forClass: controller)
                 let storyboard = UIStoryboard(name: storyboard, bundle: bundle)
@@ -51,7 +51,7 @@ public final class Navigating: Routing {
                 contained: contained,
                 style: style,
                 instance: instance,
-                parameters: parameters)
+                setup: setup)
     }
     
     public func map<T: UIViewController>(pattern: String,
@@ -60,7 +60,7 @@ public final class Navigating: Routing {
         style: PresentationStyle = .Show,
         nib: String,
         bundle: String? = nil,
-        parameters: (T, Parameters) -> Void) {
+        setup: (T, Parameters) -> Void) {
             let instance = { () -> T in
                 let bundle = bundle.flatMap { NSBundle(identifier: $0) }
                     ?? NSBundle(forClass: controller)
@@ -71,7 +71,7 @@ public final class Navigating: Routing {
                 contained: contained,
                 style: style,
                 instance: instance,
-                parameters: parameters)
+                setup: setup)
     }
     
     public func map<T: UIViewController>(pattern: String,
@@ -79,13 +79,13 @@ public final class Navigating: Routing {
         contained: Bool = false,
         style: PresentationStyle = .Show,
         instance: () -> T,
-        parameters: (T, Parameters) -> Void) {
+        setup: (T, Parameters) -> Void) {
             updateNavigationTree(pattern,
                 controller: controller,
                 style: style,
                 contained: contained,
                 instance: instance,
-                parameters: parameters)
+                setup: setup)
             
             let mapHandler: MapHandler = { parameters, completed in
                 // Retrieve Tree
@@ -101,7 +101,7 @@ public final class Navigating: Routing {
         style: PresentationStyle,
         contained: Bool,
         instance: () -> T,
-        parameters: (T, Parameters) -> Void) {
+        setup: (T, Parameters) -> Void) {
             if let rangeOfScheme = pattern.rangeOfString("^(.*:)//", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
                 pattern.replaceRange(rangeOfScheme, with: "")
             }
