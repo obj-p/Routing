@@ -112,9 +112,7 @@ public final class Navigating: Routing {
                     nodes = navigating.navigatingNodes
                 }
                 
-                // Climb and inspect view hierarchy from root to current VC
-                // Call each NavigatingNode needed to reach requested path
-                completed()
+                navigating.climbHierarchy(route, nodes: nodes, completed: completed)
             }
             
             self.map(pattern, handler: mapHandler)
@@ -137,6 +135,27 @@ public final class Navigating: Routing {
                     instance: instance,
                     setup: setup)
             }
+    }
+    
+    private func climbHierarchy(var route: String, nodes: [String: NavigatingNode], completed: () -> Void) {
+        if let rangeOfScheme = route.rangeOfString("^(.*:)//", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
+            route.replaceRange(rangeOfScheme, with: "")
+        }
+        
+        var components: [String] = route.componentsSeparatedByString("/").reverse()
+        var currentPath = ""
+        while (components.isEmpty == false) {
+            if let next = components.popLast() {
+                currentPath += next
+            }
+            
+            let node = nodes[currentPath]
+            
+            
+            currentPath += "/"
+        }
+        
+        completed()
     }
     
 }
