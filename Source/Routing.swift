@@ -150,16 +150,15 @@ public class Routing {
                     }
                     
                     if let (queue, handler, parameters) =
-                        (overwrittingRoute.map { self.filterRoute($0, routes: maps).first }
-                            ?? routeComponents) {
-                                var parameters = parameters
-                                (overwrittingParameters ?? queryParameters).forEach {
-                                    parameters[$0.0] = $0.1
-                                }
-                                dispatch_async(queue) { handler(overwrittingRoute ?? URLString, parameters) {
-                                    dispatch_semaphore_signal(semaphore) }
-                                }
-                                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+                        (overwrittingRoute.map { self.filterRoute($0, routes: maps).first } ?? routeComponents) {
+                            var parameters = parameters
+                            (overwrittingParameters ?? queryParameters).forEach {
+                                parameters[$0.0] = $0.1
+                            }
+                            dispatch_async(queue) { handler(overwrittingRoute ?? URLString, parameters) {
+                                dispatch_semaphore_signal(semaphore) }
+                            }
+                            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
                     }
                 }
             }
@@ -168,45 +167,35 @@ public class Routing {
         return false
     }
     
-    private func prepare<H>(var pattern: String,
-        queue: dispatch_queue_t,
-        handler: H) -> ((String) -> (dispatch_queue_t, H?, Parameters)) {
-            var dynamicSegments = [String]()
-            while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+",
-                options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
-                    dynamicSegments
-                        .append(pattern.substringWithRange(range)
-                            .stringByReplacingOccurrencesOfString(":", withString: ""))
-                    pattern.replaceRange(range, with: "([^/]+)")
+    private func prepare<H>(var pattern: String, queue: dispatch_queue_t, handler: H) -> ((String) -> (dispatch_queue_t, H?, Parameters)) {
+        var dynamicSegments = [String]()
+        while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]){
+            dynamicSegments.append(pattern.substringWithRange(range).stringByReplacingOccurrencesOfString(":", withString: ""))
+            pattern.replaceRange(range, with: "([^/]+)")
+        }
+        
+        return { (route: String) -> (dispatch_queue_t, H?, Parameters) in
+            guard let matches = (try? NSRegularExpression(pattern: pattern, options: .CaseInsensitive))
+                .flatMap({ $0.matchesInString(route, options: [], range: NSMakeRange(0, route.characters.count)) })?
+                .first else {
+                    return (queue, nil, [:])
             }
             
-            return { (route: String) -> (dispatch_queue_t, H?, Parameters) in
-                guard let matches = (try? NSRegularExpression(pattern: pattern, options: .CaseInsensitive))
-                    .flatMap({ $0.matchesInString(route,
-                        options: [],
-                        range: NSMakeRange(0, route.characters.count)) })?
-                    .first
-                    else {
-                        return (queue, nil, [:])
+            var parameters = Parameters()
+            if dynamicSegments.count > 0 && dynamicSegments.count == matches.numberOfRanges - 1 {
+                [Int](1 ..< matches.numberOfRanges).forEach { (index) in
+                    parameters[dynamicSegments[index-1]] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
                 }
-                
-                var parameters = Parameters()
-                if dynamicSegments.count > 0 && dynamicSegments.count == matches.numberOfRanges - 1 {
-                    [Int](1 ..< matches.numberOfRanges).forEach { (index) in
-                        parameters[dynamicSegments[index-1]] = (route as NSString)
-                            .substringWithRange(matches.rangeAtIndex(index))
-                    }
-                }
-                return (queue, handler, parameters)
             }
+            return (queue, handler, parameters)
+        }
     }
     
-    private func filterRoute<H>(route: String,
-        routes: [(String) -> (dispatch_queue_t, H?, Parameters)]) -> [(dispatch_queue_t, H, Parameters)] {
-            return routes
-                .map { $0(route) }
-                .filter { $0.1 != nil }
-                .map { ($0, $1!, $2) }
+    private func filterRoute<H>(route: String, routes: [(String) -> (dispatch_queue_t, H?, Parameters)]) -> [(dispatch_queue_t, H, Parameters)] {
+        return routes
+            .map { $0(route) }
+            .filter { $0.1 != nil }
+            .map { ($0, $1!, $2) }
     }
     
 }

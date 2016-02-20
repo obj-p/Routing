@@ -67,6 +67,17 @@ class RoutingSpec: QuickSpec {
                     expect(routeCalled).toEventually(equal(4))
                 }
                 
+                it("should pass the matching route to the closure") {
+                    var matched: String?
+                    router.map("routingexample://route") { (route, _, completed) in
+                        matched = route
+                        completed()
+                    }
+                    
+                    router.open(NSURL(string: "routingexample://route")!)
+                    expect(matched).toEventually(equal("routingexample://route"))
+                }
+                
                 it("should pass url arguments specified in the route in the parameters dictionary") {
                     var argument: String?
                     router.map("routingexample://route/:argument") { (_, parameters, completed) in

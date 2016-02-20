@@ -34,7 +34,7 @@ public struct AppRoutes {
     public static var isProxying = false
     public static func registerRoutes() {
 // MARK: Proxies
-        AppRoutes.sharedRouter.proxy("/*") {  route, parameters, next in
+        AppRoutes.sharedRouter.proxy("/*") { route, parameters, next in
             print("Routing route: \(route) with parameters: \(parameters)")
             next(nil, nil)
         }
