@@ -17,7 +17,7 @@ public typealias Parameters = [String: String]
  - Parameter Completed: Must be called for Routing to continue processing other routes with #open
  */
 
-public typealias MapHandler = (Parameters, Completed) -> Void
+public typealias MapHandler = (String, Parameters, Completed) -> Void
 public typealias Completed = () -> Void
 
 /**
@@ -156,7 +156,7 @@ public class Routing {
                                 (overwrittingParameters ?? queryParameters).forEach {
                                     parameters[$0.0] = $0.1
                                 }
-                                dispatch_async(queue) { handler(parameters) {
+                                dispatch_async(queue) { handler(overwrittingRoute ?? URLString, parameters) {
                                     dispatch_semaphore_signal(semaphore) }
                                 }
                                 dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)

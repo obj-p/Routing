@@ -101,9 +101,17 @@ public final class Navigating: Routing {
                 instance: instance,
                 setup: setup)
             
-            let mapHandler: MapHandler = { parameters, completed in
-                print(self.navigatingNodes)
-                // Retrieve nodes
+            let mapHandler: MapHandler = { [weak self] (route, parameters, completed) in
+                guard let navigating = self else {
+                    completed()
+                    return
+                }
+                
+                var nodes: [String: NavigatingNode]!
+                dispatch_sync(navigating.nodesQueue) {
+                    nodes = navigating.navigatingNodes
+                }
+                
                 // Climb and inspect view hierarchy from root to current VC
                 // Call each NavigatingNode needed to reach requested path
                 completed()
