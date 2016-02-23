@@ -39,7 +39,7 @@ private typealias Proxy = (String) -> (dispatch_queue_t, ProxyHandler?, Paramete
 public class Routing {
     
     public var logger: ((String) -> Void)?
-    
+
     private var maps: [Map] = [Map]()
     private var proxies: [Proxy] = [Proxy]()
     private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT)
@@ -167,7 +167,9 @@ public class Routing {
         return false
     }
     
-    private func prepare<H>(var pattern: String, queue: dispatch_queue_t, handler: H) -> ((String) -> (dispatch_queue_t, H?, Parameters)) {
+    private func prepare<H>(var pattern: String,
+        queue: dispatch_queue_t,
+        handler: H) -> ((String) -> (dispatch_queue_t, H?, Parameters)) {
         var dynamicSegments = [String]()
         while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]){
             dynamicSegments.append(pattern.substringWithRange(range).stringByReplacingOccurrencesOfString(":", withString: ""))
@@ -191,7 +193,8 @@ public class Routing {
         }
     }
     
-    private func filterRoute<H>(route: String, routes: [(String) -> (dispatch_queue_t, H?, Parameters)]) -> [(dispatch_queue_t, H, Parameters)] {
+    private func filterRoute<H>(route: String,
+        routes: [(String) -> (dispatch_queue_t, H?, Parameters)]) -> [(dispatch_queue_t, H, Parameters)] {
         return routes
             .map { $0(route) }
             .filter { $0.1 != nil }

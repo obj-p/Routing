@@ -150,12 +150,48 @@ public final class Navigating: Routing {
             }
             
             let node = nodes[currentPath]
-            
+            var vc = UIApplication.sharedApplication().keyWindow!.rootViewController!
+            guard let stepped = node.map({ stepOn($0, spot: &vc) }) where stepped == true else {
+                abort()
+            }
             
             currentPath += "/"
         }
         
         completed()
+    }
+    
+    private func stepOn(node: NavigatingNode, inout spot: UIViewController) -> Bool {
+        if node.contained {
+            var foundVC: UIViewController?
+            if let tab = spot as? UITabBarController {
+                if ((tab.selectedViewController?.isKindOfClass(node.controller)) != nil) {
+                    
+                } else {
+                    
+                }
+            } else if let nav = spot as? UINavigationController {
+                if spot.isKindOfClass(node.controller) {
+                    
+                } else {
+                    
+                }
+            } else {
+                if spot.isKindOfClass(node.controller) {
+                    
+                } else {
+                    
+                }
+            }
+        } else {
+            if spot.isKindOfClass(node.controller) {
+                
+            } else {
+                
+            }
+        }
+        
+        return true
     }
     
 }
