@@ -10,7 +10,6 @@ import UIKit
 
 public enum PresentationStyle {
     
-    case Root
     case Show
     case ShowDetail
     case Present(animated: () -> Bool)
@@ -84,7 +83,6 @@ public final class Navigating: Routing {
                 }
                 
                 switch style {
-                case .Root: break
                 case .Show:
                     CATransaction.begin()
                     CATransaction.setCompletionBlock(completed)
