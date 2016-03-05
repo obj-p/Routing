@@ -15,38 +15,13 @@ public enum PresentationStyle {
     case ShowDetail
     case Present(animated: () -> Bool)
     case Push(animated: () -> Bool)
-    case Custom((presenting: UIViewController,
+    case Custom(custom: (presenting: UIViewController,
         presented: UIViewController,
         completed: Completed) -> Void)
     
 }
 
-private struct NavigatingNode {
-    
-    let controller: UIViewController.Type
-    let style: PresentationStyle
-    let contained: Bool
-    let instance: () -> UIViewController
-    let setup: (UIViewController, Parameters) -> Void
-    
-    init(controller:UIViewController.Type,
-        style: PresentationStyle,
-        contained: Bool,
-        instance: () -> UIViewController,
-        setup: (UIViewController, Parameters) -> Void) {
-            self.controller = controller
-            self.style = style
-            self.contained = contained
-            self.instance = instance
-            self.setup = setup
-    }
-    
-}
-
 public final class Navigating: Routing {
-    
-    private var navigatingNodes: [String: NavigatingNode] = [String: NavigatingNode]()
-    private var nodesQueue = dispatch_queue_create("Navigating Nodes Queue", DISPATCH_QUEUE_CONCURRENT)
     
     public func map(pattern: String,
         controller: UIViewController.Type,
@@ -61,7 +36,6 @@ public final class Navigating: Routing {
                 return storyboard.instantiateViewControllerWithIdentifier(identifier)
             }
             map(pattern,
-                controller: controller,
                 contained: contained,
                 style: style,
                 instance: instance,
@@ -81,7 +55,6 @@ public final class Navigating: Routing {
                 return controller.init(nibName: nib, bundle: bundle)
             }
             map(pattern,
-                controller: controller,
                 contained: contained,
                 style: style,
                 instance: instance,
@@ -89,109 +62,88 @@ public final class Navigating: Routing {
     }
     
     public func map(pattern: String,
-        controller: UIViewController.Type,
         contained: Bool = false,
         style: PresentationStyle = .Show,
         instance: () -> UIViewController,
         setup: (UIViewController, Parameters) -> Void) {
-            updateNavigatingNodes(pattern,
-                controller: controller,
-                style: style,
-                contained: contained,
-                instance: instance,
-                setup: setup)
-            
-            let mapHandler: MapHandler = { [weak self] (route, parameters, completed) in
-                guard let navigating = self else {
+            let mapHandler: MapHandler = { (route, parameters, completed) in
+                guard let root = UIApplication.sharedApplication().keyWindow?.rootViewController else {
                     completed()
                     return
                 }
                 
-                var nodes: [String: NavigatingNode]!
-                dispatch_sync(navigating.nodesQueue) {
-                    nodes = navigating.navigatingNodes
+                var vc = instance()
+                if contained {
+                    vc = UINavigationController(rootViewController: vc);
+                }
+                setup(vc, parameters)
+                
+                var presenter = root
+                while let nextVC = presenter.nextViewController() {
+                    presenter = nextVC
                 }
                 
-                navigating.climbHierarchy(route, nodes: nodes, completed: completed)
+                switch style {
+                case .Root: break
+                case .Show:
+                    CATransaction.begin()
+                    CATransaction.setCompletionBlock(completed)
+                    presenter.showViewController(vc, sender: nil)
+                    CATransaction.commit()
+                    break
+                case .ShowDetail:
+                    CATransaction.begin()
+                    CATransaction.setCompletionBlock(completed)
+                    presenter.showDetailViewController(vc, sender: nil)
+                    CATransaction.commit()
+                    break
+                case let .Present(animated):
+                    presenter.presentViewController(vc, animated: animated(), completion: completed)
+                    break
+                case let .Push(animated):
+                    if let presenter = presenter as? UINavigationController {
+                        CATransaction.begin()
+                        CATransaction.setCompletionBlock(completed)
+                        presenter.pushViewController(vc, animated: animated())
+                        CATransaction.commit()
+                    }
+                    
+                    if let presenter = presenter.navigationController {
+                        CATransaction.begin()
+                        CATransaction.setCompletionBlock(completed)
+                        presenter.pushViewController(vc, animated: animated())
+                        CATransaction.commit()
+                    }
+                    break
+                case let .Custom(custom):
+                    custom(presenting: presenter, presented: vc, completed: completed)
+                    break
+                }
             }
             
             self.map(pattern, handler: mapHandler)
     }
     
-    private func updateNavigatingNodes(var pattern: String,
-        controller: UIViewController.Type,
-        style: PresentationStyle,
-        contained: Bool,
-        instance: () -> UIViewController,
-        setup: (UIViewController, Parameters) -> Void) {
-            dispatch_barrier_async(nodesQueue) {
-                if let rangeOfScheme = pattern.rangeOfString("^(.*:)//", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
-                    pattern.replaceRange(rangeOfScheme, with: "")
-                }
-                
-                self.navigatingNodes[pattern] = NavigatingNode(controller: controller,
-                    style: style,
-                    contained: contained,
-                    instance: instance,
-                    setup: setup)
-            }
+}
+
+protocol nextViewControllerIterator {
+    func nextViewController() -> UIViewController?
+}
+
+extension UITabBarController {
+    override func nextViewController() -> UIViewController? {
+        return selectedViewController
     }
-    
-    private func climbHierarchy(var route: String, nodes: [String: NavigatingNode], completed: () -> Void) {
-        if let rangeOfScheme = route.rangeOfString("^(.*:)//", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]) {
-            route.replaceRange(rangeOfScheme, with: "")
-        }
-        
-        var components: [String] = route.componentsSeparatedByString("/").reverse()
-        var currentPath = ""
-        while (components.isEmpty == false) {
-            if let next = components.popLast() {
-                currentPath += next
-            }
-            
-            let node = nodes[currentPath]
-            var vc = UIApplication.sharedApplication().keyWindow!.rootViewController!
-            guard let stepped = node.map({ stepOn($0, spot: &vc) }) where stepped == true else {
-                abort()
-            }
-            
-            currentPath += "/"
-        }
-        
-        completed()
+}
+
+extension UINavigationController {
+    override func nextViewController() -> UIViewController? {
+        return visibleViewController
     }
-    
-    private func stepOn(node: NavigatingNode, inout spot: UIViewController) -> Bool {
-        if node.contained {
-            var foundVC: UIViewController?
-            if let tab = spot as? UITabBarController {
-                if ((tab.selectedViewController?.isKindOfClass(node.controller)) != nil) {
-                    
-                } else {
-                    
-                }
-            } else if let nav = spot as? UINavigationController {
-                if spot.isKindOfClass(node.controller) {
-                    
-                } else {
-                    
-                }
-            } else {
-                if spot.isKindOfClass(node.controller) {
-                    
-                } else {
-                    
-                }
-            }
-        } else {
-            if spot.isKindOfClass(node.controller) {
-                
-            } else {
-                
-            }
-        }
-        
-        return true
+}
+
+extension UIViewController : nextViewControllerIterator {
+    func nextViewController() -> UIViewController? {
+        return presentedViewController
     }
-    
 }

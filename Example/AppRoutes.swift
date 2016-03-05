@@ -50,15 +50,6 @@ public struct AppRoutes {
         }
 
 // MARK: Navigation Routes
-        AppRoutes.sharedRouter.map(AppRoutes.paths.root,
-            controller: RootViewController.self,
-            contained: true,
-            style: .Root,
-            storyboard: "Main",
-            identifier: AppRoutes.root) { vc, parameters in
-                // Do something with parameters
-        }
-        
         let animated = { true }
         AppRoutes.sharedRouter.map(AppRoutes.paths.first,
             controller: FirstViewController.self,
@@ -71,7 +62,7 @@ public struct AppRoutes {
 
         AppRoutes.sharedRouter.map(AppRoutes.paths.second,
             controller: SecondViewController.self,
-            contained: true,
+            contained: false,
             style: .Push(animated: animated),
             storyboard: "Main",
             identifier: AppRoutes.second) { vc, parameters in
