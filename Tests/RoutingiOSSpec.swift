@@ -1,5 +1,5 @@
 //
-//  NavigatingSpec.swift
+//  RoutingiOSSpec.swift
 //  Routing
 //
 //  Created by Jason Prasad on 2/19/16.
@@ -11,10 +11,10 @@ import Quick
 import Nimble
 @testable import Routing
 
-class NavigatingSpec: QuickSpec {
+class RoutingiOSSpec: QuickSpec {
     
     override func spec() {
-        describe("Navigating") {}
+        describe("Routing-iOS") {}
     }
     
 }

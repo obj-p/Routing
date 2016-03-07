@@ -1,5 +1,5 @@
 //
-//  Routing-Others.swift
+//  RoutingOthers.swift
 //  Routing
 //
 //  Created by Jason Prasad on 3/7/16.
