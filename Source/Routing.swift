@@ -36,16 +36,14 @@ public typealias Next = (String?, Parameters?) -> Void
 private typealias Map = (String) -> (dispatch_queue_t, MapHandler?, Parameters)
 private typealias Proxy = (String) -> (dispatch_queue_t, ProxyHandler?, Parameters)
 
-public class Routing {
+public class BaseRouting {
     
-    public var logger: ((String) -> Void)?
-
     private var maps: [Map] = [Map]()
     private var proxies: [Proxy] = [Proxy]()
     private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_CONCURRENT)
     private var routingQueue = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
     
-    public init(){}
+    internal init(){}
     
     /**
      Associates a closure to a string pattern. A Routing instance will execute the closure in the
@@ -64,7 +62,7 @@ public class Routing {
      - Parameter handler:  A MapHandler
      */
     
-    public func map(pattern: String,
+    internal func map(pattern: String,
         queue: dispatch_queue_t = dispatch_get_main_queue(),
         handler: MapHandler) -> Void {
             dispatch_barrier_async(accessQueue) {
@@ -90,7 +88,7 @@ public class Routing {
      - Parameter handler:  A ProxyHandler
      */
     
-    public func proxy(pattern: String,
+    internal func proxy(pattern: String,
         queue: dispatch_queue_t = dispatch_get_main_queue(),
         handler: ProxyHandler) -> Void {
             dispatch_barrier_async(accessQueue) {
@@ -106,7 +104,7 @@ public class Routing {
      - Returns:  A Bool. True if it can open the URL, false otherwise
      */
     
-    public func open(URL: NSURL) -> Bool {
+    internal func open(URL: NSURL) -> Bool {
         var maps: [Map]!
         var proxies: [Proxy]!
         dispatch_sync(accessQueue) {

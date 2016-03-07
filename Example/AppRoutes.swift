@@ -10,7 +10,7 @@ import Foundation
 import Routing
 
 public struct AppRoutes {
-    public static var sharedRouter: Navigating = { Navigating() }()
+    public static var sharedRouter: Routing = { Routing() }()
     public static let paths = Paths()
     public static let urls = URLs()
     
