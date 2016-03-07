@@ -144,24 +144,24 @@ public final class Routing: BaseRouting {
     
 }
 
-protocol nextViewControllerIterator {
+internal protocol nextViewControllerIterator {
     func nextViewController() -> UIViewController?
 }
 
 extension UITabBarController {
-    override func nextViewController() -> UIViewController? {
+    internal override func nextViewController() -> UIViewController? {
         return selectedViewController
     }
 }
 
 extension UINavigationController {
-    override func nextViewController() -> UIViewController? {
+    internal override func nextViewController() -> UIViewController? {
         return visibleViewController
     }
 }
 
 extension UIViewController : nextViewControllerIterator {
-    func nextViewController() -> UIViewController? {
+    internal func nextViewController() -> UIViewController? {
         return presentedViewController
     }
 }
