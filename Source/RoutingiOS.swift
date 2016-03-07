@@ -43,14 +43,16 @@ public final class Routing: BaseRouting {
     }
     
     public func map(pattern: String,
-        controller: UIViewController.Type,
-        contained: Bool = false,
-        style: PresentationStyle = .Show,
         storyboard: String,
         identifier: String,
-        setup: (UIViewController, Parameters) -> Void) {
+        bundle: String? = nil,
+        controller: UIViewController.Type = UIViewController.self,
+        contained: Bool = false,
+        style: PresentationStyle = .Show,
+        setup: ((UIViewController, Parameters) -> Void)? = nil) {
             let instance = { () -> UIViewController in
-                let bundle = NSBundle(forClass: controller)
+                let bundle = bundle.flatMap { NSBundle(identifier: $0) }
+                    ?? NSBundle(forClass: controller)
                 let storyboard = UIStoryboard(name: storyboard, bundle: bundle)
                 return storyboard.instantiateViewControllerWithIdentifier(identifier)
             }
@@ -62,12 +64,12 @@ public final class Routing: BaseRouting {
     }
     
     public func map(pattern: String,
-        controller: UIViewController.Type,
-        contained: Bool = false,
-        style: PresentationStyle = .Show,
         nib: String,
         bundle: String? = nil,
-        setup: (UIViewController, Parameters) -> Void) {
+        controller: UIViewController.Type = UIViewController.self,
+        contained: Bool = false,
+        style: PresentationStyle = .Show,
+        setup: ((UIViewController, Parameters) -> Void)? = nil) {
             let instance = { () -> UIViewController in
                 let bundle = bundle.flatMap { NSBundle(identifier: $0) }
                     ?? NSBundle(forClass: controller)
@@ -84,7 +86,7 @@ public final class Routing: BaseRouting {
         contained: Bool = false,
         style: PresentationStyle = .Show,
         instance: () -> UIViewController,
-        setup: (UIViewController, Parameters) -> Void) {
+        setup: ((UIViewController, Parameters) -> Void)? = nil) {
             let mapHandler: MapHandler = { (route, parameters, completed) in
                 guard let root = UIApplication.sharedApplication().keyWindow?.rootViewController else {
                     completed()
@@ -95,7 +97,7 @@ public final class Routing: BaseRouting {
                 if contained {
                     vc = UINavigationController(rootViewController: vc);
                 }
-                setup(vc, parameters)
+                setup?(vc, parameters)
                 
                 var presenter = root
                 while let nextVC = presenter.nextViewController() {

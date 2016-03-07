@@ -12,6 +12,7 @@
 		92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
 		92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
 		92FCFA1C1BB9658D00DF05C3 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
+		D21592B61C8E3F89009C837F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D21592B51C8E3F89009C837F /* Main.storyboard */; };
 		D24C99321C8E1CA40011AA28 /* RoutingOthers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24C99301C8E1C860011AA28 /* RoutingOthers.swift */; };
 		D24C99331C8E1CA50011AA28 /* RoutingOthers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24C99301C8E1C860011AA28 /* RoutingOthers.swift */; };
 		D24C99341C8E1CA70011AA28 /* RoutingOthers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24C99301C8E1C860011AA28 /* RoutingOthers.swift */; };
@@ -26,6 +27,7 @@
 		D295F4521C6C29F7003CAC2F /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D295F4511C6C29F7003CAC2F /* Nimble.framework */; };
 		D2F5D0561C570ECB00317401 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F5D0551C570ECB00317401 /* Nimble.framework */; };
 		D2F5D0581C570ECF00317401 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F5D0571C570ECF00317401 /* Quick.framework */; };
+		D2F926981C8E4400007783EA /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,7 @@
 		92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingSpec.swift; sourceTree = "<group>"; };
 		92FCFA121BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92FCFA1B1BB9658D00DF05C3 /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
+		D21592B51C8E3F89009C837F /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		D24C99301C8E1C860011AA28 /* RoutingOthers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutingOthers.swift; sourceTree = "<group>"; };
 		D260C3C91C72A5CD000AFB09 /* RoutingiOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutingiOS.swift; sourceTree = "<group>"; };
 		D295F4081C6C25ED003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -175,6 +178,7 @@
 			children = (
 				92914D761C776840008FC623 /* RoutingiOSSpec.swift */,
 				92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */,
+				D21592B51C8E3F89009C837F /* Main.storyboard */,
 				92FCFA121BB963CD00DF05C3 /* Info.plist */,
 			);
 			path = Tests;
@@ -416,6 +420,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D21592B61C8E3F89009C837F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -555,6 +560,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2F926981C8E4400007783EA /* RoutingSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

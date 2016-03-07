@@ -16,6 +16,7 @@ class RoutingSpec: QuickSpec {
     override func spec() {
         
         describe("Routing") {
+            
             var router: Routing!
             var testingQueue: dispatch_queue_t!
             beforeEach {
