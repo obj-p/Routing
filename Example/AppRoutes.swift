@@ -11,56 +11,49 @@ import Routing
 
 public struct AppRoutes {
     public static var sharedRouter: Routing = { Routing() }()
-    public static let paths = Paths()
-    public static let urls = URLs()
     
-    public static let host = "routingexample://"
-    public static let root = "root"
-    public static let first = "first"
-    public static let second = "second"
-    
-    public struct Paths {
-        public let root = "\(host)\(AppRoutes.root)"
-        public let first = "\(host)\(AppRoutes.root)/\(AppRoutes.first)"
-        public let second = "\(host)\(AppRoutes.root)/\(AppRoutes.second)"
-    }
-    
-    public struct URLs {
-        public let root = NSURL(string: AppRoutes.paths.root)!
-        public let first = NSURL(string: AppRoutes.paths.first)!
-        public let second = NSURL(string: AppRoutes.paths.second)!
-    }
-    
-    public static var isProxying = false
     public static func registerRoutes() {
-// MARK: Proxies
+        
+        // MARK: Navigation Routes
+        AppRoutes.sharedRouter.map("routingexample://presentitem3/:presenter",
+            instance: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
+            style: .Present(animated: true)) { vc, parameters in
+                if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
+                    vc.labelText = "Presented by: \(presenter)"
+                }
+                let nc = UINavigationController(rootViewController: vc)
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "done")
+                return nc
+        }
+        
+        AppRoutes.sharedRouter.map("routingexample://pushitem3/:presenter",
+            instance: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
+            style: .Push(animated: true)) { vc, parameters in
+                if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
+                    vc.labelText = "Pushed by: \(presenter)"
+                }
+                return vc
+        }
+        
+        AppRoutes.sharedRouter.map("routingexample://showitem3/:presenter",
+            instance: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
+            style: .Show) { vc, parameters in
+                var returnedVC: UIViewController = vc
+                if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
+                    vc.labelText = "Shown by: \(presenter)"
+                    if presenter == "Item1" {
+                        returnedVC = UINavigationController(rootViewController: vc)
+                        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "done")
+                    }
+                }
+                return returnedVC
+        }
+        
+        // MARK: Proxies
         AppRoutes.sharedRouter.proxy("/*") { route, parameters, next in
             print("Routing route: \(route) with parameters: \(parameters)")
             next(nil, nil)
         }
-        
-        AppRoutes.sharedRouter.proxy(AppRoutes.paths.first) { (var route, parameters, next) in
-            if AppRoutes.isProxying { route = AppRoutes.paths.second }
-            next(route, parameters)
-        }
-        
-        AppRoutes.sharedRouter.proxy(AppRoutes.paths.second) { (var route, parameters, next) in
-            if AppRoutes.isProxying { route = AppRoutes.paths.first }
-            next(route, parameters)
-        }
-
-// MARK: Navigation Routes
-        let animated = { true }
-        AppRoutes.sharedRouter.map(AppRoutes.paths.first,
-            style: .Present(animated: animated),
-            storyboard: "Main",
-            identifier: AppRoutes.first,
-            contained: true)
-
-        AppRoutes.sharedRouter.map(AppRoutes.paths.second,
-            style: .Push(animated: animated),
-            storyboard: "Main",
-            identifier: AppRoutes.second)
         
     }
     

@@ -8,28 +8,22 @@
 
 import UIKit
 
-class Item3ViewController: UIViewController {
+public class Item3ViewController: UIViewController {
 
-    override func viewDidLoad() {
+    public var labelText: String?
+    
+    @IBOutlet weak var label: UILabel!
+    
+    public override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        if let labelText = labelText {
+            self.label.text = labelText
+        }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    internal func done() {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -16,8 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         AppRoutes.registerRoutes()
-        AppRoutes.sharedRouter.open(AppRoutes.urls.first)
-        AppRoutes.sharedRouter.open(AppRoutes.urls.second)
         return true
     }
 

@@ -10,26 +10,12 @@ import UIKit
 
 class Item1ViewController: UIViewController {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    @IBAction func pushItem3(sender: AnyObject) {
+        AppRoutes.sharedRouter.open(NSURL(string: "routingexample://pushitem3/Item1")!)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func showItem3(sender: AnyObject) {
+        AppRoutes.sharedRouter.open(NSURL(string: "routingexample://showitem3/Item1")!)
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
