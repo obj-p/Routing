@@ -1,8 +1,8 @@
 //
 //  RoutingiOSSpec.swift
-//  Routing
+//  iOS Example Tests
 //
-//  Created by Jason Prasad on 2/19/16.
+//  Created by Jason Prasad on 3/7/16.
 //  Copyright © 2016 Routing. All rights reserved.
 //
 
@@ -44,42 +44,6 @@ class RoutingiOSSpec: QuickSpec {
                     
                     expect(router.open(NSURL(string: "routingexample://route/")!)).to(equal(true))
                 }
-                
-            }
-            
-            context("Show") {
-                
-            }
-            
-            context("Show Detail") {
-                
-            }
-            
-            context("Present") {
-                
-            }
-            
-            context("Push") {
-                
-            }
-            
-            context("Custom") {
-                
-            }
-            
-            context("Top is TabBar Controller") {
-                
-            }
-            
-            context("Top is Navigation Controller") {
-                
-            }
-            
-            context("Top is View Controller") {
-                
-            }
-            
-            context("Top is Childe View Controller") {
                 
             }
             

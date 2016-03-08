@@ -17,6 +17,9 @@
 		D242F04E1C5CCED500B8935B /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D242F04D1C5CCED500B8935B /* FirstViewController.swift */; };
 		D2B669591C5C698D00923E27 /* AppRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B669581C5C698D00923E27 /* AppRoutes.swift */; };
 		D2D4D51E1C5D82BA009046C1 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4D51D1C5D82BA009046C1 /* SecondViewController.swift */; };
+		D2F926A21C8E581D007783EA /* RoutingiOSSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F926A11C8E581D007783EA /* RoutingiOSSpec.swift */; };
+		D2F926BA1C8E58CB007783EA /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F926B91C8E58CB007783EA /* Quick.framework */; };
+		D2F926BC1C8E58CF007783EA /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F926BB1C8E58CF007783EA /* Nimble.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +43,48 @@
 			proxyType = 1;
 			remoteGlobalIDString = 92FCFA001BB963CD00DF05C3;
 			remoteInfo = Routing;
+		};
+		D2F926A41C8E581D007783EA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92E79B721BBD6D3500069929 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92E79B791BBD6D3500069929;
+			remoteInfo = "iOS Example";
+		};
+		D2F926AE1C8E581D007783EA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 924DA8321BBD6DDB00F059CE /* Routing.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D295F4311C6C265D003CAC2F;
+			remoteInfo = "Routing OSX";
+		};
+		D2F926B01C8E581D007783EA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 924DA8321BBD6DDB00F059CE /* Routing.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D295F43A1C6C265D003CAC2F;
+			remoteInfo = "Routing OSXTests";
+		};
+		D2F926B21C8E581D007783EA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 924DA8321BBD6DDB00F059CE /* Routing.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D295F4151C6C2612003CAC2F;
+			remoteInfo = "Routing tvOS";
+		};
+		D2F926B41C8E581D007783EA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 924DA8321BBD6DDB00F059CE /* Routing.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D295F41E1C6C2612003CAC2F;
+			remoteInfo = "Routing tvOSTests";
+		};
+		D2F926B61C8E581D007783EA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 924DA8321BBD6DDB00F059CE /* Routing.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D295F4081C6C25ED003CAC2F;
+			remoteInfo = "Routing watchOS";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -69,6 +114,11 @@
 		D242F04D1C5CCED500B8935B /* FirstViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
 		D2B669581C5C698D00923E27 /* AppRoutes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppRoutes.swift; sourceTree = "<group>"; };
 		D2D4D51D1C5D82BA009046C1 /* SecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		D2F9269F1C8E581D007783EA /* iOS Example Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iOS Example Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2F926A11C8E581D007783EA /* RoutingiOSSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingiOSSpec.swift; sourceTree = "<group>"; };
+		D2F926A31C8E581D007783EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D2F926B91C8E58CB007783EA /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
+		D2F926BB1C8E58CF007783EA /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +130,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D2F9269C1C8E581D007783EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2F926BA1C8E58CB007783EA /* Quick.framework in Frameworks */,
+				D2F926BC1C8E58CF007783EA /* Nimble.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -88,6 +147,11 @@
 			children = (
 				924DA8381BBD6DDB00F059CE /* Routing.framework */,
 				924DA83A1BBD6DDB00F059CE /* Routing iOS Tests.xctest */,
+				D2F926AF1C8E581D007783EA /* Routing.framework */,
+				D2F926B11C8E581D007783EA /* Routing OSXTests.xctest */,
+				D2F926B31C8E581D007783EA /* Routing.framework */,
+				D2F926B51C8E581D007783EA /* Routing tvOSTests.xctest */,
+				D2F926B71C8E581D007783EA /* Routing.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,7 +159,9 @@
 		92E79B711BBD6D3500069929 = {
 			isa = PBXGroup;
 			children = (
+				D2F926BD1C8E58D6007783EA /* Frameworks */,
 				92E79B7C1BBD6D3500069929 /* Example */,
+				D2F926A01C8E581D007783EA /* Example Tests */,
 				92E79B7B1BBD6D3500069929 /* Products */,
 				924DA8321BBD6DDB00F059CE /* Routing.xcodeproj */,
 			);
@@ -105,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				92E79B7A1BBD6D3500069929 /* iOS Example.app */,
+				D2F9269F1C8E581D007783EA /* iOS Example Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -123,6 +190,25 @@
 				92E79B891BBD6D3500069929 /* Info.plist */,
 			);
 			path = Example;
+			sourceTree = "<group>";
+		};
+		D2F926A01C8E581D007783EA /* Example Tests */ = {
+			isa = PBXGroup;
+			children = (
+				D2F926A11C8E581D007783EA /* RoutingiOSSpec.swift */,
+				D2F926A31C8E581D007783EA /* Info.plist */,
+			);
+			name = "Example Tests";
+			path = ExampleTests;
+			sourceTree = "<group>";
+		};
+		D2F926BD1C8E58D6007783EA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D2F926B91C8E58CB007783EA /* Quick.framework */,
+				D2F926BB1C8E58CF007783EA /* Nimble.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,17 +233,41 @@
 			productReference = 92E79B7A1BBD6D3500069929 /* iOS Example.app */;
 			productType = "com.apple.product-type.application";
 		};
+		D2F9269E1C8E581D007783EA /* iOS Example Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D2F926B81C8E581D007783EA /* Build configuration list for PBXNativeTarget "iOS Example Tests" */;
+			buildPhases = (
+				D2F9269B1C8E581D007783EA /* Sources */,
+				D2F9269C1C8E581D007783EA /* Frameworks */,
+				D2F9269D1C8E581D007783EA /* Resources */,
+				D2F926BE1C8E599D007783EA /* Carthage */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D2F926A51C8E581D007783EA /* PBXTargetDependency */,
+			);
+			name = "iOS Example Tests";
+			productName = "iOS Example Tests";
+			productReference = D2F9269F1C8E581D007783EA /* iOS Example Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		92E79B721BBD6D3500069929 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Routing;
 				TargetAttributes = {
 					92E79B791BBD6D3500069929 = {
 						CreatedOnToolsVersion = 7.0.1;
+					};
+					D2F9269E1C8E581D007783EA = {
+						CreatedOnToolsVersion = 7.2.1;
+						TestTargetID = 92E79B791BBD6D3500069929;
 					};
 				};
 			};
@@ -181,6 +291,7 @@
 			projectRoot = "";
 			targets = (
 				92E79B791BBD6D3500069929 /* iOS Example */,
+				D2F9269E1C8E581D007783EA /* iOS Example Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -200,6 +311,41 @@
 			remoteRef = 924DA8391BBD6DDB00F059CE /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		D2F926AF1C8E581D007783EA /* Routing.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Routing.framework;
+			remoteRef = D2F926AE1C8E581D007783EA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D2F926B11C8E581D007783EA /* Routing OSXTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Routing OSXTests.xctest";
+			remoteRef = D2F926B01C8E581D007783EA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D2F926B31C8E581D007783EA /* Routing.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Routing.framework;
+			remoteRef = D2F926B21C8E581D007783EA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D2F926B51C8E581D007783EA /* Routing tvOSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "Routing tvOSTests.xctest";
+			remoteRef = D2F926B41C8E581D007783EA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D2F926B71C8E581D007783EA /* Routing.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Routing.framework;
+			remoteRef = D2F926B61C8E581D007783EA /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -213,7 +359,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D2F9269D1C8E581D007783EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D2F926BE1C8E599D007783EA /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Quick.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Nimble.framework",
+			);
+			name = Carthage;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		92E79B761BBD6D3500069929 /* Sources */ = {
@@ -228,6 +400,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D2F9269B1C8E581D007783EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2F926A21C8E581D007783EA /* RoutingiOSSpec.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -235,6 +415,11 @@
 			isa = PBXTargetDependency;
 			name = Routing;
 			targetProxy = 924DA83D1BBD6DE300F059CE /* PBXContainerItemProxy */;
+		};
+		D2F926A51C8E581D007783EA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 92E79B791BBD6D3500069929 /* iOS Example */;
+			targetProxy = D2F926A41C8E581D007783EA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -365,6 +550,40 @@
 			};
 			name = Release;
 		};
+		D2F926A61C8E581D007783EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = ExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS Example.app/iOS Example";
+			};
+			name = Debug;
+		};
+		D2F926A71C8E581D007783EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				INFOPLIST_FILE = ExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/iOS Example.app/iOS Example";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -385,6 +604,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		D2F926B81C8E581D007783EA /* Build configuration list for PBXNativeTarget "iOS Example Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D2F926A61C8E581D007783EA /* Debug */,
+				D2F926A71C8E581D007783EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
