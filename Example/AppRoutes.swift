@@ -52,22 +52,16 @@ public struct AppRoutes {
 // MARK: Navigation Routes
         let animated = { true }
         AppRoutes.sharedRouter.map(AppRoutes.paths.first,
-            controller: FirstViewController.self,
-            contained: true,
             style: .Present(animated: animated),
             storyboard: "Main",
-            identifier: AppRoutes.first) { vc, parameters in
-                // Do something with parameters
-        }
+            identifier: AppRoutes.first,
+            contained: true)
 
         AppRoutes.sharedRouter.map(AppRoutes.paths.second,
-            controller: SecondViewController.self,
-            contained: false,
             style: .Push(animated: animated),
             storyboard: "Main",
-            identifier: AppRoutes.second) { vc, parameters in
-                // Do something with parameters
-        }
+            identifier: AppRoutes.second)
+        
     }
     
 }

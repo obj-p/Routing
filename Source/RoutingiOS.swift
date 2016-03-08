@@ -43,16 +43,13 @@ public final class Routing: BaseRouting {
     }
     
     public func map(pattern: String,
+        style: PresentationStyle = PresentationStyle.Show,
         storyboard: String,
         identifier: String,
-        bundle: String? = nil,
-        controller: UIViewController.Type = UIViewController.self,
+        bundle: NSBundle = NSBundle.mainBundle(),
         contained: Bool = false,
-        style: PresentationStyle = .Show,
         setup: ((UIViewController, Parameters) -> Void)? = nil) {
             let instance = { () -> UIViewController in
-                let bundle = bundle.flatMap { NSBundle(identifier: $0) }
-                    ?? NSBundle(forClass: controller)
                 let storyboard = UIStoryboard(name: storyboard, bundle: bundle)
                 return storyboard.instantiateViewControllerWithIdentifier(identifier)
             }
@@ -64,15 +61,13 @@ public final class Routing: BaseRouting {
     }
     
     public func map(pattern: String,
+        style: PresentationStyle = PresentationStyle.Show,
         nib: String,
-        bundle: String? = nil,
+        bundle: NSBundle = NSBundle.mainBundle(),
         controller: UIViewController.Type = UIViewController.self,
         contained: Bool = false,
-        style: PresentationStyle = .Show,
         setup: ((UIViewController, Parameters) -> Void)? = nil) {
             let instance = { () -> UIViewController in
-                let bundle = bundle.flatMap { NSBundle(identifier: $0) }
-                    ?? NSBundle(forClass: controller)
                 return controller.init(nibName: nib, bundle: bundle)
             }
             map(pattern,

@@ -34,7 +34,7 @@ class RoutingiOSSpec: QuickSpec {
                 
                 it("should return true if it can open the route from nib") {
                     router.map("routingexample://route",
-                        nib: "NibViewController")
+                        nib: "TestXibViewController")
                     
                     expect(router.open(NSURL(string: "routingexample://route/")!)).to(equal(true))
                 }
@@ -74,7 +74,7 @@ class RoutingiOSSpec: QuickSpec {
             context("Top is Navigation Controller") {
                 
             }
-
+            
             context("Top is View Controller") {
                 
             }
