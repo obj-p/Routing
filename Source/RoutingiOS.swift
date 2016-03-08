@@ -46,7 +46,7 @@ public final class Routing: BaseRouting {
         style: PresentationStyle = PresentationStyle.Show,
         storyboard: String,
         identifier: String,
-        bundle: NSBundle = NSBundle.mainBundle(),
+        bundle: NSBundle? = NSBundle.mainBundle(),
         contained: Bool = false,
         setup: ((UIViewController, Parameters) -> Void)? = nil) {
             let instance = { () -> UIViewController in
@@ -63,7 +63,7 @@ public final class Routing: BaseRouting {
     public func map(pattern: String,
         style: PresentationStyle = PresentationStyle.Show,
         nib: String,
-        bundle: NSBundle = NSBundle.mainBundle(),
+        bundle: NSBundle? = NSBundle.mainBundle(),
         controller: UIViewController.Type = UIViewController.self,
         contained: Bool = false,
         setup: ((UIViewController, Parameters) -> Void)? = nil) {

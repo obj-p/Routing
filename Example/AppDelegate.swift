@@ -18,7 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppRoutes.registerRoutes()
         AppRoutes.sharedRouter.open(AppRoutes.urls.first)
         AppRoutes.sharedRouter.open(AppRoutes.urls.second)
-        
         return true
     }
 
