@@ -17,11 +17,11 @@ Pod::Spec.new do |s|
   s.source_files     = 'Source/*.swift'
   s.default_subspec = 'ios'
 
-  subspec 'ios' do |sp|
+  s.subspec 'ios' do |sp|
     sp.source_files = 'Source/Routing.swift', 'Source/RoutingiOS.swift'
   end
 
-  subspec 'other' do [sp]
+  s.subspec 'other' do |sp|
     sp.source_files = 'Source/Routing.swift', 'Source/RoutingOthers.swift'
   end
 
