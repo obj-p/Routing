@@ -141,6 +141,7 @@ router.proxy("routing://route/", queue: queue) { ... } // Can specify callback q
 
 ```swift
 // Each router.open(...) will return true / false
+router.open("routing://route/") 
 router.open(NSURL(string: "routing://route/")!) 
 router.open(NSURL(string: "routing://route/0123456789")!) // ex. route/:id
 router.open(NSURL(string: "routing://route?foo=bar")!) // query paremeters will be passed to mapped closure.
