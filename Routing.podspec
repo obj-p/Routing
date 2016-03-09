@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.default_subspec = 'ios'
 
   s.subspec 'ios' do |sp|
-    sp.frameworks = 'UIKit'
+    sp.module_name = 'UIKit'
     sp.source_files = 'Source/Routing.swift', 'Source/RoutingiOS.swift'
   end
 
