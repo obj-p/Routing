@@ -11,7 +11,6 @@
 		92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
 		92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
 		92FCFA1C1BB9658D00DF05C3 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
-		D2204C801C8FE1B400ABA4E5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2204C7F1C8FE1B400ABA4E5 /* UIKit.framework */; };
 		D24C99321C8E1CA40011AA28 /* RoutingOthers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24C99301C8E1C860011AA28 /* RoutingOthers.swift */; };
 		D24C99331C8E1CA50011AA28 /* RoutingOthers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24C99301C8E1C860011AA28 /* RoutingOthers.swift */; };
 		D24C99341C8E1CA70011AA28 /* RoutingOthers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24C99301C8E1C860011AA28 /* RoutingOthers.swift */; };
@@ -80,7 +79,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2204C801C8FE1B400ABA4E5 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
