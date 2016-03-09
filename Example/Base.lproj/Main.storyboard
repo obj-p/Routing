@@ -216,6 +216,10 @@
         <scene sceneID="VQC-oP-EbE">
             <objects>
                 <viewController id="bFC-tI-L1C" customClass="Item5ViewController" customModule="iOS_Example" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="oLF-7M-GR8"/>
+                        <viewControllerLayoutGuide type="bottom" id="0gS-Kw-vjD"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="NH3-4l-mfz">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -276,23 +280,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JSH-dr-iIT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4311" y="144"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="i4S-Fy-Ecu">
-            <objects>
-                <viewController id="DJX-bf-1tO" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="yPc-dR-5BI"/>
-                        <viewControllerLayoutGuide type="bottom" id="FmE-uu-BQM"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="QKm-Y9-3eR">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iRc-Aw-xph" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
     </scenes>
 </document>
