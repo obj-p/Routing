@@ -57,6 +57,14 @@ public struct AppRoutes {
                 return nc
         }
         
+        AppRoutes.sharedRouter.map("routingexample://pushparentviewcontroller",
+            instance: .Storyboard(storyboard: "Main", identifier: "ParentViewController", bundle: nil),
+            style: .Push(animated: true))
+        
+        AppRoutes.sharedRouter.map("routingexample://pushlastviewcontroller",
+            instance: .Storyboard(storyboard: "Main", identifier: "LastViewController", bundle: nil),
+            style: .Push(animated: true))
+        
         // MARK: Proxies        
         AppRoutes.sharedRouter.proxy("routingexample://presentitem3/:presenter") { (var route, parameters, next) in
             guard let presenter = parameters["presenter"] where presenter == "Item2" else {

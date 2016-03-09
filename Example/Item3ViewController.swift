@@ -21,6 +21,10 @@ public class Item3ViewController: UIViewController {
             self.label.text = labelText
         }
     }
+    
+    @IBAction func pushParentViewController(sender: AnyObject) {
+        AppRoutes.sharedRouter.open(NSURL(string: "routingexample://pushparentviewcontroller")!)
+    }
 
     internal func done() {
         self.dismissViewControllerAnimated(true, completion: nil)

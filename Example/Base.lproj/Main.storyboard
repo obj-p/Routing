@@ -119,9 +119,18 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ptk-2l-2CY">
+                                <rect key="frame" x="204" y="285" width="192" height="30"/>
+                                <state key="normal" title="Push Parent View Controller"/>
+                                <connections>
+                                    <action selector="pushParentViewController:" destination="VX4-e7-5jd" eventType="touchUpInside" id="z0c-h1-j76"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="ptk-2l-2CY" firstAttribute="centerY" secondItem="l5X-z2-7SY" secondAttribute="centerY" id="FYY-pT-kk7"/>
+                            <constraint firstItem="ptk-2l-2CY" firstAttribute="centerX" secondItem="l5X-z2-7SY" secondAttribute="centerX" id="I7s-xL-ZDt"/>
                             <constraint firstItem="XKd-XE-Iue" firstAttribute="top" secondItem="3ev-ab-GoW" secondAttribute="bottom" constant="15" id="g5f-WZ-HAc"/>
                             <constraint firstAttribute="leadingMargin" secondItem="XKd-XE-Iue" secondAttribute="leading" id="oId-LQ-iOy"/>
                         </constraints>
@@ -137,7 +146,7 @@
         <!--View Controller-->
         <scene sceneID="S6y-Mh-kyc">
             <objects>
-                <viewController id="8gg-cA-UdD" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ParentViewController" id="8gg-cA-UdD" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="4cM-jy-rdr"/>
                         <viewControllerLayoutGuide type="bottom" id="nyB-2c-Cqc"/>
@@ -203,19 +212,87 @@
             </objects>
             <point key="canvasLocation" x="1379" y="-517"/>
         </scene>
-        <!--View Controller-->
+        <!--Item5 View Controller-->
         <scene sceneID="VQC-oP-EbE">
             <objects>
-                <viewController id="bFC-tI-L1C" sceneMemberID="viewController">
+                <viewController id="bFC-tI-L1C" customClass="Item5ViewController" customModule="iOS_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="NH3-4l-mfz">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item 5" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cNf-OP-qqR">
+                                <rect key="frame" x="20" y="75" width="48.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="haP-Xs-e67">
+                                <rect key="frame" x="231" y="285" width="138" height="30"/>
+                                <state key="normal" title="Last View Controller"/>
+                                <connections>
+                                    <action selector="pushLastViewController:" destination="bFC-tI-L1C" eventType="touchUpInside" id="V3E-AN-hLi"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="leadingMargin" secondItem="cNf-OP-qqR" secondAttribute="leading" id="P1b-La-Y4S"/>
+                            <constraint firstItem="cNf-OP-qqR" firstAttribute="top" secondItem="NH3-4l-mfz" secondAttribute="topMargin" constant="75" id="aTS-wB-6Ov"/>
+                            <constraint firstItem="haP-Xs-e67" firstAttribute="centerX" secondItem="NH3-4l-mfz" secondAttribute="centerX" id="nif-7W-s2B"/>
+                            <constraint firstItem="haP-Xs-e67" firstAttribute="centerY" secondItem="NH3-4l-mfz" secondAttribute="centerY" id="vrU-Sb-EG0"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QHd-qp-HiT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3610" y="144"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="zeY-g0-mxx">
+            <objects>
+                <viewController storyboardIdentifier="LastViewController" id="MMO-N9-geJ" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OL5-ut-2mg"/>
+                        <viewControllerLayoutGuide type="bottom" id="qEJ-HY-ZXa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="GFT-Hn-S5k">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last View Controller" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="woI-JQ-2u4">
+                                <rect key="frame" x="223" y="289" width="154" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="woI-JQ-2u4" firstAttribute="centerX" secondItem="GFT-Hn-S5k" secondAttribute="centerX" id="Tce-w2-LYN"/>
+                            <constraint firstItem="woI-JQ-2u4" firstAttribute="centerY" secondItem="GFT-Hn-S5k" secondAttribute="centerY" id="bbQ-U4-QdN"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JSH-dr-iIT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4311" y="144"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="i4S-Fy-Ecu">
+            <objects>
+                <viewController id="DJX-bf-1tO" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="yPc-dR-5BI"/>
+                        <viewControllerLayoutGuide type="bottom" id="FmE-uu-BQM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QKm-Y9-3eR">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iRc-Aw-xph" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
 </document>
