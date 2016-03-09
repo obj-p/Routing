@@ -15,7 +15,7 @@ public class Item5ViewController: UIViewController {
     }
     
     @IBAction func pushLastViewController(sender: AnyObject) {
-        AppRoutes.sharedRouter.open(NSURL(string: "routingexample://pushlastviewcontroller")!)
+        AppRoutes.sharedRouter.open("routingexample://pushlastviewcontroller")
     }
     
 }

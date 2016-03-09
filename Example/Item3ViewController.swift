@@ -23,7 +23,7 @@ public class Item3ViewController: UIViewController {
     }
     
     @IBAction func pushParentViewController(sender: AnyObject) {
-        AppRoutes.sharedRouter.open(NSURL(string: "routingexample://pushparentviewcontroller")!)
+        AppRoutes.sharedRouter.open("routingexample://pushparentviewcontroller")
     }
 
     internal func done() {

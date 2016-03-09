@@ -10,7 +10,7 @@ import UIKit
 
 public class Item4ViewController: UIViewController {
 
-    public var callbackURL: NSURL?
+    public var callback: String?
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,8 +18,8 @@ public class Item4ViewController: UIViewController {
     
     internal func done() {
         self.dismissViewControllerAnimated(true) {
-            if let callbackURL = self.callbackURL {
-                AppRoutes.sharedRouter.open(callbackURL)
+            if let callback = self.callback {
+                AppRoutes.sharedRouter.open(callback)
             }
         }
     }

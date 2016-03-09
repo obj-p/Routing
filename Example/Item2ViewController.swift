@@ -11,11 +11,11 @@ import UIKit
 class Item2ViewController: UIViewController {
     
     @IBAction func presentItem3(sender: AnyObject) {
-        AppRoutes.sharedRouter.open(NSURL(string: "routingexample://presentitem3/Item2")!)
+        AppRoutes.sharedRouter.open("routingexample://presentitem3/Item2")
     }
     
     @IBAction func showItem3(sender: AnyObject) {
-        AppRoutes.sharedRouter.open(NSURL(string: "routingexample://showitem3/Item2")!)
+        AppRoutes.sharedRouter.open("routingexample://showitem3/Item2")
     }
 
 }

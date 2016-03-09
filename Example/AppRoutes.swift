@@ -50,7 +50,7 @@ public struct AppRoutes {
             instance: .Nib(controller: Item4ViewController.self, name: "Item4ViewController", bundle: nil),
             style: .Present(animated: true)) { vc, parameters in
                 if let callback = parameters["callback"], let vc = vc as? Item4ViewController {
-                    vc.callbackURL = NSURL(string: callback)!
+                    vc.callback = callback
                 }
                 let nc = UINavigationController(rootViewController: vc)
                 vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "done")
@@ -73,7 +73,7 @@ public struct AppRoutes {
             }
             let range = route.rangeOfString("Item2")
             route.replaceRange(range!, with: "Item4")
-            AppRoutes.sharedRouter.open(NSURL(string: "routingexample://presentitem4?callback=\(route)")!)
+            AppRoutes.sharedRouter.open("routingexample://presentitem4?callback=\(route)")
             next("", nil)
         }
         
@@ -84,7 +84,7 @@ public struct AppRoutes {
             }
             let range = route.rangeOfString("Item2")
             route.replaceRange(range!, with: "Item4")
-            AppRoutes.sharedRouter.open(NSURL(string: "routingexample://presentitem4?callback=\(route)")!)
+            AppRoutes.sharedRouter.open("routingexample://presentitem4?callback=\(route)")
             next("", nil)
         }
 
