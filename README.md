@@ -81,7 +81,7 @@ github "jwalapr/Routing"
 
 ```swift
 // Supports creation of view controller the following ways
-public enum PresentingInstance {
+public enum PresentedInstance {
     case Storyboard(storyboard: String, identifier: String, bundle: NSBundle?)
     case Nib(controller: UIViewController.Type, name: String?, bundle: NSBundle?)
     case Provided(() -> UIViewController)

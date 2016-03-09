@@ -12,7 +12,7 @@ import QuartzCore
 /**
  */
 
-public enum PresentingInstance {
+public enum PresentedInstance {
     
     case Storyboard(storyboard: String, identifier: String, bundle: NSBundle?)
     case Nib(controller: UIViewController.Type, name: String?, bundle: NSBundle?)
@@ -118,7 +118,7 @@ public final class Routing: BaseRouting {
     }
     
     public func map(pattern: String,
-        instance: PresentingInstance,
+        instance: PresentedInstance,
         style: PresentationStyle = .Show,
         setup: PresentationSetup? = nil) {
             let mapHandler: MapHandler = { [weak self] (route, parameters, completed) in
