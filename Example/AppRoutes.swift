@@ -37,7 +37,7 @@ public struct AppRoutes {
         
         AppRoutes.sharedRouter.map("routingexample://showitem3/:presenter",
             instance: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
-            style: .Show) { vc, parameters in
+            style: .ShowDetail) { vc, parameters in
                 if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
                     vc.labelText = "Shown by: \(presenter)"
                 }

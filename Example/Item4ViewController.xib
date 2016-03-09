@@ -16,7 +16,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Item 4" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yPA-gs-Gof">
-                    <rect key="frame" x="8" y="23" width="49" height="20.5"/>
+                    <rect key="frame" x="8" y="83" width="49" height="20.5"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
@@ -31,17 +31,11 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="rdk-1f-y3z" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="Rhl-Ag-sLw"/>
-                <constraint firstItem="yPA-gs-Gof" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="topMargin" constant="15" id="TeV-k7-yjt"/>
+                <constraint firstItem="yPA-gs-Gof" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="topMargin" constant="75" id="TeV-k7-yjt"/>
                 <constraint firstItem="rdk-1f-y3z" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Uw6-CH-zDL"/>
                 <constraint firstItem="yPA-gs-Gof" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leadingMargin" id="ruP-he-7IU"/>
             </constraints>
+            <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
         </view>
-        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="rNc-nk-bUA">
-            <rect key="frame" x="0.0" y="0.0" width="42" height="21"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-            <nil key="highlightedColor"/>
-        </label>
     </objects>
 </document>
