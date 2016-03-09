@@ -17,18 +17,30 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="35l-jd-cpQ">
-                                <rect key="frame" x="250" y="285" width="100" height="30"/>
-                                <state key="normal" title="Present Item 3"/>
-                                <connections>
-                                    <action selector="presentItem3:" destination="xEn-JC-eoX" eventType="touchUpInside" id="Vcv-wc-ApW"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="7F7-Pv-3Ec">
+                                <rect key="frame" x="250" y="257.5" width="100" height="85"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="35l-jd-cpQ">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="30"/>
+                                        <state key="normal" title="Present Item 3"/>
+                                        <connections>
+                                            <action selector="presentItem3:" destination="xEn-JC-eoX" eventType="touchUpInside" id="Vcv-wc-ApW"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLh-UH-nUx">
+                                        <rect key="frame" x="0.0" y="55" width="100" height="30"/>
+                                        <state key="normal" title="Show Item 3"/>
+                                        <connections>
+                                            <action selector="showItem3:" destination="xEn-JC-eoX" eventType="touchUpInside" id="GQl-JJ-Ldy"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="35l-jd-cpQ" firstAttribute="centerX" secondItem="Hv8-02-bxR" secondAttribute="centerX" id="cNe-7w-HXF"/>
-                            <constraint firstItem="35l-jd-cpQ" firstAttribute="centerY" secondItem="Hv8-02-bxR" secondAttribute="centerY" id="jkb-TB-jh8"/>
+                            <constraint firstItem="7F7-Pv-3Ec" firstAttribute="centerX" secondItem="Hv8-02-bxR" secondAttribute="centerX" id="53d-K2-2pg"/>
+                            <constraint firstItem="7F7-Pv-3Ec" firstAttribute="centerY" secondItem="Hv8-02-bxR" secondAttribute="centerY" id="ZGr-5P-kKA"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item 2" id="EHX-vh-8Wd"/>

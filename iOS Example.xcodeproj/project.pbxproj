@@ -16,6 +16,8 @@
 		D2204C6E1C8F586000ABA4E5 /* Item1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2204C6D1C8F586000ABA4E5 /* Item1ViewController.swift */; };
 		D2204C701C8F587200ABA4E5 /* Item2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2204C6F1C8F587200ABA4E5 /* Item2ViewController.swift */; };
 		D2204C721C8F588200ABA4E5 /* Item3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2204C711C8F588200ABA4E5 /* Item3ViewController.swift */; };
+		D2204C791C8FC7AC00ABA4E5 /* Item4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2204C771C8FC7AC00ABA4E5 /* Item4ViewController.swift */; };
+		D2204C7A1C8FC7AC00ABA4E5 /* Item4ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D2204C781C8FC7AC00ABA4E5 /* Item4ViewController.xib */; };
 		D2B669591C5C698D00923E27 /* AppRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B669581C5C698D00923E27 /* AppRoutes.swift */; };
 		D2F926A21C8E581D007783EA /* RoutingiOSSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F926A11C8E581D007783EA /* RoutingiOSSpec.swift */; };
 		D2F926BA1C8E58CB007783EA /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F926B91C8E58CB007783EA /* Quick.framework */; };
@@ -113,6 +115,8 @@
 		D2204C6D1C8F586000ABA4E5 /* Item1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item1ViewController.swift; sourceTree = "<group>"; };
 		D2204C6F1C8F587200ABA4E5 /* Item2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item2ViewController.swift; sourceTree = "<group>"; };
 		D2204C711C8F588200ABA4E5 /* Item3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item3ViewController.swift; sourceTree = "<group>"; };
+		D2204C771C8FC7AC00ABA4E5 /* Item4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item4ViewController.swift; sourceTree = "<group>"; };
+		D2204C781C8FC7AC00ABA4E5 /* Item4ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Item4ViewController.xib; sourceTree = "<group>"; };
 		D2B669581C5C698D00923E27 /* AppRoutes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppRoutes.swift; sourceTree = "<group>"; };
 		D2F9269F1C8E581D007783EA /* iOS Example Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "iOS Example Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2F926A11C8E581D007783EA /* RoutingiOSSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingiOSSpec.swift; sourceTree = "<group>"; };
@@ -184,6 +188,8 @@
 				D2204C6D1C8F586000ABA4E5 /* Item1ViewController.swift */,
 				D2204C6F1C8F587200ABA4E5 /* Item2ViewController.swift */,
 				D2204C711C8F588200ABA4E5 /* Item3ViewController.swift */,
+				D2204C771C8FC7AC00ABA4E5 /* Item4ViewController.swift */,
+				D2204C781C8FC7AC00ABA4E5 /* Item4ViewController.xib */,
 				92E79B811BBD6D3500069929 /* Main.storyboard */,
 				92E79B841BBD6D3500069929 /* Assets.xcassets */,
 				92E79B861BBD6D3500069929 /* LaunchScreen.storyboard */,
@@ -355,6 +361,7 @@
 			files = (
 				92E79B881BBD6D3500069929 /* LaunchScreen.storyboard in Resources */,
 				92E79B851BBD6D3500069929 /* Assets.xcassets in Resources */,
+				D2204C7A1C8FC7AC00ABA4E5 /* Item4ViewController.xib in Resources */,
 				92E79B831BBD6D3500069929 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -392,6 +399,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2204C791C8FC7AC00ABA4E5 /* Item4ViewController.swift in Sources */,
 				D2204C701C8F587200ABA4E5 /* Item2ViewController.swift in Sources */,
 				D2204C721C8F588200ABA4E5 /* Item3ViewController.swift in Sources */,
 				D2B669591C5C698D00923E27 /* AppRoutes.swift in Sources */,
