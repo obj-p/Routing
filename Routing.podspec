@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Routing"
-  s.version          = "0.1.1"
+  s.version          = "0.2.0"
   s.summary          = "A swift router implementation"
   s.description      = <<-DESC
                         Routing allows for routing URLs matched by string patterns to associated closures.
@@ -9,7 +9,20 @@ Pod::Spec.new do |s|
   s.license          = { :type => "MIT", :file => "LICENSE" }
   s.author           = { "Jason Prasad" => "jwalapr@gmail.com" }
   s.source           = { :git => "https://github.com/jwalapr/Routing.git", :tag => s.version.to_s }
-  s.ios.deployment_target     = '9.0'
+  s.ios.deployment_target = '9.0'
+  s.osx.deployment_target = '10.9'
+  s.tvos.deployment_target = '9.0'
+  s.watchos.deployment_target = '2.0'
   s.requires_arc = true
   s.source_files     = 'Source/*.swift'
+  s.default_subspec = 'ios'
+
+  subspec 'ios' do |sp|
+    sp.source_files = 'Source/Routing.swift', 'Source/RoutingiOS.swift'
+  end
+
+  subspec 'other' do [sp]
+    sp.source_files = 'Source/Routing.swift', 'Source/RoutingOthers.swift'
+  end
+
 end
