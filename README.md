@@ -87,7 +87,7 @@ public enum PresentingInstance {
     case Provided(() -> UIViewController)
 }
 
-// Supports the following ViewController transitions
+// Supports the following view controller transitions
 public enum PresentationStyle {   
     case Show
     case ShowDetail
