@@ -11,7 +11,7 @@
 
 - [Usage](#usage)
 - [Installation](#installation)
-- [Further Detail](#further_detail)
+- [Further Detail](#further-detail)
 - [Example](#example)
 
 ## Usage
