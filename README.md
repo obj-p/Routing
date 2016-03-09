@@ -57,8 +57,6 @@ router.open(NSURL(string: "routing://route/")!)
 
 ### CocoaPods
 
-** Due to trouble with podspec and multiple platforms, currently only supports iOS through CocoaPods
-
 Via [CocoaPods](https://cocoapods.org/pods/Routing):
 
 ```ruby
@@ -66,7 +64,13 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
 use_frameworks!
 
-pod 'Routing', '~> 0.2.0'
+pod 'Routing', '~> 0.2.1'
+```
+
+To specifiy a platform other than iOS use the following subspec
+
+```ruby
+pod 'Routing/Others', '~> 0.2.1'
 ```
 
 ### Carthage
