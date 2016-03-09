@@ -18,10 +18,10 @@ class RootViewController: UIViewController {
     @IBAction func openURL(sender: AnyObject) {
         switch sender.tag {
         case 0:
-            Routing.sharedRouter.open(AppRoutes.urls.first)
+            AppRoutes.sharedRouter.open(AppRoutes.urls.first)
             break
         case 1:
-            Routing.sharedRouter.open(AppRoutes.urls.second)
+            AppRoutes.sharedRouter.open(AppRoutes.urls.second)
             break
         default:
             break
@@ -36,11 +36,11 @@ class RootViewController: UIViewController {
         switch text {
         case "Enable Proxy":
             sender.setTitle("Disable Proxy", forState: .Normal)
-            Routing.isProxying = true
+            AppRoutes.isProxying = true
             break
         case "Disable Proxy":
             sender.setTitle("Enable Proxy", forState: .Normal)
-            Routing.isProxying = false
+            AppRoutes.isProxying = false
             break
         default:
             break

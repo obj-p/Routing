@@ -13,23 +13,14 @@ import Routing
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var router = Routing.sharedRouter
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        Routing.sharedRouter.registerRoutes()
-        
-        var components = NSURLComponents(URL: AppRoutes.urls.first, resolvingAgainstBaseURL: false)!
-        components.query = "animated=false"
-        Routing.sharedRouter.open(components.URL!)
-        components = NSURLComponents(URL: AppRoutes.urls.second, resolvingAgainstBaseURL: false)!
-        components.query = "animated=false"
-        Routing.sharedRouter.open(components.URL!)
-        
+        AppRoutes.registerRoutes()
         return true
     }
 
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-        return router.open(url)
+        return AppRoutes.sharedRouter.open(url)
     }
 
 

@@ -9,80 +9,91 @@
 import Foundation
 import Routing
 
-struct AppRoutes {
-    internal static let urls = URLs()
-    internal static let identifiers = Identifiers()
+public struct AppRoutes {
+    public static var sharedRouter: Routing = { Routing() }()
     
-    internal static let root = "routingexample://root"
-    internal static let first = "routingexample://root/first"
-    internal static let second = "routingexample://root/first/second"
-    
-    internal struct URLs {
-        internal let root = NSURL(string: AppRoutes.root)!
-        internal let first = NSURL(string: AppRoutes.first)!
-        internal let second = NSURL(string: AppRoutes.second)!
-    }
-    
-    internal struct Identifiers {
-        internal let root = urls.root.lastPathComponent!
-        internal let first = urls.first.lastPathComponent!
-        internal let second = urls.second.lastPathComponent!
-    }
-}
-
-internal extension Routing {
-    
-    static var sharedRouter = { Routing() }()
-    static var isProxying = false
-    
-    internal func registerRoutes() {
+    public static func registerRoutes() {
         
-        Routing.sharedRouter.proxy(AppRoutes.first) { (var route, parameters, next) in
-            if Routing.isProxying { route = AppRoutes.second }
-            next(route, parameters)
+        // MARK: Navigation Routes
+        AppRoutes.sharedRouter.map("routingexample://presentitem3/:presenter",
+            instance: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
+            style: .Present(animated: true)) { vc, parameters in
+                if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
+                    vc.labelText = "Presented by: \(presenter)"
+                }
+                let nc = UINavigationController(rootViewController: vc)
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "done")
+                return nc
         }
         
-        Routing.sharedRouter.map(AppRoutes.first) { (parameters, completed) in
-            guard let window = UIApplication.sharedApplication().delegate?.window else {
-                completed()
+        AppRoutes.sharedRouter.map("routingexample://pushitem3/:presenter",
+            instance: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
+            style: .Push(animated: true)) { vc, parameters in
+                if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
+                    vc.labelText = "Pushed by: \(presenter)"
+                }
+                return vc
+        }
+        
+        AppRoutes.sharedRouter.map("routingexample://showitem3/:presenter",
+            instance: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
+            style: .ShowDetail) { vc, parameters in
+                if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
+                    vc.labelText = "Shown by: \(presenter)"
+                }
+                let nc = UINavigationController(rootViewController: vc)
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "done")
+                return nc
+        }
+        
+        AppRoutes.sharedRouter.map("routingexample://presentitem4",
+            instance: .Nib(controller: Item4ViewController.self, name: "Item4ViewController", bundle: nil),
+            style: .Present(animated: true)) { vc, parameters in
+                if let callback = parameters["callback"], let vc = vc as? Item4ViewController {
+                    vc.callback = callback
+                }
+                let nc = UINavigationController(rootViewController: vc)
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "done")
+                return nc
+        }
+        
+        AppRoutes.sharedRouter.map("routingexample://pushparentviewcontroller",
+            instance: .Storyboard(storyboard: "Main", identifier: "ParentViewController", bundle: nil),
+            style: .Push(animated: true))
+        
+        AppRoutes.sharedRouter.map("routingexample://pushlastviewcontroller",
+            instance: .Storyboard(storyboard: "Main", identifier: "LastViewController", bundle: nil),
+            style: .Push(animated: true))
+        
+        // MARK: Proxies        
+        AppRoutes.sharedRouter.proxy("routingexample://presentitem3/:presenter") { (var route, parameters, next) in
+            guard let presenter = parameters["presenter"] where presenter == "Item2" else {
+                next(nil, nil)
                 return
             }
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-            let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.identifiers.first)
-            let navController = UINavigationController(rootViewController: vc)
-            let animated: Bool = parameters["animated"] == nil || parameters["animated"] == "true"
-            
-            window?.rootViewController?.presentViewController(navController, animated: animated, completion: completed)
+            let range = route.rangeOfString("Item2")
+            route.replaceRange(range!, with: "Item4")
+            AppRoutes.sharedRouter.open("routingexample://presentitem4?callback=\(route)")
+            next("", nil)
         }
         
-        Routing.sharedRouter.proxy(AppRoutes.second) { (var route, parameters, next) in
-            if Routing.isProxying { route = AppRoutes.first }
-            next(route, parameters)
-        }
-        
-        Routing.sharedRouter.map(AppRoutes.second) { (parameters, completed) in
-            guard let window = UIApplication.sharedApplication().delegate?.window else {
-                completed()
+        AppRoutes.sharedRouter.proxy("routingexample://showitem3/:presenter") { (var route, parameters, next) in
+            guard let presenter = parameters["presenter"] where presenter == "Item2" else {
+                next(nil, nil)
                 return
             }
-            
-            let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-            let vc = storyboard.instantiateViewControllerWithIdentifier(AppRoutes.identifiers.second)
-            let animated: Bool = parameters["animated"] == nil || parameters["animated"] == "true"
-            
-            CATransaction.begin()
-            CATransaction.setCompletionBlock(completed)
-            if let presented = (window?.rootViewController?.presentedViewController as? UINavigationController) {
-                presented.pushViewController(vc, animated: animated)
-            } else {
-                (window?.rootViewController as? UINavigationController)?.pushViewController(vc, animated: animated)
-            }
-            CATransaction.commit()
+            let range = route.rangeOfString("Item2")
+            route.replaceRange(range!, with: "Item4")
+            AppRoutes.sharedRouter.open("routingexample://presentitem4?callback=\(route)")
+            next("", nil)
+        }
+
+        
+        AppRoutes.sharedRouter.proxy("/*") { route, parameters, next in
+            print("Routing route: \(route) with parameters: \(parameters)")
+            next(nil, nil)
         }
         
     }
     
 }
-
-

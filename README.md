@@ -11,17 +11,105 @@
 
 - [Usage](#usage)
 - [Installation](#installation)
+- [Further Detail](#further-detail)
 - [Example](#example)
 
 ## Usage
 
-Routing associates string patterns to closures. In the event a URL opened by Routing matches a mapped string pattern, its associated closure will be executed. Opened URLs may also be proxied allowing for the addition of middleware.
+Routing may be used to deep link and proxy view controller navigation or other actions.
+
+To map a view controller transition is as simple as...
+
+```swift
+router.map("routingexample://route",
+    instance: .Storyboard(storyboard: "Main", identifier: "ViewController", bundle: nil),
+    style: .Push(animated: true))
+```
+
+To map a closure to be called...
+
+```swift
+router.map("routing://route") { route, parameters, completed in
+	...
+	completed() // Must call completed or the router will halt!
+}
+```
+
+To proxy with a closure...
+
+```swift
+router.proxy("routing://route") { route, parameters, next in
+	...
+	next(route, parameters) // Must call next or the router will halt!
+	/* alternatively, next(nil, nil) allowing additional proxies to execute */
+}
+```
+
+And to open any string or URL...
+
+```swift
+// Each router.open(...) will return true / false
+router.open("routing://route/") 
+router.open(NSURL(string: "routing://route/")!) 
+```
+
+## Installation
+
+### CocoaPods
+
+Via [CocoaPods](https://cocoapods.org/pods/Routing):
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+use_frameworks!
+
+pod 'Routing', '~> 0.2.0'
+```
+
+### Carthage
+
+Via [Carthage](https://github.com/Carthage/Carthage):
+
+```ogdl
+github "jwalapr/Routing"
+```
+
+## Further Detail
+
+### Map (For View Controllers)
+
+```swift
+// Supports creation of view controller the following ways
+public enum PresentedInstance {
+    case Storyboard(storyboard: String, identifier: String, bundle: NSBundle?)
+    case Nib(controller: UIViewController.Type, name: String?, bundle: NSBundle?)
+    case Provided(() -> UIViewController)
+}
+
+// Supports the following view controller transitions
+public enum PresentationStyle {   
+    case Show
+    case ShowDetail
+    case Present(animated: Bool)
+    case Push(animated: Bool)
+    case Custom(custom: (presenting: UIViewController,
+        presented: UIViewController,
+        completed: Completed) -> Void)
+}
+
+router.map("routingexample://route",
+    instance: .Storyboard(storyboard: "Main", identifier: "ViewController", bundle: nil),
+    style: .Present(animated: true)) { vc, parameters in
+        ... // Useful callback for setup such as embedding in navigation controller
+        return vc
+}
+```
 
 ### Map
 
 ```swift
-let router = Routing()
-router.map("routing://route") { parameters, completed in
+router.map("routing://route") { route, parameters, completed in
 	...
 	completed() // Must call completed or the router will halt!
 }
@@ -53,33 +141,12 @@ router.proxy("routing://route/", queue: queue) { ... } // Can specify callback q
 
 ```swift
 // Each router.open(...) will return true / false
+router.open("routing://route/") 
 router.open(NSURL(string: "routing://route/")!) 
 router.open(NSURL(string: "routing://route/0123456789")!) // ex. route/:id
 router.open(NSURL(string: "routing://route?foo=bar")!) // query paremeters will be passed to mapped closure.
 ```
 
-## Installation
-
-### CocoaPods
-
-Via [CocoaPods](https://cocoapods.org/pods/Routing):
-
-```ruby
-source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '9.0'
-use_frameworks!
-
-pod 'Routing', '~> 0.1.1'
-```
-
-### Carthage
-
-Via [Carthage](https://github.com/Carthage/Carthage):
-
-```ogdl
-github "jwalapr/Routing"
-```
-
 ## Example
 
-An example app may be run with the Example scheme to demonstrate how Routing may be used for in app navigation.
+An Example iOS app is provided to show how to use #map, #proxy, and #open in greater detail.
