@@ -57,7 +57,7 @@ router.open(NSURL(string: "routing://route/")!)
 
 ### CocoaPods
 
-** Due to trouble with podspec and multiple versions, currently only supports iOS throught CocoaPods
+** Due to trouble with podspec and multiple platforms, currently only supports iOS through CocoaPods
 
 Via [CocoaPods](https://cocoapods.org/pods/Routing):
 
