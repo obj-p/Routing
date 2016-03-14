@@ -164,21 +164,20 @@ public final class Routing: BaseRouting {
                 case let .Present(animated):
                     presenter.presentViewController(vc, animated: animated, completion: completed)
                     break
-                case let .Push(animated):
-                    if let presenter = presenter as? UINavigationController {
-                        self?.wrapInCATransaction(completed) {
-                            presenter.pushViewController(vc, animated: animated)
-                        }
+                case let .Push(animated) where presenter.isKindOfClass(UINavigationController):
+                    self?.wrapInCATransaction(completed) {
+                        (presenter as? UINavigationController)?.pushViewController(vc, animated: animated)
                     }
-                    
-                    if let presenter = presenter.navigationController {
-                        self?.wrapInCATransaction(completed) {
-                            presenter.pushViewController(vc, animated: animated)
-                        }
+                case let .Push(animated) where presenter.navigationController != nil:
+                    self?.wrapInCATransaction(completed) {
+                        presenter.navigationController?.pushViewController(vc, animated: animated)
                     }
                     break
                 case let .Custom(custom):
                     custom(presenting: presenter, presented: vc, completed: completed)
+                    break
+                default:
+                    completed()
                     break
                 }
             }
