@@ -64,13 +64,13 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
 use_frameworks!
 
-pod 'Routing', '~> 0.2.1'
+pod 'Routing', '~> 0.2.2'
 ```
 
 To specifiy a platform other than iOS use the following subspec
 
 ```ruby
-pod 'Routing/Others', '~> 0.2.1'
+pod 'Routing/Others', '~> 0.2.2'
 ```
 
 ### Carthage
