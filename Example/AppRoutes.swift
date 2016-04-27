@@ -22,7 +22,7 @@ public struct AppRoutes {
                     vc.labelText = "Presented by: \(presenter)"
                 }
                 let nc = UINavigationController(rootViewController: vc)
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "done")
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: #selector(Item3ViewController.done))
                 return nc
         }
         
@@ -42,7 +42,7 @@ public struct AppRoutes {
                     vc.labelText = "Shown by: \(presenter)"
                 }
                 let nc = UINavigationController(rootViewController: vc)
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "done")
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: #selector(Item3ViewController.done))
                 return nc
         }
         
@@ -53,7 +53,7 @@ public struct AppRoutes {
                     vc.callback = callback
                 }
                 let nc = UINavigationController(rootViewController: vc)
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: "done")
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: #selector(Item3ViewController.done))
                 return nc
         }
         
@@ -66,22 +66,24 @@ public struct AppRoutes {
             style: .Push(animated: true))
         
         // MARK: Proxies        
-        AppRoutes.sharedRouter.proxy("routingexample://presentitem3/:presenter") { (var route, parameters, next) in
+        AppRoutes.sharedRouter.proxy("routingexample://presentitem3/:presenter") { (route, parameters, next) in
             guard let presenter = parameters["presenter"] where presenter == "Item2" else {
                 next(nil, nil)
                 return
             }
+            var route = route
             let range = route.rangeOfString("Item2")
             route.replaceRange(range!, with: "Item4")
             AppRoutes.sharedRouter.open("routingexample://presentitem4?callback=\(route)")
             next("", nil)
         }
         
-        AppRoutes.sharedRouter.proxy("routingexample://showitem3/:presenter") { (var route, parameters, next) in
+        AppRoutes.sharedRouter.proxy("routingexample://showitem3/:presenter") { (route, parameters, next) in
             guard let presenter = parameters["presenter"] where presenter == "Item2" else {
                 next(nil, nil)
                 return
             }
+            var route = route
             let range = route.rangeOfString("Item2")
             route.replaceRange(range!, with: "Item4")
             AppRoutes.sharedRouter.open("routingexample://presentitem4?callback=\(route)")

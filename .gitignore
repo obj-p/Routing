@@ -16,4 +16,4 @@ xcuserdata
 *.xcuserstate
 *.xcscmblueprint
 
-Carthage
+Carthage/Build
