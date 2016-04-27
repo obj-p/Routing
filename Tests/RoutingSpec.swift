@@ -192,7 +192,8 @@ class RoutingSpec: QuickSpec {
                         completed()
                     }
                     
-                    router.proxy("routingexample://route/:argument") { (route, var parameters, next) -> Void in
+                    router.proxy("routingexample://route/:argument") { (route, parameters, next) -> Void in
+                        var parameters = parameters
                         parameters["argument"] = "two"
                         next(route, parameters)
                     }
@@ -208,7 +209,8 @@ class RoutingSpec: QuickSpec {
                         completed()
                     }
                     
-                    router.proxy("routingexample://route") { (route, var parameters, next) -> Void in
+                    router.proxy("routingexample://route") { (route, parameters, next) -> Void in
+                        var parameters = parameters
                         parameters["query"] = "bar"
                         next(route, parameters)
                     }

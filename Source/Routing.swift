@@ -133,9 +133,10 @@ public class BaseRouting {
         return false
     }
     
-    private func prepare<H>(var pattern: String,
+    private func prepare<H>(pattern: String,
         queue: dispatch_queue_t,
         handler: H) -> ((String) -> (dispatch_queue_t, H?, Parameters)) {
+        var pattern = pattern
         var dynamicSegments = [String]()
         while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+", options: [.RegularExpressionSearch, .CaseInsensitiveSearch]){
             dynamicSegments.append(pattern.substringWithRange(range).stringByReplacingOccurrencesOfString(":", withString: ""))
