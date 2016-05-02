@@ -17,13 +17,13 @@ env:
     - FRAMEWORK_NAME="Routing"
     - IOS_SDK=iphonesimulator9.3
     - OSX_SDK=macosx10.11
-    - TVOS_SDK=appletvsimulator9.1 
-    - WATCHOS_SDK=watchsimulator2.1
+    - TVOS_SDK=appletvsimulator9.2
+    - WATCHOS_SDK=watchsimulator2.2
   matrix:
     - DESTINATION="OS=9.3,name=iPhone 6S Plus"     SCHEME="iOS"     SDK="$IOS_SDK"     ACTION="test"
     - DESTINATION="arch=x86_64"                    SCHEME="OSX"     SDK="$OSX_SDK"     ACTION="test"
-    - DESTINATION="OS=9.1,name=Apple TV 1080p"     SCHEME="tvOS"    SDK="$TVOS_SDK"    ACTION="build"
-    - DESTINATION="OS=2.1,name=Apple Watch - 38mm" SCHEME="watchOS" SDK="$WATCHOS_SDK" ACTION="build"
+    - DESTINATION="OS=9.2,name=Apple TV 1080p"     SCHEME="tvOS"    SDK="$TVOS_SDK"    ACTION="build"
+    - DESTINATION="OS=2.2,name=Apple Watch - 38mm" SCHEME="watchOS" SDK="$WATCHOS_SDK" ACTION="build"
 
 script:
   - set -o pipefail
