@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Routing"
-  s.version          = "0.2.2"
+  s.version          = "0.2.3"
   s.summary          = "A Swift router implementation"
   s.description      = <<-DESC
                         Routing allows for routing URLs matched by string patterns to associated closures.
@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.author           = { "Jason Prasad" => "jwalapr@gmail.com" }
   s.source           = { :git => "https://github.com/jwalapr/Routing.git", :tag => s.version.to_s }
   s.requires_arc = true
-  s.ios.deployment_target = '9.0'  
+  s.ios.deployment_target = '8.0'  
 
   s.subspec "iOS" do |sp|
     sp.framework   = 'UIKit', 'QuartzCore'
