@@ -39,7 +39,7 @@ public typealias Next = (String?, Parameters?) -> Void
 private typealias Map = (String) -> (dispatch_queue_t, MapHandler?, Parameters)
 private typealias Proxy = (String) -> (dispatch_queue_t, ProxyHandler?, Parameters)
 
-public class BaseRouting {
+public final class Routing {
     
     private var maps: [Map] = [Map]()
     private var proxies: [Proxy] = [Proxy]()
@@ -48,7 +48,24 @@ public class BaseRouting {
     
     internal init(){}
     
-    internal func map(pattern: String,
+    /**
+     Associates a closure to a string pattern. A Routing instance will execute the closure in the
+     event of a matching URL using #open. Routing will only execute the first matching mapped route.
+     This will be the last routed added with #map.
+     
+     ```code
+     let router = Routing()
+     router.map("routing://route") { parameters, completed in
+     completed() // Must call completed or the router will halt!
+     }
+     ```
+     
+     - Parameter pattern:  A String pattern
+     - Parameter queue:  A dispatch queue for the callback
+     - Parameter handler:  A MapHandler
+     */
+    
+    public func map(pattern: String,
         queue: dispatch_queue_t = dispatch_get_main_queue(),
         handler: MapHandler) -> Void {
             dispatch_barrier_async(accessQueue) {
@@ -56,7 +73,25 @@ public class BaseRouting {
             }
     }
     
-    internal func proxy(pattern: String,
+    /**
+     Associates a closure to a string pattern. A Routing instance will execute the closure in the
+     event of a matching URL using #open. Routing will execute all proxies unless #next() is called
+     with non nil arguments.
+     
+     ```code
+     let router = Routing()
+     router.proxy("routing://route") { route, parameters, next in
+     next(route, parameters) // Must call next or the router will halt!
+     /* alternatively, next(nil, nil) allowing additional proxies to execute */
+     }
+     ```
+     
+     - Parameter pattern:  A String pattern
+     - Parameter queue:  A dispatch queue for the callback
+     - Parameter handler:  A ProxyHandler
+     */
+    
+    public func proxy(pattern: String,
         queue: dispatch_queue_t = dispatch_get_main_queue(),
         handler: ProxyHandler) -> Void {
             dispatch_barrier_async(accessQueue) {
@@ -64,7 +99,15 @@ public class BaseRouting {
             }
     }
     
-    internal func open(string: String) -> Bool {
+    /**
+     Will execute the first mapped closure and any proxies with matching patterns. Mapped closures
+     are read in a last to be mapped first executed order.
+     
+     - Parameter string:  A string represeting a URL
+     - Returns:  A Bool. True if the string is a valid URL and it can open the URL, false otherwise
+     */
+    
+    public func open(string: String) -> Bool {
         guard let URL = NSURL(string: string) else {
             return false
         }
@@ -72,7 +115,15 @@ public class BaseRouting {
         return open(URL)
     }
     
-    internal func open(URL: NSURL) -> Bool {
+    /**
+     Will execute the first mapped closure and any proxies with matching patterns. Mapped closures
+     are read in a last to be mapped first executed order.
+     
+     - Parameter URL:  A URL
+     - Returns:  A Bool. True if it can open the URL, false otherwise
+     */
+    
+    public func open(URL: NSURL) -> Bool {
         var maps: [Map]!
         var proxies: [Proxy]!
         dispatch_sync(accessQueue) {
@@ -167,5 +218,4 @@ public class BaseRouting {
             .filter { $0.1 != nil }
             .map { ($0, $1!, $2) }
     }
-    
 }
