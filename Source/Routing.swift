@@ -138,21 +138,18 @@ public final class Routing {
         defer {
             dispatch_async(routingQueue) {
                 let semaphore = dispatch_semaphore_create(0)
-                var overwrittingRoute: String?, overwrittingParameters: Route.Parameters?
-                
                 for route in _routes where route.isProxy && route.matches(matchedString) != nil {
                     if case let .Proxy(handler) = route.handler {
                         dispatch_async(route.queue) {
-                            handler(matchedString, parameters) { (route, params) in
-                                matchedString = route
-                                parameters = params
+                            handler(matchedString, parameters) { (a, b) in
+                                if let a = a, let b = b {
+                                    matchedString = a
+                                    parameters = b
+                                }
                                 dispatch_semaphore_signal(semaphore)
                             }
                         }
                         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-                        if overwrittingRoute != nil || overwrittingParameters != nil {
-                            break
-                        }
                     }
                 }
                 
