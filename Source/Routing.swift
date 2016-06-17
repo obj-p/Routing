@@ -14,7 +14,7 @@ public final class Routing {
     private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_SERIAL)
     private var routingQueue = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
     
-    internal init(){}
+    public init(){}
     
     public func map(pattern: String,
                     queue: dispatch_queue_t = dispatch_get_main_queue(),
@@ -51,25 +51,33 @@ public final class Routing {
         Routing.prepare(&searchPath, queryParameters: &queryParameters, from: components)
         
         var currentRoutes: [Route]!
+        var matchedRoute: Route!
         dispatch_sync(accessQueue) {
             currentRoutes = self.routes
+            matchedRoute = Routing.findRoute(searchPath, within: currentRoutes)
         }
         
-        guard let matchedRoute = Routing.findRoute(searchPath, within: currentRoutes) else {
+        if matchedRoute == nil {
             return false
         }
-        // Grab all Proxies
+        
+        defer {
+            dispatch_async(routingQueue) {
+                self.process(matchedRoute, within: currentRoutes)
+            }
+        }
+        
+        return true
+    }
+    
+    private func process(route: Route, within routes: [Route]) {
+        var proxies = [Route]()
+        for proxy in routes where proxy.isProxy {
+            proxies.append(proxy)
+        }
+        
         // Cache results
         
-        var _routes: [Route]!
-        var matchedString: String!
-        var parameters: Parameters!
-        //        dispatch_sync(accessQueue) {
-        //            _routes = self.routes
-        //            if _routes.count > 0 {
-        //
-        //
-        //
         //                for route in _routes where !route.isProxy {
         //                    if let matches = route.matches(URLString, parameters: []) {
         //                        matchedRoute = route
@@ -81,38 +89,34 @@ public final class Routing {
         //                }
         //            }
         //        }
-        
-        defer {
-            //            dispatch_async(routingQueue) {
-            //                let semaphore = dispatch_semaphore_create(0)
-            //                for route in _routes where route.isProxy && route.matches(matchedString) != nil {
-            //                    if case let .Proxy(handler) = route.handler {
-            //                        dispatch_async(route.queue) {
-            //                            handler(matchedString, parameters) { (a, b) in
-            //                                if let a = a, let b = b {
-            //                                    matchedString = a
-            //                                    parameters = b
-            //                                }
-            //                                dispatch_semaphore_signal(semaphore)
-            //                            }
-            //                        }
-            //                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-            //                    }
-            //                }
-            //
-            //                for route in _routes where !route.isProxy && route.matches(matchedString) != nil {
-            //                    dispatch_async(route.queue) {
-            //                        if case let .Route(handler) = route.handler {
-            //                            handler(matchedString, parameters) {
-            //                                dispatch_semaphore_signal(semaphore)
-            //                            }
-            //                        }
-            //                    }
-            //                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-            //                }
-            //            }
-        }
-        return true
+        //            dispatch_async(routingQueue) {
+        //                let semaphore = dispatch_semaphore_create(0)
+        //                for route in _routes where route.isProxy && route.matches(matchedString) != nil {
+        //                    if case let .Proxy(handler) = route.handler {
+        //                        dispatch_async(route.queue) {
+        //                            handler(matchedString, parameters) { (a, b) in
+        //                                if let a = a, let b = b {
+        //                                    matchedString = a
+        //                                    parameters = b
+        //                                }
+        //                                dispatch_semaphore_signal(semaphore)
+        //                            }
+        //                        }
+        //                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+        //                    }
+        //                }
+        //
+        //                for route in _routes where !route.isProxy && route.matches(matchedString) != nil {
+        //                    dispatch_async(route.queue) {
+        //                        if case let .Route(handler) = route.handler {
+        //                            handler(matchedString, parameters) {
+        //                                dispatch_semaphore_signal(semaphore)
+        //                            }
+        //                        }
+        //                    }
+        //                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+        //                }
+        //            }
     }
     
     private static func prepare(inout searchPath: String,
