@@ -16,6 +16,23 @@ public final class Routing {
     
     public init(){}
     
+    /**
+     Associates a closure to a string pattern. A Routing instance will execute the closure in the
+     event of a matching URL using #open. Routing will only execute the first matching mapped route.
+     This will be the last routed added with #map.
+     
+     ```code
+     let router = Routing()
+     router.map("routing://route") { parameters, completed in
+        completed() // Must call completed or the router will halt!
+     }
+     ```
+     
+     - Parameter pattern:  A String pattern
+     - Parameter queue:  A dispatch queue for the callback
+     - Parameter handler:  A MapHandler
+     */
+    
     public func map(pattern: String,
                     queue: dispatch_queue_t = dispatch_get_main_queue(),
                     handler: RouteHandler) -> Void {
@@ -23,6 +40,24 @@ public final class Routing {
             self.routes.insert(Route(pattern, queue: queue, handler: .Route(handler)), atIndex: 0)
         }
     }
+    
+    /**
+     Associates a closure to a string pattern. A Routing instance will execute the closure in the
+     event of a matching URL using #open. Routing will execute all proxies unless #next() is called
+     with non nil arguments.
+     
+     ```code
+     let router = Routing()
+     router.proxy("routing://route") { route, parameters, next in
+        next(route, parameters) // Must call next or the router will halt!
+        /* alternatively, next(nil, nil) allowing additional proxies to execute */
+     }
+     ```
+     
+     - Parameter pattern:  A String pattern
+     - Parameter queue:  A dispatch queue for the callback
+     - Parameter handler:  A ProxyHandler
+     */
     
     public func proxy(pattern: String,
                       queue: dispatch_queue_t = dispatch_get_main_queue(),
@@ -32,6 +67,14 @@ public final class Routing {
         }
     }
     
+    /**
+     Will execute the first mapped closure and any proxies with matching patterns. Mapped closures
+     are read in a last to be mapped first executed order.
+     
+     - Parameter string:  A string represeting a URL
+     - Returns:  A Bool. True if the string is a valid URL and it can open the URL, false otherwise
+     */
+    
     public func open(string: String) -> Bool {
         guard let URL = NSURL(string: string) else {
             return false
@@ -39,6 +82,14 @@ public final class Routing {
         
         return open(URL)
     }
+    
+    /**
+     Will execute the first mapped closure and any proxies with matching patterns. Mapped closures
+     are read in a last to be mapped first executed order.
+     
+     - Parameter URL:  A URL
+     - Returns:  A Bool. True if it can open the URL, false otherwise
+     */
     
     public func open(URL: NSURL) -> Bool {
         guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) else {
@@ -109,14 +160,19 @@ public final class Routing {
         }
         
         var searchPath = searchPath
-        var route = route
+        var modifiedRoute: Route? = route
         if let modifiedSearchPath = modifiedSearchPath {
             searchPath = modifiedSearchPath
+            modifiedRoute = nil
             for proxiedRoute in routes
                 where !proxiedRoute.isProxy && proxiedRoute.matches(searchPath) {
-                route = proxiedRoute
+                modifiedRoute = proxiedRoute
                     break
             }
+        }
+        
+        guard let route = modifiedRoute else {
+            return
         }
         
         dispatch_async(route.queue) {

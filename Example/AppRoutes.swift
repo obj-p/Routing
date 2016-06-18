@@ -6,7 +6,7 @@
 //  Copyright © 2016 Routing. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Routing
 
 public struct AppRoutes {

@@ -9,8 +9,27 @@
 import Foundation
 
 public typealias Parameters = [String: String]
+
+/**
+ The closure type associated with #map
+ 
+ - Parameter Parameters:  Any query parameters or dynamic segments found in the URL
+ - Parameter Completed: Must be called for Routing to continue processing other routes with #open
+ */
+
 public typealias RouteHandler = (String, Parameters, Completed) -> Void
 public typealias Completed = () -> Void
+
+/**
+ The closure type associated with #proxy
+ 
+ - Parameter String:  The route being opened
+ - Parameter Parameters:  Any query parameters or dynamic segments found in the URL
+ - Parameter Next: Must be called for Routing to continue processing. Calling #Next with
+ nil arguments will continue executing other matching proxies. Calling #Next with non nil
+ arguments will continue to process the route.
+ */
+
 public typealias ProxyHandler = (String, Parameters, Next) -> Void
 public typealias Next = (String?, Parameters?) -> Void
 
