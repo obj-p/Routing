@@ -16,7 +16,7 @@ public struct AppRoutes {
         
         // MARK: Navigation Routes
         AppRoutes.sharedRouter.map("routingexample://presentitem3/:presenter",
-            instance: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
+            source: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
             style: .Present(animated: true)) { vc, parameters in
                 if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
                     vc.labelText = "Presented by: \(presenter)"
@@ -27,7 +27,7 @@ public struct AppRoutes {
         }
         
         AppRoutes.sharedRouter.map("routingexample://pushitem3/:presenter",
-            instance: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
+            source: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
             style: .Push(animated: true)) { vc, parameters in
                 if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
                     vc.labelText = "Pushed by: \(presenter)"
@@ -36,7 +36,7 @@ public struct AppRoutes {
         }
         
         AppRoutes.sharedRouter.map("routingexample://showitem3/:presenter",
-            instance: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
+            source: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
             style: .ShowDetail) { vc, parameters in
                 if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
                     vc.labelText = "Shown by: \(presenter)"
@@ -47,7 +47,7 @@ public struct AppRoutes {
         }
         
         AppRoutes.sharedRouter.map("routingexample://presentitem4",
-            instance: .Nib(controller: Item4ViewController.self, name: "Item4ViewController", bundle: nil),
+            source: .Nib(controller: Item4ViewController.self, name: "Item4ViewController", bundle: nil),
             style: .Present(animated: true)) { vc, parameters in
                 if let callback = parameters["callback"], let vc = vc as? Item4ViewController {
                     vc.callback = callback
@@ -58,11 +58,11 @@ public struct AppRoutes {
         }
         
         AppRoutes.sharedRouter.map("routingexample://pushparentviewcontroller",
-            instance: .Storyboard(storyboard: "Main", identifier: "ParentViewController", bundle: nil),
+            source: .Storyboard(storyboard: "Main", identifier: "ParentViewController", bundle: nil),
             style: .Push(animated: true))
         
         AppRoutes.sharedRouter.map("routingexample://pushlastviewcontroller",
-            instance: .Storyboard(storyboard: "Main", identifier: "LastViewController", bundle: nil),
+            source: .Storyboard(storyboard: "Main", identifier: "LastViewController", bundle: nil),
             style: .Push(animated: true))
         
         // MARK: Proxies        
