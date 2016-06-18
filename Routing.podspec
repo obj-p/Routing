@@ -14,14 +14,14 @@ Pod::Spec.new do |s|
 
   s.subspec "iOS" do |sp|
     sp.framework   = 'UIKit', 'QuartzCore'
-    sp.source_files = 'Source/Routing.swift', 'Source/RoutingiOS.swift'
+    sp.source_files = 'Source/Routing.swift', 'Source/RoutingiOS.swift', 'Source/Route.swift'
   end
 
   s.subspec "Others" do |sp|
     sp.osx.deployment_target = '10.11'
     sp.tvos.deployment_target = '9.0'
     sp.watchos.deployment_target = '2.1'
-    sp.source_files = 'Source/Routing.swift'
+    sp.source_files = 'Source/Routing.swift', 'Source/Route.swift'
   end
 
   s.default_subspec = "iOS"
