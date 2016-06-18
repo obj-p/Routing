@@ -33,7 +33,7 @@ public final class Routing {
     }
     
     public func open(string: String) -> Bool {
-        guard let URL = NSURL(string: string) where routes.count > 0 else {
+        guard let URL = NSURL(string: string) else {
             return false
         }
         
@@ -41,20 +41,23 @@ public final class Routing {
     }
     
     public func open(URL: NSURL) -> Bool {
-        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false)
-            where routes.count > 0 else {
-                return false
+        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) else {
+            return false
         }
         
         var searchPath = String()
-        var queryParameters: [String: String] = [:]
-        Routing.prepare(&searchPath, queryParameters: &queryParameters, from: components)
+        var parameters = Parameters()
+        Routing.prepare(&searchPath, queryParameters: &parameters, from: components)
         
         var currentRoutes: [Route]!
         var matchedRoute: Route!
         dispatch_sync(accessQueue) {
             currentRoutes = self.routes
-            matchedRoute = Routing.findRoute(searchPath, within: currentRoutes)
+            for route in currentRoutes
+                where !route.isProxy && route.matches(searchPath, parameters: &parameters) {
+                    matchedRoute = route
+                    break
+            }
         }
         
         if matchedRoute == nil {
@@ -63,60 +66,64 @@ public final class Routing {
         
         defer {
             dispatch_async(routingQueue) {
-                self.process(matchedRoute, within: currentRoutes)
+                self.process(searchPath,
+                             parameters: parameters,
+                             matching: matchedRoute,
+                             within: currentRoutes)
             }
         }
         
         return true
     }
     
-    private func process(route: Route, within routes: [Route]) {
-        var proxies = [Route]()
-        for proxy in routes where proxy.isProxy {
-            proxies.append(proxy)
+    private func process(searchPath: String,
+                         parameters: Parameters,
+                         matching route: Route,
+                                  within routes: [Route]) {
+        let semaphore = dispatch_semaphore_create(0)
+        var modifiedSearchPath: String?, modifiedParameters: Parameters?
+        for proxy in routes where proxy.isProxy && proxy.matches(searchPath) {
+            if case let .Proxy(handler) = proxy.handler {
+                dispatch_async(proxy.queue) {
+                    handler(searchPath, parameters) { (proxiedPath, proxiedParameters) in
+                        modifiedSearchPath = proxiedPath
+                        modifiedParameters = proxiedParameters
+                        dispatch_semaphore_signal(semaphore)
+                    }
+                }
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+                if (modifiedSearchPath != nil || modifiedParameters != nil) {
+                    break
+                }
+            }
         }
         
-        // Cache results
+        var parameters = parameters
+        if let modifiedParameters = modifiedParameters {
+            modifiedParameters.forEach {
+                parameters[$0.0] = $0.1
+            }
+        }
         
-        //                for route in _routes where !route.isProxy {
-        //                    if let matches = route.matches(URLString, parameters: []) {
-        //                        matchedRoute = route
-        //                        matchedString = URLString
-        //                        parameters = route.parameters(URLString, matches: matches)
-        //                        queryParameters.forEach { parameters![$0.0] = $0.1 }
-        //                        break
-        //                    }
-        //                }
-        //            }
-        //        }
-        //            dispatch_async(routingQueue) {
-        //                let semaphore = dispatch_semaphore_create(0)
-        //                for route in _routes where route.isProxy && route.matches(matchedString) != nil {
-        //                    if case let .Proxy(handler) = route.handler {
-        //                        dispatch_async(route.queue) {
-        //                            handler(matchedString, parameters) { (a, b) in
-        //                                if let a = a, let b = b {
-        //                                    matchedString = a
-        //                                    parameters = b
-        //                                }
-        //                                dispatch_semaphore_signal(semaphore)
-        //                            }
-        //                        }
-        //                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-        //                    }
-        //                }
-        //
-        //                for route in _routes where !route.isProxy && route.matches(matchedString) != nil {
-        //                    dispatch_async(route.queue) {
-        //                        if case let .Route(handler) = route.handler {
-        //                            handler(matchedString, parameters) {
-        //                                dispatch_semaphore_signal(semaphore)
-        //                            }
-        //                        }
-        //                    }
-        //                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-        //                }
-        //            }
+        var searchPath = searchPath
+        var route = route
+        if let modifiedSearchPath = modifiedSearchPath {
+            searchPath = modifiedSearchPath
+            for proxiedRoute in routes
+                where !proxiedRoute.isProxy && proxiedRoute.matches(searchPath) {
+                route = proxiedRoute
+                    break
+            }
+        }
+        
+        dispatch_async(route.queue) {
+            if case let .Route(handler) = route.handler {
+                handler(searchPath, parameters) {
+                    dispatch_semaphore_signal(semaphore)
+                }
+            }
+        }
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
     }
     
     private static func prepare(inout searchPath: String,
@@ -130,7 +137,7 @@ public final class Routing {
     }
     
     private static func findRoute(matching: String, within routes: [Route]) -> Route? {
-        for route in routes where !route.isProxy {
+        for route in routes where !route.isProxy && route.matches(matching) {
             return route
         }
         return nil

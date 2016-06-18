@@ -54,24 +54,23 @@ internal struct Route {
             return false
         }
         
-        if dynamicSegments.count > 0 && dynamicSegments.count == matches.count {
-            for (segment, match) in zip(dynamicSegments, matches) {
-                parameters[segment] = (route as NSString).substringWithRange(match.range)
+        if dynamicSegments.count > 0 && dynamicSegments.count == matches.numberOfRanges - 1 {
+            [Int](1 ..< matches.numberOfRanges).forEach { (index) in
+                parameters[dynamicSegments[index-1]] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
             }
         }
         
         return true
     }
     
-    private func _matches(route: String) -> [NSTextCheckingResult]? {
+    private func _matches(route: String) -> NSTextCheckingResult? {
         return (try? NSRegularExpression(pattern: pattern, options: .CaseInsensitive))
             .flatMap {
                 $0.matchesInString(route, options: [], range: NSMakeRange(0, route.characters.count))
-            }
+            }?.first
     }
     
     private static func prepare(inout pattern: String, inout dynamicSegments: [String]) {
-        var pattern = pattern
         let options: NSStringCompareOptions = [.RegularExpressionSearch, .CaseInsensitiveSearch]
         while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+", options: options) {
             let segment = pattern
