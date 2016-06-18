@@ -45,9 +45,12 @@ public final class Routing {
             return false
         }
         
-        var searchPath = String()
         var parameters = Parameters()
-        Routing.prepare(&searchPath, queryParameters: &parameters, from: components)
+        components.queryItems?.forEach {
+            parameters[$0.name] = ($0.value ?? "")
+        }
+        components.query = nil
+        var searchPath = components.string ?? ""
         
         var currentRoutes: [Route]!
         var matchedRoute: Route!
@@ -124,23 +127,6 @@ public final class Routing {
             }
         }
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-    }
-    
-    private static func prepare(inout searchPath: String,
-                                      inout queryParameters: [String: String],
-                                            from components: NSURLComponents) {
-        components.queryItems?.forEach {
-            queryParameters.updateValue(($0.value ?? ""), forKey: $0.name)
-        }
-        components.query = nil
-        searchPath = components.string ?? ""
-    }
-    
-    private static func findRoute(matching: String, within routes: [Route]) -> Route? {
-        for route in routes where !route.isProxy && route.matches(matching) {
-            return route
-        }
-        return nil
     }
     
 }
