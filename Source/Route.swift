@@ -34,7 +34,6 @@ public typealias ProxyHandler = (String, Parameters, Next) -> Void
 public typealias Next = (String?, Parameters?) -> Void
 
 internal struct Route {
-    
     internal enum HandlerType {
         case Route(RouteHandler)
         case Proxy(ProxyHandler)
@@ -93,5 +92,4 @@ internal struct Route {
                 $0.matchesInString(route, options: [], range: NSMakeRange(0, route.characters.count))
             }?.first
     }
-    
 }

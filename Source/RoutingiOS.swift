@@ -10,15 +10,12 @@ import UIKit
 import QuartzCore
 
 public enum PresentedInstance {
-    
     case Storyboard(storyboard: String, identifier: String, bundle: NSBundle?)
     case Nib(controller: UIViewController.Type, name: String?, bundle: NSBundle?)
     case Provided(() -> UIViewController)
-    
 }
 
 public enum PresentationStyle {
-    
     case Show
     case ShowDetail
     case Present(animated: Bool)
@@ -26,7 +23,6 @@ public enum PresentationStyle {
     case Custom(custom: (presenting: UIViewController,
         presented: UIViewController,
         completed: Completed) -> Void)
-    
 }
 
 /**

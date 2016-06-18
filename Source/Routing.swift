@@ -9,7 +9,6 @@
 import Foundation
 
 public final class Routing {
-    
     private var routes: [Route] = [Route]()
     private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_SERIAL)
     private var routingQueue = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
@@ -184,5 +183,4 @@ public final class Routing {
         }
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
     }
-    
 }
