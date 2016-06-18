@@ -66,9 +66,9 @@
 		D273364D1CFE78970004A92A /* UIKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKit.swift; sourceTree = "<group>"; };
 		D295F4081C6C25ED003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D295F4151C6C2612003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D295F41E1C6C2612003CAC2F /* Routing tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Routing tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D295F41E1C6C2612003CAC2F /* Routing tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Routing tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D295F4311C6C265D003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D295F43A1C6C265D003CAC2F /* Routing OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Routing OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D295F43A1C6C265D003CAC2F /* Routing OSX Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Routing OSX Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D295F44F1C6C29F5003CAC2F /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/Mac/Quick.framework; sourceTree = "<group>"; };
 		D295F4511C6C29F7003CAC2F /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/Mac/Nimble.framework; sourceTree = "<group>"; };
 		D2F5D0551C570ECB00317401 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
@@ -152,9 +152,9 @@
 				92FCFA0B1BB963CD00DF05C3 /* Routing iOS Tests.xctest */,
 				D295F4081C6C25ED003CAC2F /* Routing.framework */,
 				D295F4151C6C2612003CAC2F /* Routing.framework */,
-				D295F41E1C6C2612003CAC2F /* Routing tvOSTests.xctest */,
+				D295F41E1C6C2612003CAC2F /* Routing tvOS Tests.xctest */,
 				D295F4311C6C265D003CAC2F /* Routing.framework */,
-				D295F43A1C6C265D003CAC2F /* Routing OSXTests.xctest */,
+				D295F43A1C6C265D003CAC2F /* Routing OSX Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -300,9 +300,9 @@
 			productReference = D295F4151C6C2612003CAC2F /* Routing.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		D295F41D1C6C2612003CAC2F /* Routing tvOSTests */ = {
+		D295F41D1C6C2612003CAC2F /* Routing tvOS Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D295F4291C6C2612003CAC2F /* Build configuration list for PBXNativeTarget "Routing tvOSTests" */;
+			buildConfigurationList = D295F4291C6C2612003CAC2F /* Build configuration list for PBXNativeTarget "Routing tvOS Tests" */;
 			buildPhases = (
 				D295F41A1C6C2612003CAC2F /* Sources */,
 				D295F41B1C6C2612003CAC2F /* Frameworks */,
@@ -314,9 +314,9 @@
 			dependencies = (
 				D295F4211C6C2612003CAC2F /* PBXTargetDependency */,
 			);
-			name = "Routing tvOSTests";
+			name = "Routing tvOS Tests";
 			productName = "Routing tvOSTests";
-			productReference = D295F41E1C6C2612003CAC2F /* Routing tvOSTests.xctest */;
+			productReference = D295F41E1C6C2612003CAC2F /* Routing tvOS Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		D295F4301C6C265D003CAC2F /* Routing OSX */ = {
@@ -337,9 +337,9 @@
 			productReference = D295F4311C6C265D003CAC2F /* Routing.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		D295F4391C6C265D003CAC2F /* Routing OSXTests */ = {
+		D295F4391C6C265D003CAC2F /* Routing OSX Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D295F4451C6C265D003CAC2F /* Build configuration list for PBXNativeTarget "Routing OSXTests" */;
+			buildConfigurationList = D295F4451C6C265D003CAC2F /* Build configuration list for PBXNativeTarget "Routing OSX Tests" */;
 			buildPhases = (
 				D295F4361C6C265D003CAC2F /* Sources */,
 				D295F4371C6C265D003CAC2F /* Frameworks */,
@@ -351,9 +351,9 @@
 			dependencies = (
 				D295F43D1C6C265D003CAC2F /* PBXTargetDependency */,
 			);
-			name = "Routing OSXTests";
+			name = "Routing OSX Tests";
 			productName = "Routing OSXTests";
-			productReference = D295F43A1C6C265D003CAC2F /* Routing OSXTests.xctest */;
+			productReference = D295F43A1C6C265D003CAC2F /* Routing OSX Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -404,9 +404,9 @@
 				92FCFA001BB963CD00DF05C3 /* Routing iOS */,
 				92FCFA0A1BB963CD00DF05C3 /* Routing iOS Tests */,
 				D295F4301C6C265D003CAC2F /* Routing OSX */,
-				D295F4391C6C265D003CAC2F /* Routing OSXTests */,
+				D295F4391C6C265D003CAC2F /* Routing OSX Tests */,
 				D295F4141C6C2612003CAC2F /* Routing tvOS */,
-				D295F41D1C6C2612003CAC2F /* Routing tvOSTests */,
+				D295F41D1C6C2612003CAC2F /* Routing tvOS Tests */,
 				D295F4071C6C25ED003CAC2F /* Routing watchOS */,
 			);
 		};
@@ -978,7 +978,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D295F4291C6C2612003CAC2F /* Build configuration list for PBXNativeTarget "Routing tvOSTests" */ = {
+		D295F4291C6C2612003CAC2F /* Build configuration list for PBXNativeTarget "Routing tvOS Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D295F42A1C6C2612003CAC2F /* Debug */,
@@ -996,7 +996,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D295F4451C6C265D003CAC2F /* Build configuration list for PBXNativeTarget "Routing OSXTests" */ = {
+		D295F4451C6C265D003CAC2F /* Build configuration list for PBXNativeTarget "Routing OSX Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D295F4461C6C265D003CAC2F /* Debug */,

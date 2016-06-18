@@ -93,6 +93,8 @@ public extension Routing {
             while let nextVC = presenter.nextViewController() {
                 presenter = nextVC
             }
+            
+            strongSelf.showController(vc, from: presenter, with: style, completion: completed)
         }
         
         self.map(pattern, handler: routeHandler)

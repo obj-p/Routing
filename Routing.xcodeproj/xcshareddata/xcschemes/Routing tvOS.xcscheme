@@ -34,8 +34,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D295F41D1C6C2612003CAC2F"
-               BuildableName = "Routing tvOSTests.xctest"
-               BlueprintName = "Routing tvOSTests"
+               BuildableName = "Routing tvOS Tests.xctest"
+               BlueprintName = "Routing tvOS Tests"
                ReferencedContainer = "container:Routing.xcodeproj">
             </BuildableReference>
          </TestableReference>
