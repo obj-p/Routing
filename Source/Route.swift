@@ -30,18 +30,22 @@ internal struct Route {
     internal init(_ pattern: String, queue: dispatch_queue_t, handler: HandlerType) {
         var pattern = pattern
         var dynamicSegments = [String]()
-        Route.prepare(&pattern, dynamicSegments: &dynamicSegments)
+        let options: NSStringCompareOptions = [.RegularExpressionSearch, .CaseInsensitiveSearch]
+        while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+", options: options) {
+            let segment = pattern
+                .substringWithRange(range.startIndex.advancedBy(1)..<range.endIndex)
+            dynamicSegments.append(segment)
+            pattern.replaceRange(range, with: "([^/]+)")
+        }
         
         self.pattern = pattern
         self.queue = queue
         self.handler = handler
-        
         if case .Proxy(_) = handler {
             isProxy = true
         } else {
             isProxy = false
         }
-        
         self.dynamicSegments = dynamicSegments
     }
     
@@ -55,8 +59,9 @@ internal struct Route {
         }
         
         if dynamicSegments.count > 0 && dynamicSegments.count == matches.numberOfRanges - 1 {
-            [Int](1 ..< matches.numberOfRanges).forEach { (index) in
-                parameters[dynamicSegments[index-1]] = (route as NSString).substringWithRange(matches.rangeAtIndex(index))
+            for i in (1 ..< matches.numberOfRanges) {
+                parameters[dynamicSegments[i-1]] = (route as NSString)
+                    .substringWithRange(matches.rangeAtIndex(i))
             }
         }
         
@@ -68,16 +73,6 @@ internal struct Route {
             .flatMap {
                 $0.matchesInString(route, options: [], range: NSMakeRange(0, route.characters.count))
             }?.first
-    }
-    
-    private static func prepare(inout pattern: String, inout dynamicSegments: [String]) {
-        let options: NSStringCompareOptions = [.RegularExpressionSearch, .CaseInsensitiveSearch]
-        while let range = pattern.rangeOfString(":[a-zA-Z0-9-_]+", options: options) {
-            let segment = pattern
-                .substringWithRange(range.startIndex.advancedBy(1)..<range.endIndex)
-            dynamicSegments.append(segment)
-            pattern.replaceRange(range, with: "([^/]+)")
-        }
     }
     
 }
