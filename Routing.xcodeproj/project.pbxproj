@@ -11,6 +11,7 @@
 		92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
 		92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
 		92FCFA1C1BB9658D00DF05C3 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
+		D24099D31D55959C009A3FD4 /* UIKitSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCC6271D559407005C474B /* UIKitSpec.swift */; };
 		D24501A21D146B2F006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
 		D24501A31D14D1AF006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
 		D24501A41D14D1B0006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
@@ -27,6 +28,19 @@
 		D2F5D0561C570ECB00317401 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F5D0551C570ECB00317401 /* Nimble.framework */; };
 		D2F5D0581C570ECF00317401 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F5D0571C570ECF00317401 /* Quick.framework */; };
 		D2F926981C8E4400007783EA /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
+		D2FCC6081D5593D5005C474B /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
+		D2FCC6091D5593D5005C474B /* Routing.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D2FCC61B1D5593F0005C474B /* AppRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCC60D1D5593F0005C474B /* AppRoutes.swift */; };
+		D2FCC61C1D5593F0005C474B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCC60E1D5593F0005C474B /* AppDelegate.swift */; };
+		D2FCC61D1D5593F0005C474B /* Item1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCC60F1D5593F0005C474B /* Item1ViewController.swift */; };
+		D2FCC61E1D5593F0005C474B /* Item2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCC6101D5593F0005C474B /* Item2ViewController.swift */; };
+		D2FCC61F1D5593F0005C474B /* Item3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCC6111D5593F0005C474B /* Item3ViewController.swift */; };
+		D2FCC6201D5593F0005C474B /* Item4ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCC6121D5593F0005C474B /* Item4ViewController.swift */; };
+		D2FCC6211D5593F0005C474B /* Item5ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCC6131D5593F0005C474B /* Item5ViewController.swift */; };
+		D2FCC6221D5593F0005C474B /* Item4ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D2FCC6141D5593F0005C474B /* Item4ViewController.xib */; };
+		D2FCC6231D5593F0005C474B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2FCC6161D5593F0005C474B /* Main.storyboard */; };
+		D2FCC6241D5593F0005C474B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D2FCC6171D5593F0005C474B /* Assets.xcassets */; };
+		D2FCC6251D5593F0005C474B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2FCC6191D5593F0005C474B /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +50,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 92FCFA001BB963CD00DF05C3;
 			remoteInfo = Routing;
+		};
+		D24099D11D55958B009A3FD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92FCF9F81BB963CD00DF05C3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2FCC5F51D5593BF005C474B;
+			remoteInfo = Example;
 		};
 		D295F4201C6C2612003CAC2F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -51,7 +72,28 @@
 			remoteGlobalIDString = D295F4301C6C265D003CAC2F;
 			remoteInfo = "Routing OSX";
 		};
+		D2FCC60A1D5593D5005C474B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92FCF9F81BB963CD00DF05C3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 92FCFA001BB963CD00DF05C3;
+			remoteInfo = "Routing iOS";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D2FCC60C1D5593D5005C474B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D2FCC6091D5593D5005C474B /* Routing.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		92FCFA011BB963CD00DF05C3 /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +115,20 @@
 		D295F4511C6C29F7003CAC2F /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/Mac/Nimble.framework; sourceTree = "<group>"; };
 		D2F5D0551C570ECB00317401 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		D2F5D0571C570ECF00317401 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
+		D2FCC5F61D5593BF005C474B /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2FCC60D1D5593F0005C474B /* AppRoutes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppRoutes.swift; sourceTree = "<group>"; };
+		D2FCC60E1D5593F0005C474B /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D2FCC60F1D5593F0005C474B /* Item1ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item1ViewController.swift; sourceTree = "<group>"; };
+		D2FCC6101D5593F0005C474B /* Item2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item2ViewController.swift; sourceTree = "<group>"; };
+		D2FCC6111D5593F0005C474B /* Item3ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item3ViewController.swift; sourceTree = "<group>"; };
+		D2FCC6121D5593F0005C474B /* Item4ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item4ViewController.swift; sourceTree = "<group>"; };
+		D2FCC6131D5593F0005C474B /* Item5ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item5ViewController.swift; sourceTree = "<group>"; };
+		D2FCC6141D5593F0005C474B /* Item4ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Item4ViewController.xib; sourceTree = "<group>"; };
+		D2FCC6151D5593F0005C474B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D2FCC6171D5593F0005C474B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D2FCC6181D5593F0005C474B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D2FCC61A1D5593F0005C474B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D2FCC6271D559407005C474B /* UIKitSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKitSpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +188,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D2FCC5F31D5593BF005C474B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2FCC6081D5593D5005C474B /* Routing.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -139,6 +203,7 @@
 			isa = PBXGroup;
 			children = (
 				D2F5D0591C570ED600317401 /* Frameworks */,
+				D2FCC5F71D5593BF005C474B /* Example */,
 				92FCFA031BB963CD00DF05C3 /* Source */,
 				92FCFA0F1BB963CD00DF05C3 /* Tests */,
 				92FCFA021BB963CD00DF05C3 /* Products */,
@@ -155,6 +220,7 @@
 				D295F41E1C6C2612003CAC2F /* Routing tvOS Tests.xctest */,
 				D295F4311C6C265D003CAC2F /* Routing.framework */,
 				D295F43A1C6C265D003CAC2F /* Routing OSX Tests.xctest */,
+				D2FCC5F61D5593BF005C474B /* Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -175,6 +241,7 @@
 			isa = PBXGroup;
 			children = (
 				92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */,
+				D2FCC6271D559407005C474B /* UIKitSpec.swift */,
 				92FCFA121BB963CD00DF05C3 /* Info.plist */,
 			);
 			path = Tests;
@@ -190,6 +257,25 @@
 				D2F5D0551C570ECB00317401 /* Nimble.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D2FCC5F71D5593BF005C474B /* Example */ = {
+			isa = PBXGroup;
+			children = (
+				D2FCC60D1D5593F0005C474B /* AppRoutes.swift */,
+				D2FCC60E1D5593F0005C474B /* AppDelegate.swift */,
+				D2FCC60F1D5593F0005C474B /* Item1ViewController.swift */,
+				D2FCC6101D5593F0005C474B /* Item2ViewController.swift */,
+				D2FCC6111D5593F0005C474B /* Item3ViewController.swift */,
+				D2FCC6121D5593F0005C474B /* Item4ViewController.swift */,
+				D2FCC6131D5593F0005C474B /* Item5ViewController.swift */,
+				D2FCC6141D5593F0005C474B /* Item4ViewController.xib */,
+				D2FCC6161D5593F0005C474B /* Main.storyboard */,
+				D2FCC6171D5593F0005C474B /* Assets.xcassets */,
+				D2FCC6191D5593F0005C474B /* LaunchScreen.storyboard */,
+				D2FCC61A1D5593F0005C474B /* Info.plist */,
+			);
+			path = Example;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,6 +344,7 @@
 			);
 			dependencies = (
 				92FCFA0E1BB963CD00DF05C3 /* PBXTargetDependency */,
+				D24099D21D55958B009A3FD4 /* PBXTargetDependency */,
 			);
 			name = "Routing iOS Tests";
 			productName = RoutingTests;
@@ -356,13 +443,32 @@
 			productReference = D295F43A1C6C265D003CAC2F /* Routing OSX Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		D2FCC5F51D5593BF005C474B /* Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D2FCC6071D5593BF005C474B /* Build configuration list for PBXNativeTarget "Example" */;
+			buildPhases = (
+				D2FCC5F21D5593BF005C474B /* Sources */,
+				D2FCC5F31D5593BF005C474B /* Frameworks */,
+				D2FCC5F41D5593BF005C474B /* Resources */,
+				D2FCC60C1D5593D5005C474B /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D2FCC60B1D5593D5005C474B /* PBXTargetDependency */,
+			);
+			name = Example;
+			productName = Example;
+			productReference = D2FCC5F61D5593BF005C474B /* Example.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		92FCF9F81BB963CD00DF05C3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Routing;
 				TargetAttributes = {
@@ -371,6 +477,7 @@
 					};
 					92FCFA0A1BB963CD00DF05C3 = {
 						CreatedOnToolsVersion = 7.0;
+						TestTargetID = D2FCC5F51D5593BF005C474B;
 					};
 					D295F4071C6C25ED003CAC2F = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -387,6 +494,9 @@
 					D295F4391C6C265D003CAC2F = {
 						CreatedOnToolsVersion = 7.2.1;
 					};
+					D2FCC5F51D5593BF005C474B = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
 				};
 			};
 			buildConfigurationList = 92FCF9FB1BB963CD00DF05C3 /* Build configuration list for PBXProject "Routing" */;
@@ -395,12 +505,14 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 92FCF9F71BB963CD00DF05C3;
 			productRefGroup = 92FCFA021BB963CD00DF05C3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				D2FCC5F51D5593BF005C474B /* Example */,
 				92FCFA001BB963CD00DF05C3 /* Routing iOS */,
 				92FCFA0A1BB963CD00DF05C3 /* Routing iOS Tests */,
 				D295F4301C6C265D003CAC2F /* Routing OSX */,
@@ -459,6 +571,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D2FCC5F41D5593BF005C474B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2FCC6221D5593F0005C474B /* Item4ViewController.xib in Resources */,
+				D2FCC6251D5593F0005C474B /* LaunchScreen.storyboard in Resources */,
+				D2FCC6241D5593F0005C474B /* Assets.xcassets in Resources */,
+				D2FCC6231D5593F0005C474B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -531,6 +654,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */,
+				D24099D31D55959C009A3FD4 /* UIKitSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -577,6 +701,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D2FCC5F21D5593BF005C474B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D2FCC6201D5593F0005C474B /* Item4ViewController.swift in Sources */,
+				D2FCC61E1D5593F0005C474B /* Item2ViewController.swift in Sources */,
+				D2FCC61F1D5593F0005C474B /* Item3ViewController.swift in Sources */,
+				D2FCC61C1D5593F0005C474B /* AppDelegate.swift in Sources */,
+				D2FCC61D1D5593F0005C474B /* Item1ViewController.swift in Sources */,
+				D2FCC6211D5593F0005C474B /* Item5ViewController.swift in Sources */,
+				D2FCC61B1D5593F0005C474B /* AppRoutes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -584,6 +722,11 @@
 			isa = PBXTargetDependency;
 			target = 92FCFA001BB963CD00DF05C3 /* Routing iOS */;
 			targetProxy = 92FCFA0D1BB963CD00DF05C3 /* PBXContainerItemProxy */;
+		};
+		D24099D21D55958B009A3FD4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2FCC5F51D5593BF005C474B /* Example */;
+			targetProxy = D24099D11D55958B009A3FD4 /* PBXContainerItemProxy */;
 		};
 		D295F4211C6C2612003CAC2F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -595,7 +738,31 @@
 			target = D295F4301C6C265D003CAC2F /* Routing OSX */;
 			targetProxy = D295F43C1C6C265D003CAC2F /* PBXContainerItemProxy */;
 		};
+		D2FCC60B1D5593D5005C474B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 92FCFA001BB963CD00DF05C3 /* Routing iOS */;
+			targetProxy = D2FCC60A1D5593D5005C474B /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D2FCC6161D5593F0005C474B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D2FCC6151D5593F0005C474B /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		D2FCC6191D5593F0005C474B /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D2FCC6181D5593F0005C474B /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		92FCFA131BB963CD00DF05C3 /* Debug */ = {
@@ -733,6 +900,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
 			name = Debug;
 		};
@@ -747,6 +915,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
 			name = Release;
 		};
@@ -930,6 +1099,34 @@
 			};
 			name = Release;
 		};
+		D2FCC6051D5593BF005C474B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		D2FCC6061D5593BF005C474B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1001,6 +1198,15 @@
 			buildConfigurations = (
 				D295F4461C6C265D003CAC2F /* Debug */,
 				D295F4471C6C265D003CAC2F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D2FCC6071D5593BF005C474B /* Build configuration list for PBXNativeTarget "Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D2FCC6051D5593BF005C474B /* Debug */,
+				D2FCC6061D5593BF005C474B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

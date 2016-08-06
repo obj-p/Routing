@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import Routing
 
-public class Item3ViewController: UIViewController {
+public class Item3ViewController: UIViewController, RoutingPresentationSetup {
 
     public var labelText: String?
     
@@ -19,6 +20,19 @@ public class Item3ViewController: UIViewController {
         
         if let labelText = labelText {
             self.label.text = labelText
+        }
+    }
+    
+    public func setup(route: String, parameters: Parameters) {
+        guard let presenter = parameters["presenter"] else {
+            return
+        }
+        
+        if route.containsString("pushitem3") {
+            self.labelText = "Pushed by: \(presenter)"
+        } else if route.containsString("showitem3") {
+            self.labelText = "Shown by: \(presenter)"
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(self.done))
         }
     }
     
