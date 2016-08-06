@@ -11,6 +11,7 @@
 		92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
 		92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
 		92FCFA1C1BB9658D00DF05C3 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
+		D24099D31D55959C009A3FD4 /* UIKitSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCC6271D559407005C474B /* UIKitSpec.swift */; };
 		D24501A21D146B2F006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
 		D24501A31D14D1AF006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
 		D24501A41D14D1B0006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
@@ -49,6 +50,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 92FCFA001BB963CD00DF05C3;
 			remoteInfo = Routing;
+		};
+		D24099D11D55958B009A3FD4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 92FCF9F81BB963CD00DF05C3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D2FCC5F51D5593BF005C474B;
+			remoteInfo = Example;
 		};
 		D295F4201C6C2612003CAC2F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -120,7 +128,7 @@
 		D2FCC6171D5593F0005C474B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D2FCC6181D5593F0005C474B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D2FCC61A1D5593F0005C474B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D2FCC6271D559407005C474B /* RoutingiOSSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutingiOSSpec.swift; sourceTree = "<group>"; };
+		D2FCC6271D559407005C474B /* UIKitSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIKitSpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,7 +241,7 @@
 			isa = PBXGroup;
 			children = (
 				92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */,
-				D2FCC6271D559407005C474B /* RoutingiOSSpec.swift */,
+				D2FCC6271D559407005C474B /* UIKitSpec.swift */,
 				92FCFA121BB963CD00DF05C3 /* Info.plist */,
 			);
 			path = Tests;
@@ -336,6 +344,7 @@
 			);
 			dependencies = (
 				92FCFA0E1BB963CD00DF05C3 /* PBXTargetDependency */,
+				D24099D21D55958B009A3FD4 /* PBXTargetDependency */,
 			);
 			name = "Routing iOS Tests";
 			productName = RoutingTests;
@@ -468,6 +477,7 @@
 					};
 					92FCFA0A1BB963CD00DF05C3 = {
 						CreatedOnToolsVersion = 7.0;
+						TestTargetID = D2FCC5F51D5593BF005C474B;
 					};
 					D295F4071C6C25ED003CAC2F = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -644,6 +654,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */,
+				D24099D31D55959C009A3FD4 /* UIKitSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -711,6 +722,11 @@
 			isa = PBXTargetDependency;
 			target = 92FCFA001BB963CD00DF05C3 /* Routing iOS */;
 			targetProxy = 92FCFA0D1BB963CD00DF05C3 /* PBXContainerItemProxy */;
+		};
+		D24099D21D55958B009A3FD4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D2FCC5F51D5593BF005C474B /* Example */;
+			targetProxy = D24099D11D55958B009A3FD4 /* PBXContainerItemProxy */;
 		};
 		D295F4211C6C2612003CAC2F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -884,6 +900,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
 			name = Debug;
 		};
@@ -898,6 +915,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
 			name = Release;
 		};
@@ -1191,6 +1209,7 @@
 				D2FCC6061D5593BF005C474B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

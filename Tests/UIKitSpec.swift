@@ -9,7 +9,6 @@
 import XCTest
 import Quick
 import Nimble
-@testable import iOS_Example
 @testable import Routing
 
 class RoutingiOSSpec: QuickSpec {
