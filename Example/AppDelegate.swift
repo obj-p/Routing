@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-        return AppRoutes.sharedRouter.open(url)
+        return AppRoutes.sharedRouter["Views", "Logs"].open(url)
     }
 
 

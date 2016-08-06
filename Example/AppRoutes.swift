@@ -46,7 +46,7 @@ public struct AppRoutes {
             style: .Push(animated: true))
         
         // MARK: Proxies        
-        AppRoutes.sharedRouter.proxy("routingexample://presentitem3/:presenter") { (route, parameters, next) in
+        AppRoutes.sharedRouter.proxy("routingexample://presentitem3/:presenter", tags: ["Views"]) { (route, parameters, next) in
             guard let presenter = parameters["presenter"] where presenter == "Item2" else {
                 next(nil, nil)
                 return
@@ -58,7 +58,7 @@ public struct AppRoutes {
             next("", nil)
         }
         
-        AppRoutes.sharedRouter.proxy("routingexample://showitem3/:presenter") { (route, parameters, next) in
+        AppRoutes.sharedRouter.proxy("routingexample://showitem3/:presenter", tags: ["Views"]) { (route, parameters, next) in
             guard let presenter = parameters["presenter"] where presenter == "Item2" else {
                 next(nil, nil)
                 return
@@ -70,7 +70,7 @@ public struct AppRoutes {
             next("", nil)
         }
 
-        AppRoutes.sharedRouter.proxy("/*") { route, parameters, next in
+        AppRoutes.sharedRouter.proxy("/*", tags: ["Logs"]) { route, parameters, next in
             print("Routing route: \(route) with parameters: \(parameters)")
             next(nil, nil)
         }

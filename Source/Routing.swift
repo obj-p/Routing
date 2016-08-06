@@ -13,7 +13,20 @@ public final class Routing {
     private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_SERIAL)
     private var routingQueue = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
     
-    public init(){}
+    public subscript(tags: String...) -> Routing {
+        get {
+            let set = Set(tags)
+            return Routing(routes: self.routes.filter({ set.intersect($0.tags).isEmpty == false }), targetQueue: self.routingQueue)
+        }
+    }
+    
+    public init() {}
+    
+    private convenience init(routes: [Route], targetQueue: dispatch_queue_t) {
+        self.init()
+        self.routes = routes
+        dispatch_set_target_queue(self.routingQueue, targetQueue)
+    }
     
     /**
      Associates a closure to a string pattern. A Routing instance will execute the closure in the
@@ -29,14 +42,16 @@ public final class Routing {
      
      - Parameter pattern:  A String pattern
      - Parameter queue:  A dispatch queue for the callback
+     - Parameter tag:  A tag to reference when subscripting a Routing object
      - Parameter handler:  A MapHandler
      */
     
     public func map(pattern: String,
+                    tags: [String] = [],
                     queue: dispatch_queue_t = dispatch_get_main_queue(),
                     handler: RouteHandler) -> Void {
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, queue: queue, handler: .Route(handler)), atIndex: 0)
+            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: .Route(handler)), atIndex: 0)
         }
     }
     
@@ -55,14 +70,16 @@ public final class Routing {
      
      - Parameter pattern:  A String pattern
      - Parameter queue:  A dispatch queue for the callback
+     - Parameter tag:  A tag to reference when subscripting a Routing object
      - Parameter handler:  A ProxyHandler
      */
     
     public func proxy(pattern: String,
+                      tags: [String] = [],
                       queue: dispatch_queue_t = dispatch_get_main_queue(),
                       handler: ProxyHandler) -> Void {
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, queue: queue, handler: .Proxy(handler)), atIndex: 0)
+            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: .Proxy(handler)), atIndex: 0)
         }
     }
     

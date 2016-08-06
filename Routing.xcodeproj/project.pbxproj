@@ -262,8 +262,8 @@
 		D2FCC5F71D5593BF005C474B /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				D2FCC60D1D5593F0005C474B /* AppRoutes.swift */,
 				D2FCC60E1D5593F0005C474B /* AppDelegate.swift */,
+				D2FCC60D1D5593F0005C474B /* AppRoutes.swift */,
 				D2FCC60F1D5593F0005C474B /* Item1ViewController.swift */,
 				D2FCC6101D5593F0005C474B /* Item2ViewController.swift */,
 				D2FCC6111D5593F0005C474B /* Item3ViewController.swift */,

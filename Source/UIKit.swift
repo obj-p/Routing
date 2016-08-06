@@ -1,11 +1,12 @@
 //
-//  RoutingiOS.swift
+//  UIKit.swift
 //  Routing
 //
 //  Created by Jason Prasad on 5/31/16.
 //  Copyright © 2016 Routing. All rights reserved.
 //
 
+#if os(iOS)
 import UIKit
 import QuartzCore
 
@@ -55,7 +56,6 @@ extension UIViewController : ControllerIterator {
 }
 
 public extension Routing {
-    
     /**
      Associates a view controller presentation to a string pattern. A Routing instance present the
      view controller in the event of a matching URL using #open. Routing will only execute the first
@@ -72,12 +72,14 @@ public extension Routing {
      ```
      
      - Parameter pattern:  A String pattern
+     - Parameter tag:  A tag to reference when subscripting a Routing object
      - Parameter source: The source of the view controller instance
      - Parameter style:  The presentation style in presenting the view controller
      - Parameter setup:  A closure provided for additional setup
      */
     
     public func map(pattern: String,
+                    tags: [String] = ["Views"],
                     source: ControllerSource,
                     style: PresentationStyle = .Show,
                     setup: PresentationSetup? = nil) {
@@ -102,7 +104,7 @@ public extension Routing {
             strongSelf.showController(vc, from: presenter, with: style, completion: completed)
         }
         
-        self.map(pattern, handler: routeHandler)
+        self.map(pattern, tags: tags, queue: dispatch_get_main_queue(), handler: routeHandler)
     }
     
     private func controller(from source: ControllerSource) -> UIViewController {
@@ -135,25 +137,21 @@ public extension Routing {
         case let .Present(animated):
             presenting.presentViewController(presented, animated: animated, completion: completion)
             break
-        case let .Push(animated) where presenting.isKindOfClass(UINavigationController):
+        case let .Push(animated):
             self.commit(completion) {
-                (presenting as? UINavigationController)?.pushViewController(presented, animated: animated)
+                if let presenting = presenting as? UINavigationController {
+                    presenting.pushViewController(presented, animated: animated)
+                } else {
+                    presenting.navigationController?.pushViewController(presented, animated: animated)
+                }
             }
-        case let .Push(animated) where presenting.navigationController != nil:
-            self.commit(completion) {
-                presenting.navigationController?.pushViewController(presented, animated: animated)
-            }
-            break
         case let .Custom(custom):
             custom(presenting: presenting, presented: presented, completed: completion)
             break
         case let .InNavigationController(style):
             showController(UINavigationController(rootViewController: presented), from: presenting, with: style, completion: completion)
-        default:
-            completion()
             break
         }
-        
     }
     
     private func commit(completed: Completed, transition: () -> Void) {
@@ -163,3 +161,4 @@ public extension Routing {
         CATransaction.commit()
     }
 }
+#endif
