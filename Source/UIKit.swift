@@ -136,25 +136,21 @@ public extension Routing {
         case let .Present(animated):
             presenting.presentViewController(presented, animated: animated, completion: completion)
             break
-        case let .Push(animated) where presenting.isKindOfClass(UINavigationController):
+        case let .Push(animated):
             self.commit(completion) {
-                (presenting as? UINavigationController)?.pushViewController(presented, animated: animated)
+                if let presenting = presenting as? UINavigationController {
+                    presenting.pushViewController(presented, animated: animated)
+                } else {
+                    presenting.navigationController?.pushViewController(presented, animated: animated)
+                }
             }
-        case let .Push(animated) where presenting.navigationController != nil:
-            self.commit(completion) {
-                presenting.navigationController?.pushViewController(presented, animated: animated)
-            }
-            break
         case let .Custom(custom):
             custom(presenting: presenting, presented: presented, completed: completion)
             break
         case let .InNavigationController(style):
             showController(UINavigationController(rootViewController: presented), from: presenting, with: style, completion: completion)
-        default:
-            completion()
             break
         }
-        
     }
     
     private func commit(completed: Completed, transition: () -> Void) {
