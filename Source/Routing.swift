@@ -29,14 +29,16 @@ public final class Routing {
      
      - Parameter pattern:  A String pattern
      - Parameter queue:  A dispatch queue for the callback
+     - Parameter tag:
      - Parameter handler:  A MapHandler
      */
     
     public func map(pattern: String,
+                    tag: String = "",
                     queue: dispatch_queue_t = dispatch_get_main_queue(),
                     handler: RouteHandler) -> Void {
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, queue: queue, handler: .Route(handler)), atIndex: 0)
+            self.routes.insert(Route(pattern, tag: tag, queue: queue, handler: .Route(handler)), atIndex: 0)
         }
     }
     
@@ -55,14 +57,16 @@ public final class Routing {
      
      - Parameter pattern:  A String pattern
      - Parameter queue:  A dispatch queue for the callback
+     - Parameter tag:
      - Parameter handler:  A ProxyHandler
      */
     
     public func proxy(pattern: String,
+                      tag: String = "",
                       queue: dispatch_queue_t = dispatch_get_main_queue(),
                       handler: ProxyHandler) -> Void {
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, queue: queue, handler: .Proxy(handler)), atIndex: 0)
+            self.routes.insert(Route(pattern, tag: tag, queue: queue, handler: .Proxy(handler)), atIndex: 0)
         }
     }
     
