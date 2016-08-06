@@ -40,13 +40,13 @@ internal struct Route {
     }
     
     internal let pattern: String
-    internal let tag: String
+    internal let tags: [String]
     internal let queue: dispatch_queue_t
     internal let handler: HandlerType
     internal let isProxy: Bool
     private let dynamicSegments: [String]
     
-    internal init(_ pattern: String, tag: String = "", queue: dispatch_queue_t, handler: HandlerType) {
+    internal init(_ pattern: String, tags: [String], queue: dispatch_queue_t, handler: HandlerType) {
         var pattern = pattern
         var dynamicSegments = [String]()
         let options: NSStringCompareOptions = [.RegularExpressionSearch, .CaseInsensitiveSearch]
@@ -58,7 +58,7 @@ internal struct Route {
         }
         
         self.pattern = pattern
-        self.tag = tag
+        self.tags = tags
         self.queue = queue
         self.handler = handler
         if case .Proxy(_) = handler {

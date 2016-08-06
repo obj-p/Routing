@@ -78,7 +78,7 @@ public extension Routing {
      */
     
     public func map(pattern: String,
-                    tag: String = "Views",
+                    tags: [String] = ["Views"],
                     source: ControllerSource,
                     style: PresentationStyle = .Show,
                     setup: PresentationSetup? = nil) {
@@ -103,7 +103,7 @@ public extension Routing {
             strongSelf.showController(vc, from: presenter, with: style, completion: completed)
         }
         
-        self.map(pattern, tag: tag, queue: dispatch_get_main_queue(), handler: routeHandler)
+        self.map(pattern, tags: tags, queue: dispatch_get_main_queue(), handler: routeHandler)
     }
     
     private func controller(from source: ControllerSource) -> UIViewController {

@@ -15,7 +15,8 @@ public final class Routing {
     
     public subscript(tags: String...) -> Routing {
         get {
-            return Routing(routes: self.routes.filter({ tags.contains($0.tag) }), targetQueue: self.routingQueue)
+            let set = Set(tags)
+            return Routing(routes: self.routes.filter({ set.intersect($0.tags).isEmpty == false }), targetQueue: self.routingQueue)
         }
     }
     
@@ -46,11 +47,11 @@ public final class Routing {
      */
     
     public func map(pattern: String,
-                    tag: String = "",
+                    tags: [String] = [],
                     queue: dispatch_queue_t = dispatch_get_main_queue(),
                     handler: RouteHandler) -> Void {
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, tag: tag, queue: queue, handler: .Route(handler)), atIndex: 0)
+            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: .Route(handler)), atIndex: 0)
         }
     }
     
@@ -74,11 +75,11 @@ public final class Routing {
      */
     
     public func proxy(pattern: String,
-                      tag: String = "",
+                      tags: [String] = [],
                       queue: dispatch_queue_t = dispatch_get_main_queue(),
                       handler: ProxyHandler) -> Void {
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, tag: tag, queue: queue, handler: .Proxy(handler)), atIndex: 0)
+            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: .Proxy(handler)), atIndex: 0)
         }
     }
     
