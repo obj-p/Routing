@@ -15,9 +15,7 @@ public final class Routing {
     
     public subscript(tags: String...) -> Routing {
         get {
-            
-            let routes = self.routes.filter { tags.contains($0.tag) }
-            return Routing(routes: routes, targetQueue: self.routingQueue)
+            return Routing(routes: self.routes.filter({ tags.contains($0.tag) }), targetQueue: self.routingQueue)
         }
     }
     
