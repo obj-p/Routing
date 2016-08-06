@@ -43,10 +43,9 @@ internal struct Route {
     internal let tags: [String]
     internal let queue: dispatch_queue_t
     internal let handler: HandlerType
-    internal let isProxy: Bool
     private let dynamicSegments: [String]
     
-    internal init(_ pattern: String, tags: [String], queue: dispatch_queue_t, handler: HandlerType) {
+    private init(_ pattern: String, tags: [String], queue: dispatch_queue_t, handler: HandlerType) {
         var pattern = pattern
         var dynamicSegments = [String]()
         let options: NSStringCompareOptions = [.RegularExpressionSearch, .CaseInsensitiveSearch]
@@ -61,12 +60,15 @@ internal struct Route {
         self.tags = tags
         self.queue = queue
         self.handler = handler
-        if case .Proxy(_) = handler {
-            isProxy = true
-        } else {
-            isProxy = false
-        }
         self.dynamicSegments = dynamicSegments
+    }
+    
+    internal init(_ pattern: String, tags: [String], queue: dispatch_queue_t, handler: RouteHandler) {
+        self.init(pattern, tags: tags, queue: queue, handler: .Route(handler))
+    }
+    
+    internal init(_ pattern: String, tags: [String], queue: dispatch_queue_t, handler: ProxyHandler) {
+        self.init(pattern, tags: tags, queue: queue, handler: .Proxy(handler))
     }
     
     internal func matches(route: String) -> Bool {

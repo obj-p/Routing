@@ -36,7 +36,7 @@ public final class Routing {
      ```code
      let router = Routing()
      router.map("routing://route") { parameters, completed in
-        completed() // Must call completed or the router will halt!
+     completed() // Must call completed or the router will halt!
      }
      ```
      
@@ -51,7 +51,7 @@ public final class Routing {
                     queue: dispatch_queue_t = dispatch_get_main_queue(),
                     handler: RouteHandler) -> Void {
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: .Route(handler)), atIndex: 0)
+            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: handler), atIndex: 0)
         }
     }
     
@@ -63,8 +63,8 @@ public final class Routing {
      ```code
      let router = Routing()
      router.proxy("routing://route") { route, parameters, next in
-        next(route, parameters) // Must call next or the router will halt!
-        /* alternatively, next(nil, nil) allowing additional proxies to execute */
+     next(route, parameters) // Must call next or the router will halt!
+     /* alternatively, next(nil, nil) allowing additional proxies to execute */
      }
      ```
      
@@ -79,7 +79,7 @@ public final class Routing {
                       queue: dispatch_queue_t = dispatch_get_main_queue(),
                       handler: ProxyHandler) -> Void {
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: .Proxy(handler)), atIndex: 0)
+            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: handler), atIndex: 0)
         }
     }
     
@@ -123,8 +123,9 @@ public final class Routing {
         var matchedRoute: Route!
         dispatch_sync(accessQueue) {
             currentRoutes = self.routes
-            for route in currentRoutes
-                where !route.isProxy && route.matches(searchPath, parameters: &parameters) {
+            let handlers = currentRoutes.map { $0.handler }
+            for case let (route, .Route(handler)) in zip(currentRoutes, handlers)
+                where route.matches(searchPath, parameters: &parameters) {
                     matchedRoute = route
                     break
             }
@@ -152,8 +153,9 @@ public final class Routing {
                                   within routes: [Route]) {
         let semaphore = dispatch_semaphore_create(0)
         var modifiedSearchPath: String?, modifiedParameters: Parameters?
-        for proxy in routes where proxy.isProxy && proxy.matches(searchPath) {
-            if case let .Proxy(handler) = proxy.handler {
+        let zipped = zip(routes, routes.map { $0.handler })
+        for case let (proxy, .Proxy(handler)) in zipped
+            where proxy.matches(searchPath) {
                 dispatch_async(proxy.queue) {
                     handler(searchPath, parameters) { (proxiedPath, proxiedParameters) in
                         modifiedSearchPath = proxiedPath
@@ -165,7 +167,6 @@ public final class Routing {
                 if (modifiedSearchPath != nil || modifiedParameters != nil) {
                     break
                 }
-            }
         }
         
         var parameters = parameters
@@ -180,9 +181,9 @@ public final class Routing {
         if let modifiedSearchPath = modifiedSearchPath {
             searchPath = modifiedSearchPath
             modifiedRoute = nil
-            for proxiedRoute in routes
-                where !proxiedRoute.isProxy && proxiedRoute.matches(searchPath) {
-                modifiedRoute = proxiedRoute
+            for case let (proxiedRoute, .Route(_)) in zipped
+                where proxiedRoute.matches(searchPath) {
+                    modifiedRoute = proxiedRoute
                     break
             }
         }
@@ -199,5 +200,5 @@ public final class Routing {
             }
         }
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-    }    
+    }
 }
