@@ -188,3 +188,11 @@ public final class Routing {
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
     }
 }
+
+public extension Routing {
+    subscript(pattern: String) -> Routing {
+        get {
+            return self
+        }
+    }
+}

@@ -78,7 +78,7 @@ public extension Routing {
      */
     
     public func map(pattern: String,
-                    tag: String = "",
+                    tag: String = "Views",
                     source: ControllerSource,
                     style: PresentationStyle = .Show,
                     setup: PresentationSetup? = nil) {
