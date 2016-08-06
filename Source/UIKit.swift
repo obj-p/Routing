@@ -55,7 +55,6 @@ extension UIViewController : ControllerIterator {
 }
 
 public extension Routing {
-    
     /**
      Associates a view controller presentation to a string pattern. A Routing instance present the
      view controller in the event of a matching URL using #open. Routing will only execute the first

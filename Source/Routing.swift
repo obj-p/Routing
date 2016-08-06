@@ -13,7 +13,21 @@ public final class Routing {
     private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_SERIAL)
     private var routingQueue = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
     
-    public init(){}
+    public subscript(tags: String...) -> Routing {
+        get {
+            
+            let routes = self.routes.filter { tags.contains($0.tag) }
+            return Routing(routes: routes, targetQueue: self.routingQueue)
+        }
+    }
+    
+    public init() {}
+    
+    private convenience init(routes: [Route], targetQueue: dispatch_queue_t) {
+        self.init()
+        self.routes = routes
+        dispatch_set_target_queue(self.routingQueue, targetQueue)
+    }
     
     /**
      Associates a closure to a string pattern. A Routing instance will execute the closure in the
@@ -186,13 +200,5 @@ public final class Routing {
             }
         }
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-    }
-}
-
-public extension Routing {
-    subscript(pattern: String) -> Routing {
-        get {
-            return self
-        }
     }
 }
