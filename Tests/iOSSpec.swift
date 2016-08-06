@@ -1,6 +1,6 @@
 //
-//  RoutingiOSSpec.swift
-//  iOS Example Tests
+//  iOSSpec.swift
+//  Routing
 //
 //  Created by Jason Prasad on 3/7/16.
 //  Copyright © 2016 Routing. All rights reserved.

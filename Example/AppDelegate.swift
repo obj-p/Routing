@@ -23,6 +23,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return AppRoutes.sharedRouter["Views", "Logs"].open(url)
     }
 
-
 }
 

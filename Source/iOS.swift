@@ -1,5 +1,5 @@
 //
-//  UIKit.swift
+//  iOS.swift
 //  Routing
 //
 //  Created by Jason Prasad on 5/31/16.
@@ -91,9 +91,7 @@ public extension Routing {
             
             let strongSelf = self
             let vc = strongSelf.controller(from: source)
-            if let vc = vc as? RoutingPresentationSetup {
-                vc.setup(route, parameters: parameters)
-            }
+            (vc as? RoutingPresentationSetup)?.setup(route, parameters: parameters)
             setup?(vc, parameters)
             
             var presenter = root

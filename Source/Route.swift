@@ -93,5 +93,5 @@ internal struct Route {
             .flatMap {
                 $0.matchesInString(route, options: [], range: NSMakeRange(0, route.characters.count))
             }?.first
-    }
+    }    
 }
