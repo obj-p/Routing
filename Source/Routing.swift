@@ -41,7 +41,7 @@ public final class Routing {
      
      - Parameter pattern:  A String pattern
      - Parameter queue:  A dispatch queue for the callback
-     - Parameter tag:
+     - Parameter tag:  A tag to reference when subscripting a Routing object
      - Parameter handler:  A MapHandler
      */
     
@@ -69,7 +69,7 @@ public final class Routing {
      
      - Parameter pattern:  A String pattern
      - Parameter queue:  A dispatch queue for the callback
-     - Parameter tag:
+     - Parameter tag:  A tag to reference when subscripting a Routing object
      - Parameter handler:  A ProxyHandler
      */
     

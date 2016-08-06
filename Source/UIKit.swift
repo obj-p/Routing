@@ -71,6 +71,7 @@ public extension Routing {
      ```
      
      - Parameter pattern:  A String pattern
+     - Parameter tag:  A tag to reference when subscripting a Routing object
      - Parameter source: The source of the view controller instance
      - Parameter style:  The presentation style in presenting the view controller
      - Parameter setup:  A closure provided for additional setup
