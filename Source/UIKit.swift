@@ -15,7 +15,7 @@ public enum ControllerSource {
     case Provided(() -> UIViewController)
 }
 
-public enum PresentationStyle {
+public indirect enum PresentationStyle {
     case Show
     case ShowDetail
     case Present(animated: Bool)
@@ -23,9 +23,10 @@ public enum PresentationStyle {
     case Custom(custom: (presenting: UIViewController,
         presented: UIViewController,
         completed: Completed) -> Void)
+    case InNavigationController(PresentationStyle)
 }
 
-public typealias PresentationSetup = (UIViewController, Parameters) -> UIViewController
+public typealias PresentationSetup = (UIViewController, Parameters) -> Void
 
 internal protocol ViewControllerIterator {
     func nextViewController() -> UIViewController?
@@ -83,11 +84,8 @@ public extension Routing {
             }
             
             let strongSelf = self
-            var vc = strongSelf.controller(from: source)
-            
-            if let setup = setup {
-                vc = setup(vc, parameters)
-            }
+            let vc = strongSelf.controller(from: source)
+            setup?(vc, parameters)
             
             var presenter = root
             while let nextVC = presenter.nextViewController() {
@@ -118,12 +116,12 @@ public extension Routing {
                                           completion: Completed) {
         switch style {
         case .Show:
-            self.commitTransaction(completion) {
+            self.commit(completion) {
                 presenting.showViewController(presented, sender: self)
             }
             break
         case .ShowDetail:
-            self.commitTransaction(completion) {
+            self.commit(completion) {
                 presenting.showDetailViewController(presented, sender: self)
             }
             break
@@ -131,17 +129,19 @@ public extension Routing {
             presenting.presentViewController(presented, animated: animated, completion: completion)
             break
         case let .Push(animated) where presenting.isKindOfClass(UINavigationController):
-            self.commitTransaction(completion) {
+            self.commit(completion) {
                 (presenting as? UINavigationController)?.pushViewController(presented, animated: animated)
             }
         case let .Push(animated) where presenting.navigationController != nil:
-            self.commitTransaction(completion) {
+            self.commit(completion) {
                 presenting.navigationController?.pushViewController(presented, animated: animated)
             }
             break
         case let .Custom(custom):
             custom(presenting: presenting, presented: presented, completed: completion)
             break
+        case let .InNavigationController(style):
+            showController(UINavigationController(rootViewController: presented), from: presenting, with: style, completion: completion)
         default:
             completion()
             break
@@ -149,7 +149,7 @@ public extension Routing {
         
     }
     
-    private func commitTransaction(completed: Completed, transition: () -> Void) {
+    private func commit(completed: Completed, transition: () -> Void) {
         CATransaction.begin()
         CATransaction.setCompletionBlock(completed)
         transition()
