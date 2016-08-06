@@ -1,11 +1,12 @@
 //
-//  RoutingiOS.swift
+//  UIKit.swift
 //  Routing
 //
 //  Created by Jason Prasad on 5/31/16.
 //  Copyright © 2016 Routing. All rights reserved.
 //
 
+#if os(iOS)
 import UIKit
 import QuartzCore
 
@@ -160,3 +161,4 @@ public extension Routing {
         CATransaction.commit()
     }
 }
+#endif
