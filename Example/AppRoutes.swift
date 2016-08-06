@@ -10,6 +10,7 @@ import UIKit
 import Routing
 
 public struct AppRoutes {
+    
     public static var sharedRouter: Routing = { Routing() }()
     
     public static func registerRoutes() {
@@ -26,29 +27,15 @@ public struct AppRoutes {
         
         AppRoutes.sharedRouter.map("routingexample://pushitem3/:presenter",
             source: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
-            style: .Push(animated: true)) { vc, parameters in
-                if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
-                    vc.labelText = "Pushed by: \(presenter)"
-                }
-        }
+            style: .Push(animated: true))
         
         AppRoutes.sharedRouter.map("routingexample://showitem3/:presenter",
             source: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
-            style: .InNavigationController(.ShowDetail)) { vc, parameters in
-                if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
-                    vc.labelText = "Shown by: \(presenter)"
-                }
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: #selector(Item3ViewController.done))
-        }
+            style: .InNavigationController(.ShowDetail))
         
         AppRoutes.sharedRouter.map("routingexample://presentitem4",
             source: .Nib(controller: Item4ViewController.self, name: "Item4ViewController", bundle: nil),
-            style: .InNavigationController(.Present(animated: true))) { vc, parameters in
-                if let callback = parameters["callback"], let vc = vc as? Item4ViewController {
-                    vc.callback = callback
-                }
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: #selector(Item3ViewController.done))
-        }
+            style: .InNavigationController(.Present(animated: true)))
         
         AppRoutes.sharedRouter.map("routingexample://pushparentviewcontroller",
             source: .Storyboard(storyboard: "Main", identifier: "ParentViewController", bundle: nil),
@@ -83,7 +70,6 @@ public struct AppRoutes {
             next("", nil)
         }
 
-        
         AppRoutes.sharedRouter.proxy("/*") { route, parameters, next in
             print("Routing route: \(route) with parameters: \(parameters)")
             next(nil, nil)

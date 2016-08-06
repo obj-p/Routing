@@ -7,13 +7,21 @@
 //
 
 import UIKit
+import Routing
 
-public class Item4ViewController: UIViewController {
+public class Item4ViewController: UIViewController, RoutingPresentationSetup {
 
     public var callback: String?
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    public func setup(route: String, parameters: Parameters) {
+        if let callback = parameters["callback"] {
+            self.callback = callback
+        }
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(self.done))
     }
     
     internal func done() {
