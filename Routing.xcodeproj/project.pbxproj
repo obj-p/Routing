@@ -225,9 +225,9 @@
 			isa = PBXGroup;
 			children = (
 				92FCFA041BB963CD00DF05C3 /* Routing.h */,
+				D273364D1CFE78970004A92A /* iOS.swift */,
 				D24501A11D146B2F006BBDC8 /* Route.swift */,
 				92FCFA1B1BB9658D00DF05C3 /* Routing.swift */,
-				D273364D1CFE78970004A92A /* iOS.swift */,
 				92FCFA061BB963CD00DF05C3 /* Info.plist */,
 			);
 			path = Source;

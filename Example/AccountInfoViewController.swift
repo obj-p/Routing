@@ -7,11 +7,6 @@
 //
 
 import UIKit
+import Routing
 
-class AccountInfoViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-}
+class AccountInfoViewController: UIViewController {}

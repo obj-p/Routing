@@ -8,10 +8,16 @@
 
 import UIKit
 
-class SettingsViewController: UIViewController {
+var shouldPresentViewControllers = false
+
+class SettingsViewController: UITableViewController {
+    @IBOutlet weak var presentViewControllers: UISwitch!
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        self.presentViewControllers.setOn(shouldPresentViewControllers, animated: false)
+    }
+    
+    @IBAction func presentViewControllersChanged(sender: UISwitch) {
+        shouldPresentViewControllers = sender.on
     }
 }

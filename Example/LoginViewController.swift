@@ -7,9 +7,51 @@
 //
 
 import UIKit
+import Routing
 
-class LoginViewController: UIViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
+var authenticated = false
+
+class LoginViewController: UIViewController, RoutingPresentationSetup {
+    @IBOutlet weak var username: UITextField!
+    @IBOutlet weak var password: UITextField!
+    var callback: String?
+    
+    func setup(route: String, parameters: Parameters) {
+        if let callbackURL = parameters["callback"] {
+            self.callback = callbackURL
+        }
+    }
+    
+    @IBAction func login() {
+        guard let username = username.text, let password = password.text where username != "" && password != ""  else {
+            return
+        }
+        
+        // TODO: improve this!
+        let completion = {
+            if let callback = self.callback {
+                router.open(callback)
+            }
+        }
+        
+        authenticated = true
+        if isModal {
+            self.dismissViewControllerAnimated(true, completion: completion)
+        } else {
+            CATransaction.begin()
+            CATransaction.setCompletionBlock(completion)
+            self.navigationController?.popViewControllerAnimated(true)
+            CATransaction.commit()
+        }
+    }
+}
+
+extension LoginViewController {
+    var isModal: Bool {
+        if let presented = self.presentingViewController?.presentedViewController, let navigationController = self.navigationController
+            where presented == navigationController {
+            return true
+        }
+        return false
     }
 }
