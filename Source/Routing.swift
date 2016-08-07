@@ -120,18 +120,18 @@ public final class Routing {
         var searchPath = components.string ?? ""
         
         var currentRoutes: [Route]!
-        var matchedRoute: Route!
+        var route: Route!
         dispatch_sync(accessQueue) {
             currentRoutes = self.routes
             let handlers = currentRoutes.map { $0.handler }
-            for case let (route, .Route(handler)) in zip(currentRoutes, handlers)
-                where route.matches(searchPath, parameters: &parameters) {
-                    matchedRoute = route
+            for case let (matchedRoute, .Route(handler)) in zip(currentRoutes, handlers)
+                where matchedRoute.matches(searchPath, parameters: &parameters) {
+                    route = matchedRoute
                     break
             }
         }
         
-        if matchedRoute == nil {
+        if route == nil {
             return false
         }
         
@@ -139,7 +139,7 @@ public final class Routing {
             dispatch_async(routingQueue) {
                 self.process(searchPath,
                              parameters: parameters,
-                             matching: matchedRoute,
+                             matching: route,
                              within: currentRoutes)
             }
         }

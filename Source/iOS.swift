@@ -147,7 +147,10 @@ public extension Routing {
             custom(presenting: presenting, presented: presented, completed: completion)
             break
         case let .InNavigationController(style):
-            showController(UINavigationController(rootViewController: presented), from: presenting, with: style, completion: completion)
+            showController(UINavigationController(rootViewController: presented),
+                           from: presenting,
+                           with: style,
+                           completion: completion)
             break
         }
     }
