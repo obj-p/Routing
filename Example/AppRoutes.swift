@@ -9,72 +9,35 @@
 import UIKit
 import Routing
 
-public struct AppRoutes {
-    
-    public static var sharedRouter: Routing = { Routing() }()
-    
-    public static func registerRoutes() {
-        
-        // MARK: Navigation Routes
-        AppRoutes.sharedRouter.map("routingexample://presentitem3/:presenter",
-            source: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
-            style: .InNavigationController(.Present(animated: true))) { vc, parameters in
-                if let presenter = parameters["presenter"], let vc = vc as? Item3ViewController {
-                    vc.labelText = "Presented by: \(presenter)"
-                }
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: vc, action: #selector(Item3ViewController.done))
-        }
-        
-        AppRoutes.sharedRouter.map("routingexample://pushitem3/:presenter",
-            source: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
-            style: .Push(animated: true))
-        
-        AppRoutes.sharedRouter.map("routingexample://showitem3/:presenter",
-            source: .Storyboard(storyboard: "Main", identifier: "Item3", bundle: nil),
-            style: .InNavigationController(.ShowDetail))
-        
-        AppRoutes.sharedRouter.map("routingexample://presentitem4",
-            source: .Nib(controller: Item4ViewController.self, name: "Item4ViewController", bundle: nil),
-            style: .InNavigationController(.Present(animated: true)))
-        
-        AppRoutes.sharedRouter.map("routingexample://pushparentviewcontroller",
-            source: .Storyboard(storyboard: "Main", identifier: "ParentViewController", bundle: nil),
-            style: .Push(animated: true))
-        
-        AppRoutes.sharedRouter.map("routingexample://pushlastviewcontroller",
-            source: .Storyboard(storyboard: "Main", identifier: "LastViewController", bundle: nil),
-            style: .Push(animated: true))
-        
-        // MARK: Proxies        
-        AppRoutes.sharedRouter.proxy("routingexample://presentitem3/:presenter", tags: ["Views"]) { (route, parameters, next) in
-            guard let presenter = parameters["presenter"] where presenter == "Item2" else {
-                next(nil, nil)
-                return
-            }
-            var route = route
-            let range = route.rangeOfString("Item2")
-            route.replaceRange(range!, with: "Item4")
-            AppRoutes.sharedRouter.open("routingexample://presentitem4?callback=\(route)")
-            next("", nil)
-        }
-        
-        AppRoutes.sharedRouter.proxy("routingexample://showitem3/:presenter", tags: ["Views"]) { (route, parameters, next) in
-            guard let presenter = parameters["presenter"] where presenter == "Item2" else {
-                next(nil, nil)
-                return
-            }
-            var route = route
-            let range = route.rangeOfString("Item2")
-            route.replaceRange(range!, with: "Item4")
-            AppRoutes.sharedRouter.open("routingexample://presentitem4?callback=\(route)")
-            next("", nil)
-        }
+public let router = Routing()
 
-        AppRoutes.sharedRouter.proxy("/*", tags: ["Logs"]) { route, parameters, next in
-            print("Routing route: \(route) with parameters: \(parameters)")
-            next(nil, nil)
-        }
-        
-    }
+public func registerRoutes() {
+    router.map("routingexample://login",
+               source: .Storyboard(storyboard: "Main", identifier: "LoginViewController", bundle: nil),
+               style: .Push(animated: true))
     
+    router.map("routingexample://present/login",
+               source: .Storyboard(storyboard: "Main", identifier: "LoginViewController", bundle: nil),
+               style: .InNavigationController(.Present(animated: true)))
+    
+    router.map("routingexample://accountinfo",
+               source: .Storyboard(storyboard: "Main", identifier: "AccountInfoViewController", bundle: nil),
+               style: .Push(animated: true))
+    
+    router.map("routingexample://present/login",
+               source: .Storyboard(storyboard: "Main", identifier: "AccountInfoViewController", bundle: nil),
+               style: .InNavigationController(.Present(animated: true)))
+    
+    router.map("routingexample://settings",
+               source: .Storyboard(storyboard: "Main", identifier: "SettingsViewController", bundle: nil),
+               style: .Push(animated: true))
+    
+    router.map("routingexample://present/settings",
+               source: .Storyboard(storyboard: "Main", identifier: "SettingsViewController", bundle: nil),
+               style: .InNavigationController(.Present(animated: true)))
+    
+    router.proxy("/*", tags: ["Logs"]) { route, parameters, next in
+        print("opened: route (\(route)) with parameters (\(parameters))")
+        next(nil, nil)
+    }
 }
