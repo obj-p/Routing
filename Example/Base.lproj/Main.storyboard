@@ -240,20 +240,34 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m4K-fH-W8R">
-                                <rect key="frame" x="15" y="0.0" width="570" height="600"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <mutableString key="text">Super secure account information...Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="iK0-AZ-ch0">
+                                <rect key="frame" x="20" y="30" width="560" height="570"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Secure Account Info" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lI5-hz-wDL">
+                                        <rect key="frame" x="0.0" y="0.0" width="560" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="vEI-7j-P59"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vKx-Dc-QTF">
+                                        <rect key="frame" x="0.0" y="35" width="560" height="535"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="m4K-fH-W8R" firstAttribute="height" secondItem="aOZ-8Q-iEk" secondAttribute="height" id="062-80-UNu"/>
-                            <constraint firstItem="m4K-fH-W8R" firstAttribute="centerX" secondItem="aOZ-8Q-iEk" secondAttribute="centerX" id="4k3-Wf-5cm"/>
-                            <constraint firstItem="m4K-fH-W8R" firstAttribute="centerY" secondItem="aOZ-8Q-iEk" secondAttribute="centerY" id="Wfj-yd-Igh"/>
-                            <constraint firstAttribute="width" secondItem="m4K-fH-W8R" secondAttribute="width" constant="30" id="rc9-Ne-hfk"/>
+                            <constraint firstItem="uqB-jJ-L4E" firstAttribute="top" secondItem="iK0-AZ-ch0" secondAttribute="bottom" id="9to-bg-Isg"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="iK0-AZ-ch0" secondAttribute="trailing" id="VRh-sb-OKL"/>
+                            <constraint firstItem="iK0-AZ-ch0" firstAttribute="leading" secondItem="aOZ-8Q-iEk" secondAttribute="leadingMargin" id="aYm-Xo-gFO"/>
+                            <constraint firstItem="iK0-AZ-ch0" firstAttribute="top" secondItem="XDl-P1-T5t" secondAttribute="bottom" constant="10" id="qcb-Dn-3fx"/>
                         </constraints>
                     </view>
                 </viewController>

@@ -27,7 +27,6 @@ class LoginViewController: UIViewController, RoutingPresentationSetup {
             return
         }
         
-        // TODO: improve this!
         let completion = {
             if let callback = self.callback {
                 router.open(callback)
@@ -38,10 +37,7 @@ class LoginViewController: UIViewController, RoutingPresentationSetup {
         if isModal {
             self.dismissViewControllerAnimated(true, completion: completion)
         } else {
-            CATransaction.begin()
-            CATransaction.setCompletionBlock(completion)
-            self.navigationController?.popViewControllerAnimated(true)
-            CATransaction.commit()
+            self.navigationController?.popViewControllerAnimated(true, completion: completion)
         }
     }
 }
