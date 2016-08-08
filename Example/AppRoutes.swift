@@ -45,7 +45,8 @@ public func registerRoutes() {
     
     router.proxy("routingexample://*", tags: ["Views"]) { route, _, next in
         if shouldPresentViewControllers {
-            next(route.stringByReplacingOccurrencesOfString("push", withString: "present"), nil)
+            let route = route.stringByReplacingOccurrencesOfString("push", withString: "present")
+            next(route, nil)
         } else {
             next(nil, nil)
         }
@@ -55,9 +56,7 @@ public func registerRoutes() {
         if authenticated {
             next(nil, nil)
         } else {
-            // TODO: improve this!
-            router.open("routingexample://present/login?callback=\(route)")
-            next("", nil)
+            next("routingexample://present/login?callback=\(route)", parameters)
         }
     }
     
