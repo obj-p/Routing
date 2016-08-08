@@ -124,3 +124,22 @@ router.proxy("routingexample://route/one") { (route, parameters, next) -> Void i
 ### Order of Map or Proxy
 
 In general, the last call to register a map or proxy to the router will be first called in the event of a matched URL respectively. Proxies will be serviced first and then a map.
+
+### Tags
+
+A tag may be passed to maps or proxies. The default tag for maps to view controller navigation is "Views". Tags allow for the router to be subscripted to a specific context. If a router is subscripted with "Views", then it will only attempt to find routes that are tagged as such.
+
+```swift
+router["Views", "Logs", "Actions"].open(url)
+```
+
+### Callback Queues
+
+A queue may be passed to maps or proxies. This queue will be the queue that a RouteHandler or ProxyHandler closure is called back on. By default, maps that are used for view controller navigation are called back on the main queue.
+
+```swift
+let callbackQueue = dispatch_queue_create("Testing Call Back Queue", DISPATCH_QUEUE_SERIAL) 
+router.map("routingexample://route", queue: callbackQueue) { (_, _, completed) in
+    completed()
+}
+```
