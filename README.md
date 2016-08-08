@@ -34,7 +34,7 @@ router.proxy("/*/accountinfo", tags: ["Views"]) { route, parameters, next in
 }
 ```
 
-![Account Information](http://i.giphy.com/l2Sq4jCHxNbnfKWC4.gif)
+![Account Information](http://i.giphy.com/l0HlDRBupwd9z4wq4.gif)
 
 Eventually we may need to support a user editting their account information on a website. After completing the process from a web browser, the site may deep link into the relevant screen within the mobile app. This can be handled in the AppDelegate simply as follows.
 
@@ -88,7 +88,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'Routing', '~> 0.4.2'
+pod 'Routing', '~> 1.0.0'
 ```
 
 ### Carthage
