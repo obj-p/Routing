@@ -175,3 +175,32 @@ indirect public enum PresentationStyle {
 
 The above presentation styles are made available. The recursive **.InNavigationController(PresentationStyle)** enumeration will result in the view controller being wrapped in a navigation controller before being presented in whatever fashion. There is also the ability to provide custom presentation styles.
 
+### View Controller Sources
+
+The following view controller sources are utilized.
+
+```swift
+public enum ControllerSource {
+    case Storyboard(storyboard: String, identifier: String, bundle: NSBundle?)
+    case Nib(controller: UIViewController.Type, name: String?, bundle: NSBundle?)
+    case Provided(() -> UIViewController)
+}
+```
+
+### Presentation Extensions
+
+The following has been extended to allow for a completion closure to be passed in.
+
+```swift
+extension UIViewController {
+    public func showViewController(vc: UIViewController, sender: AnyObject?, completion: Routing.Completed)
+    public func showDetailViewController(vc: UIViewController, sender: AnyObject?, completion: Routing.Completed)
+}
+
+extension UINavigationController {
+    public func pushViewController(vc: UIViewController, animated: Bool, completion: Routing.Completed)
+    public func popViewControllerAnimated(animated: Bool, completion: Routing.Completed) -> UIViewController?
+    public func popToViewControllerAnimated(viewController: UIViewController, animated: Bool, completion: Routing.Completed) -> [UIViewController]?
+    public func popToRootViewControllerAnimated(animated: Bool, completion: Routing.Completed) -> [UIViewController]?
+}
+```
