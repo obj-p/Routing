@@ -11,17 +11,15 @@ import Routing
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        AppRoutes.registerRoutes()
+        registerRoutes()
         return true
     }
 
     func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
-        return AppRoutes.sharedRouter["Views", "Logs"].open(url)
+        return router["Views"].open(url)
     }
-
 }
 

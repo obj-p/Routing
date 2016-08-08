@@ -108,30 +108,24 @@ public final class Routing {
      */
     
     public func open(URL: NSURL) -> Bool {
-        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) else {
+        var parameters = Parameters()
+        guard let searchPath = searchPath(URL, with: &parameters) else {
             return false
         }
         
-        var parameters = Parameters()
-        components.queryItems?.forEach {
-            parameters[$0.name] = ($0.value ?? "")
-        }
-        components.query = nil
-        var searchPath = components.string ?? ""
-        
         var currentRoutes: [Route]!
-        var matchedRoute: Route!
+        var route: Route!
         dispatch_sync(accessQueue) {
             currentRoutes = self.routes
             let handlers = currentRoutes.map { $0.handler }
-            for case let (route, .Route(handler)) in zip(currentRoutes, handlers)
-                where route.matches(searchPath, parameters: &parameters) {
-                    matchedRoute = route
+            for case let (matchedRoute, .Route(handler)) in zip(currentRoutes, handlers)
+                where matchedRoute.matches(searchPath, parameters: &parameters) {
+                    route = matchedRoute
                     break
             }
         }
         
-        if matchedRoute == nil {
+        if route == nil {
             return false
         }
         
@@ -139,7 +133,7 @@ public final class Routing {
             dispatch_async(routingQueue) {
                 self.process(searchPath,
                              parameters: parameters,
-                             matching: matchedRoute,
+                             matching: route,
                              within: currentRoutes)
             }
         }
@@ -152,53 +146,70 @@ public final class Routing {
                          matching route: Route,
                                   within routes: [Route]) {
         let semaphore = dispatch_semaphore_create(0)
-        var modifiedSearchPath: String?, modifiedParameters: Parameters?
+        var newSearchPath: String?, newParameters: Parameters?
         let zipped = zip(routes, routes.map { $0.handler })
         for case let (proxy, .Proxy(handler)) in zipped
             where proxy.matches(searchPath) {
                 dispatch_async(proxy.queue) {
                     handler(searchPath, parameters) { (proxiedPath, proxiedParameters) in
-                        modifiedSearchPath = proxiedPath
-                        modifiedParameters = proxiedParameters
+                        newSearchPath = proxiedPath
+                        newParameters = proxiedParameters
                         dispatch_semaphore_signal(semaphore)
                     }
                 }
                 dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-                if (modifiedSearchPath != nil || modifiedParameters != nil) {
+                if (newSearchPath != nil || newParameters != nil) {
                     break
                 }
         }
         
         var parameters = parameters
-        if let modifiedParameters = modifiedParameters {
-            modifiedParameters.forEach {
+        if let newParameters = newParameters {
+            newParameters.forEach {
                 parameters[$0.0] = $0.1
             }
         }
         
         var searchPath = searchPath
-        var modifiedRoute: Route? = route
-        if let modifiedSearchPath = modifiedSearchPath {
-            searchPath = modifiedSearchPath
-            modifiedRoute = nil
+        var newRoute: Route? = route
+        if let newSearchPath = newSearchPath {
+            searchPath = self.searchPath(newSearchPath, with: &parameters) ?? ""
+            newRoute = nil
             for case let (proxiedRoute, .Route(_)) in zipped
                 where proxiedRoute.matches(searchPath) {
-                    modifiedRoute = proxiedRoute
+                    newRoute = proxiedRoute
                     break
             }
         }
         
-        guard let route = modifiedRoute else {
+        guard let route = newRoute else {
             return
         }
         
-        dispatch_async(route.queue) {
-            if case let .Route(handler) = route.handler {
+        if case let .Route(handler) = route.handler {
+            dispatch_async(route.queue) {
                 handler(searchPath, parameters) {
                     dispatch_semaphore_signal(semaphore)
                 }
             }
         }
         dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+    }
+    
+    private func searchPath(URL: NSURL, inout with parameters: Parameters) -> String? {
+        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) else {
+            return nil
+        }
+        
+        components.queryItems?.forEach {
+            parameters[$0.name] = ($0.value ?? "")
+        }
+        components.query = nil
+        
+        return components.string
+    }
+    
+    private func searchPath(URL: String, inout with parameters: Parameters) -> String? {
+        return NSURL(string: URL).flatMap { return searchPath($0, with: &parameters) }
     }
 }
