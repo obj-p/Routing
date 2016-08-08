@@ -102,7 +102,7 @@ github "jwalapr/Routing"
 
 ### Map
 
-A router instance may map a string pattern to view controller navigation as covered above or just a closure as presented below. The closure will have three parameters. The route it matched, the parameters (both query and segments in the URL), and a completion closure that must be called or the router will halt all subsequent calls to #open.
+A router instance may map a string pattern to view controller navigation, as covered in the [Usage](#Usage) section above, or just a closure as presented below. The closure will have three parameters. The route it matched, the parameters (both query and segments in the URL), and a completion closure that must be called or the router will halt all subsequent calls to #open.
 
 ```swift
 router.map("routingexample://route/:argument") { route, parameters, completed in
@@ -143,3 +143,35 @@ router.map("routingexample://route", queue: callbackQueue) { (_, _, completed) i
     completed()
 }
 ```
+
+### Presentation Setup
+
+View controllers mapped to the router will have the opportunity to be informed of a opened route through either a closure or the RoutingPresentationSetup protocol. In either implementation, the view controller will have access to the parameters passed through the URL. An example of the closure approach is in the [Usage](#Usage) section above. The protocol looks as follows.
+
+```swift
+class LoginViewController: UIViewController, RoutingPresentationSetup {
+    var callback: String?
+    
+    func setup(route: String, parameters: Parameters) {
+        if let callbackURL = parameters["callback"] {
+            self.callback = callbackURL
+        }
+    }
+}
+```
+
+### Presentation Styles
+
+```swift
+indirect public enum PresentationStyle {
+    case Show
+    case ShowDetail
+    case Present(animated: Bool)
+    case Push(animated: Bool)
+    case Custom(custom: (presenting: UIViewController, presented: UIViewController, completed: Routing.Completed) -> Void)
+    case InNavigationController(Routing.PresentationStyle)
+}
+```
+
+The above presentation styles are made available. The recursive **.InNavigationController(PresentationStyle)** enumeration will result in the view controller being wrapped in a navigation controller before being presented in whatever fashion. There is also the ability to provide custom presentation styles.
+
