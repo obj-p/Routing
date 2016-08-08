@@ -34,7 +34,7 @@ router.proxy("/*/accountinfo", tags: ["Views"]) { route, parameters, next in
 }
 ```
 
-![Account Information](http://i.giphy.com/l46CadVdLgotxmqIM.gif)
+![Account Information](http://i.giphy.com/l46CadVdLgotxmqIM.gif | height = 100px)
 
 Eventually we may need to support a user editting their account information on a website. After completing the process from a web browser, the site may deep link into the relevant screen within the mobile app. This can be handled in the AppDelegate simply as follows.
 
@@ -44,7 +44,7 @@ func application(app: UIApplication, openURL url: NSURL, options: [String : AnyO
 }
 ```
 
-![Deep Link](http://i.giphy.com/3o6ZsW8YIdRnCK3172.gif)
+![Deep Link](http://i.giphy.com/3o6ZsW8YIdRnCK3172.gif | height = 100px)
 
 An example of other routes in an application may look like this.
 
