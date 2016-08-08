@@ -98,3 +98,30 @@ Via [Carthage](https://github.com/Carthage/Carthage):
 ```ogdl
 github "jwalapr/Routing"
 ```
+## Further Detail
+
+### Map
+
+A router instance may map a string pattern to view controller navigation as covered above or just a closure as presented below. The closure will have three parameters. The route it matched, the parameters (both query and segments in the URL), and a completion closure that must be called or the router will halt all subsequent calls to #open.
+
+```swift
+router.map("routingexample://route/:argument") { route, parameters, completed in
+    argument = parameters["argument"]
+    completed()
+}
+```
+
+### Proxy
+
+A router instance may proxy any string pattern. The closure will also have three parameters. The route it matched, the parameters, and a next closure. The next closure accepts two optional arguments for the route and parameters. If nil is passed to both arguments then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a route or parameters to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to #open. 
+
+```swift
+router.map("routingexample://route/:argument") { route, parameters, completed in
+    argument = parameters["argument"]
+    completed()
+}
+```
+
+### Order of Map or Proxy
+
+In general, the last call to register a map or proxy to the router will be first called in the event of a matched URL respectively. Proxies will be serviced first and then a map.
