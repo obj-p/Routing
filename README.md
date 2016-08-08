@@ -7,51 +7,71 @@
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Routing.svg)](https://cocoapods.org/pods/Routing)
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/Routing/Routing/blob/master/LICENSE)
 
-## Table of Contents
-
-- [Usage](#usage)
-- [Installation](#installation)
-- [Further Detail](#further-detail)
-- [Example](#example)
-
 ## Usage
 
-Routing may be used to deep link and proxy view controller navigation or other actions.
-
-To map a view controller transition is as simple as...
+Let's say you have a table view controller that will display account information once a user selects a cell. An implementation of tableView:didSelectRowAtIndexPath: may look as such.
 
 ```swift
-router.map("routingexample://route",
-    instance: .Storyboard(storyboard: "Main", identifier: "ViewController", bundle: nil),
-    style: .Push(animated: true))
-```
-
-To map a closure to be called...
-
-```swift
-router.map("routing://route") { route, parameters, completed in
-	...
-	completed() // Must call completed or the router will halt!
+override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    switch Row(rawValue: indexPath.row)! {
+    // ...
+    case .AccountInfo:
+        router["Views"].open("routingexample://push/accountinfo")
+    }
+    // ...
 }
 ```
 
-To proxy with a closure...
+Perhaps the account information is only available after a user authenticates with the service. After logging in we want the account information presented to the user right away. Without changing the above implementation we may proxy the intent and display a log in view, after which, a call back may present the original account information screen.
 
 ```swift
-router.proxy("routing://route") { route, parameters, next in
-	...
-	next(route, parameters) // Must call next or the router will halt!
-	/* alternatively, next(nil, nil) allowing additional proxies to execute */
+router.proxy("/*/accountinfo", tags: ["Views"]) { route, parameters, next in
+    if authenticated {
+        next(nil, nil)
+    } else {
+        next("routingexample://present/login?callback=\(route)", parameters)
+    }
 }
 ```
 
-And to open any string or URL...
+Eventually we may need to support a user editting their account information on a website. After completing the process from a web browser, the site may deep link into the relevant screen within the mobile app. This can be handled in the AppDelegate simply as follows.
 
 ```swift
-// Each router.open(...) will return true / false
-router.open("routing://route/") 
-router.open(NSURL(string: "routing://route/")!) 
+func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
+    return router["Views"].open(url)
+}
 ```
+
+An example of other routes in an application may look like this.
+
+```swift
+let presentationSetup: PresentationSetup = { vc, _ in
+    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, 
+                                                          target: vc, 
+                                                          action: #selector(vc.cancel))
+}
+
+router.map("routingexample://present/login",
+           source: .Storyboard(storyboard: "Main", identifier: "LoginViewController", bundle: nil),
+           style: .InNavigationController(.Present(animated: true)),
+           setup: presentationSetup)
+    
+router.map("routingexample://push/accountinfo",
+           source: .Storyboard(storyboard: "Main", identifier: "AccountInfoViewController", bundle: nil),
+           style: .Push(animated: true))
+    
+router.map("routingexample://present/settings",
+           source: .Storyboard(storyboard: "Main", identifier: "SettingsViewController", bundle: nil),
+           style: .InNavigationController(.Present(animated: true)),
+           setup: presentationSetup)
+    
+router.proxy("/*", tags: ["Views"]) { route, parameters, next in
+    print("opened: route (\(route)) with parameters (\(parameters))")
+    next(nil, nil)
+}
+```
+
+At its simplest, Routing allows the association of string patterns to closures. This allows for the expression of intent in certain areas of code and the implementation of it in another. UI may only be concerned with expressing the intent of transitioning to another view and the business logic may be handled elsewhere. Routing allows for the explicit documentation of an application's behavior and views through mappings and proxies.
 
 ## Installation
 
@@ -74,79 +94,3 @@ Via [Carthage](https://github.com/Carthage/Carthage):
 ```ogdl
 github "jwalapr/Routing"
 ```
-
-## Further Detail
-
-### Map (For View Controllers)
-
-```swift
-// Supports creation of view controller the following ways
-public enum PresentedInstance {
-    case Storyboard(storyboard: String, identifier: String, bundle: NSBundle?)
-    case Nib(controller: UIViewController.Type, name: String?, bundle: NSBundle?)
-    case Provided(() -> UIViewController)
-}
-
-// Supports the following view controller transitions
-public enum PresentationStyle {   
-    case Show
-    case ShowDetail
-    case Present(animated: Bool)
-    case Push(animated: Bool)
-    case Custom(custom: (presenting: UIViewController,
-        presented: UIViewController,
-        completed: Completed) -> Void)
-}
-
-router.map("routingexample://route",
-    instance: .Storyboard(storyboard: "Main", identifier: "ViewController", bundle: nil),
-    style: .Present(animated: true)) { vc, parameters in
-        ... // Useful callback for setup such as embedding in navigation controller
-        return vc
-}
-```
-
-### Map
-
-```swift
-router.map("routing://route") { route, parameters, completed in
-	...
-	completed() // Must call completed or the router will halt!
-}
-
-router.map("routing://*") { ... } // Regex, wildcards are supported
-router.map("routing://route/:id") { ... } // Dynamic segments are supported
-
-let queue = dispatch_queue_create("Callback Queue", DISPATCH_QUEUE_SERIAL)
-router.map("routing://route/", queue: queue) { ... } // Can specify callback queue
-```
-
-### Proxy
-
-```swift
-router.proxy("routing://route") { route, parameters, next in
-	...
-	next(route, parameters) // Must call next or the router will halt!
-	/* alternatively, next(nil, nil) allowing additional proxies to execute */
-}
-
-router.proxy("routing://*") { ... } // Regex, wildcards are supported
-router.proxy("routing://route/:id") { ... } // Dynamic segments are supported
-
-let queue = dispatch_queue_create("Callback Queue", DISPATCH_QUEUE_SERIAL)
-router.proxy("routing://route/", queue: queue) { ... } // Can specify callback queue
-```
-
-### Open
-
-```swift
-// Each router.open(...) will return true / false
-router.open("routing://route/") 
-router.open(NSURL(string: "routing://route/")!) 
-router.open(NSURL(string: "routing://route/0123456789")!) // ex. route/:id
-router.open(NSURL(string: "routing://route?foo=bar")!) // query paremeters will be passed to mapped closure.
-```
-
-## Example
-
-An Example iOS app is provided to show how to use #map, #proxy, and #open in greater detail.

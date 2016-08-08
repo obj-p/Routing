@@ -42,11 +42,12 @@ extension HomeViewController {
 // MARK: Table View Datasource
 extension HomeViewController {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if case .Login = Row(rawValue: indexPath.row)! where authenticated == true {
+        switch Row(rawValue: indexPath.row)! {
+        case .Login where authenticated == true: fallthrough
+        case .Logout where authenticated == false:
             return 0.0
-        } else if case .Logout = Row(rawValue: indexPath.row)! where authenticated == false {
-            return 0.0
+        default:
+            return 44.0
         }
-        return 44.0
     }
 }
