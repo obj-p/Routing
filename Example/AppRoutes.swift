@@ -13,7 +13,9 @@ public let router = Routing()
 
 public func registerRoutes() {
     let presentationSetup: PresentationSetup = { vc, _ in
-        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: vc, action: #selector(vc.cancel))
+        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel,
+                                                              target: vc,
+                                                              action: #selector(vc.cancel))
     }
     
     router.map("routingexample://push/login",

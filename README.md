@@ -9,7 +9,7 @@
 
 ## Usage
 
-Let's say you have a table view controller that will display account information once a user selects a cell. An implementation of tableView:didSelectRowAtIndexPath: may look as such.
+Let's say you have a table view controller that displays account information once a user selects a cell. An implementation of tableView:didSelectRowAtIndexPath: may look as such.
 
 ```swift
 override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -34,6 +34,8 @@ router.proxy("/*/accountinfo", tags: ["Views"]) { route, parameters, next in
 }
 ```
 
+![Account Information](http://gph.is/2aTnodc)
+
 Eventually we may need to support a user editting their account information on a website. After completing the process from a web browser, the site may deep link into the relevant screen within the mobile app. This can be handled in the AppDelegate simply as follows.
 
 ```swift
@@ -41,6 +43,8 @@ func application(app: UIApplication, openURL url: NSURL, options: [String : AnyO
     return router["Views"].open(url)
 }
 ```
+
+![Deep Link](http://gph.is/2aToszx)
 
 An example of other routes in an application may look like this.
 
