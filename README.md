@@ -102,7 +102,7 @@ github "jwalapr/Routing"
 
 ### Map
 
-A router instance may map a string pattern to view controller navigation, as covered in the [Usage](#Usage) section above, or just a closure as presented below. The closure will have three parameters. The route it matched, the parameters (both query and segments in the URL), and a completion closure that must be called or the router will halt all subsequent calls to #open.
+A router instance may map a string pattern to view controller navigation, as covered in the [Usage](#usage) section above, or just a closure as presented below. The closure will have three parameters. The route it matched, the parameters (both query and segments in the URL), and a completion closure that must be called or the router will halt all subsequent calls to #open.
 
 ```swift
 router.map("routingexample://route/:argument") { route, parameters, completed in
@@ -130,7 +130,14 @@ In general, the last call to register a map or proxy to the router will be first
 A tag may be passed to maps or proxies. The default tag for maps to view controller navigation is "Views". Tags allow for the router to be subscripted to a specific context. If a router is subscripted with "Views", then it will only attempt to find routes that are tagged as such.
 
 ```swift
+router.proxy("/*", tags: ["Views, Logs"]) { route, parameters, next in
+    print("opened: route (\(route)) with parameters (\(parameters))")
+    next(nil, nil)
+}
+
 router["Views", "Logs", "Actions"].open(url)
+
+router.open(url) // - or - to search all routes...
 ```
 
 ### Callback Queues
@@ -146,7 +153,7 @@ router.map("routingexample://route", queue: callbackQueue) { (_, _, completed) i
 
 ### Presentation Setup
 
-View controllers mapped to the router will have the opportunity to be informed of a opened route through either a closure or the RoutingPresentationSetup protocol. In either implementation, the view controller will have access to the parameters passed through the URL. An example of the closure approach is in the [Usage](#Usage) section above. The protocol looks as follows.
+View controllers mapped to the router will have the opportunity to be informed of a opened route through either a closure or the RoutingPresentationSetup protocol. In either implementation, the view controller will have access to the parameters passed through the URL. An example of the closure approach is in the [Usage](#usage) section above. The protocol looks as follows.
 
 ```swift
 class LoginViewController: UIViewController, RoutingPresentationSetup {
