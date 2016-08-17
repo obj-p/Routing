@@ -15,5 +15,6 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = '2.1'
   s.frameworks = 'Foundation'
   s.ios.framework = 'UIKit', 'QuartzCore'
-  s.source_files = 'Source/*.swift'
+  s.source_files = 'Source/Ro*.swift'
+  s.ios.source_files = 'Source/iOS.swift'
 end
