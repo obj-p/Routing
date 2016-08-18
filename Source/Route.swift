@@ -10,6 +10,8 @@ import Foundation
 
 public protocol RouteOwner: class {}
 
+public typealias RouteUUID = String
+
 public typealias Parameters = [String: String]
 
 /**
@@ -41,6 +43,7 @@ internal struct Route {
         case Proxy(ProxyHandler)
     }
     
+    internal let uuid = { NSUUID().UUIDString }()
     internal let pattern: String
     internal let tags: [String]
     internal weak var owner: RouteOwner?

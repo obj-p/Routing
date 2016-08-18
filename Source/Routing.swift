@@ -45,16 +45,19 @@ public final class Routing: RouteOwner {
      - Parameter owner: The routes owner. If deallocated the route will be removed.
      - Parameter queue:  A dispatch queue for the callback
      - Parameter handler:  A MapHandler
+     - Returns:  The RouteUUID
      */
     
     public func map(pattern: String,
                     tags: [String] = [],
                     queue: dispatch_queue_t = dispatch_get_main_queue(),
                     owner: RouteOwner? = nil,
-                    handler: RouteHandler) -> Void {
+                    handler: RouteHandler) -> RouteUUID {
+        let route = Route(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler)
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler), atIndex: 0)
+            self.routes.insert(route, atIndex: 0)
         }
+        return route.uuid
     }
     
     /**
@@ -75,16 +78,19 @@ public final class Routing: RouteOwner {
      - Parameter owner: The routes owner. If deallocated the route will be removed.
      - Parameter queue:  A dispatch queue for the callback
      - Parameter handler:  A ProxyHandler
+     - Returns:  The RouteUUID
      */
     
     public func proxy(pattern: String,
                       tags: [String] = [],
                       owner: RouteOwner? = nil,
                       queue: dispatch_queue_t = dispatch_get_main_queue(),
-                      handler: ProxyHandler) -> Void {
+                      handler: ProxyHandler) -> RouteUUID {
+        let route = Route(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler)
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler), atIndex: 0)
+            self.routes.insert(route, atIndex: 0)
         }
+        return route.uuid
     }
     
     /**
@@ -144,6 +150,18 @@ public final class Routing: RouteOwner {
         }
         
         return true
+    }
+    
+    /**
+     Removes the route with the given RouteUUID.
+     
+     - Parameter route:  A RouteUUID
+     */
+    
+    public func disposeOf(route: RouteUUID) {
+        dispatch_async(accessQueue) {
+            self.routes = self.routes.filter { $0.uuid != route }
+        }
     }
     
     private func process(searchPath: String,

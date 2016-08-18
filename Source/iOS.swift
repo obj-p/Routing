@@ -129,6 +129,7 @@ public extension Routing {
      - Parameter source: The source of the view controller instance
      - Parameter style:  The presentation style in presenting the view controller
      - Parameter setup:  A closure provided for additional setup
+     - Returns:  The RouteUUID
      */
     
     public func map(pattern: String,
@@ -136,7 +137,7 @@ public extension Routing {
                     owner: RouteOwner? = nil,
                     source: ControllerSource,
                     style: PresentationStyle = .Show,
-                    setup: PresentationSetup? = nil) {
+                    setup: PresentationSetup? = nil) -> RouteUUID {
         let routeHandler: RouteHandler = { [unowned self] (route, parameters, completed) in
             guard let root = UIApplication.sharedApplication().keyWindow?.rootViewController else {
                 completed()
@@ -156,7 +157,7 @@ public extension Routing {
             strongSelf.showController(vc, from: presenter, with: style, completion: completed)
         }
         
-        self.map(pattern, tags: tags, owner: owner, queue: dispatch_get_main_queue(), handler: routeHandler)
+        return self.map(pattern, tags: tags, owner: owner, queue: dispatch_get_main_queue(), handler: routeHandler)
     }
     
     private func controller(from source: ControllerSource) -> UIViewController {
