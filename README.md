@@ -9,23 +9,23 @@
 
 ## Usage
 
-Let's say you have a table view controller that displays account information once a user selects a cell. An implementation of tableView:didSelectRowAtIndexPath: may look as such.
+Let's say you have a table view controller that displays privileged information once a user selects a cell. An implementation of tableView:didSelectRowAtIndexPath: may look as such.
 
 ```swift
 override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
     switch Row(rawValue: indexPath.row)! {
     // ...
-    case .AccountInfo:
-        router["Views"].open("routingexample://push/accountinfo")
+    case .PrivilegedInfo:
+        router["Views"].open("routingexample://push/privilegedinfo")
     }
     // ...
 }
 ```
 
-Perhaps the account information is only available after a user authenticates with the service. After logging in we want the account information presented to the user right away. Without changing the above implementation we may proxy the intent and display a log in view, after which, a call back may present the original account information screen.
+Perhaps the privileged information is only available after a user authenticates with the service. After logging in we want the privileged information presented to the user right away. Without changing the above implementation we may proxy the intent and display a log in view, after which, a call back may present the privileged information screen.
 
 ```swift
-router.proxy("/*/accountinfo", tags: ["Views"]) { route, parameters, next in
+router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, next in
     if authenticated {
         next(nil, nil)
     } else {
@@ -34,9 +34,9 @@ router.proxy("/*/accountinfo", tags: ["Views"]) { route, parameters, next in
 }
 ```
 
-![Account Information](http://i.giphy.com/l0HlDRBupwd9z4wq4.gif)
+![Routing Proxy](http://i.giphy.com/26hiu41Rz4cQvLhfy.gif)
 
-Eventually we may need to support a user editting their account information on a website. After completing the process from a web browser, the site may deep link into the relevant screen within the mobile app. This can be handled in the AppDelegate simply as follows.
+Eventually we may need to support a deep link to the privileged information from outside of the application. This can be handled in the AppDelegate simply as follows.
 
 ```swift
 func application(app: UIApplication, openURL url: NSURL, options: [String : AnyObject]) -> Bool {
@@ -44,7 +44,7 @@ func application(app: UIApplication, openURL url: NSURL, options: [String : AnyO
 }
 ```
 
-![Deep Link](http://i.giphy.com/3o7TKIGLGQYT6aHp5u.gif)
+![Routing Deep Link](http://i.giphy.com/1iTWYM8tm1eTVIWs.gif)
 
 An example of other routes in an application may look like this.
 
@@ -60,7 +60,7 @@ router.map("routingexample://present/login",
            style: .InNavigationController(.Present(animated: true)),
            setup: presentationSetup)
     
-router.map("routingexample://push/accountinfo",
+router.map("routingexample://push/privilegeinfo",
            source: .Storyboard(storyboard: "Main", identifier: "AccountInfoViewController", bundle: nil),
            style: .Push(animated: true))
     
@@ -139,6 +139,8 @@ router["Views", "Logs", "Actions"].open(url)
 
 router.open(url) // - or - to search all routes...
 ```
+
+### Route Owner
 
 ### Callback Queues
 
