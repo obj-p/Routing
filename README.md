@@ -157,6 +157,18 @@ class PrivilegedInfoViewController: UIViewController, RouteOwner {
 }
 ```
 
+### RouteUUID and Disposing of a Route
+
+When a route is added via #map or #proxy, a RouteUUID is returned. This RouteUUID can be used to dispose of the route.
+
+```swift
+routeUUID = router.map("routingexample://present/secret",
+                               source: .Storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
+                               style: .InNavigationController(.Present(animated: true))) 
+                               
+router.disposeOf(routeUUID)
+```
+
 ### Callback Queues
 
 A queue may be passed to maps or proxies. This queue will be the queue that a RouteHandler or ProxyHandler closure is called back on. By default, maps that are used for view controller navigation are called back on the main queue.
