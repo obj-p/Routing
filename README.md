@@ -60,8 +60,8 @@ router.map("routingexample://present/login",
            style: .InNavigationController(.Present(animated: true)),
            setup: presentationSetup)
     
-router.map("routingexample://push/privilegeinfo",
-           source: .Storyboard(storyboard: "Main", identifier: "AccountInfoViewController", bundle: nil),
+router.map("routingexample://push/privilegedinfo",
+           source: .Storyboard(storyboard: "Main", identifier: "PrivilegedInfoViewController", bundle: nil),
            style: .Push(animated: true))
     
 router.map("routingexample://present/settings",
