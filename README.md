@@ -34,7 +34,7 @@ router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, next in
 }
 ```
 
-![Routing Proxy](http://i.giphy.com/26hiu41Rz4cQvLhfy.gif)
+![Routing Proxy](http://i.giphy.com/l0MYulEzZgjlDkI1y.gif)
 
 Eventually we may need to support a deep link to the privileged information from outside of the application. This can be handled in the AppDelegate simply as follows.
 
@@ -44,7 +44,7 @@ func application(app: UIApplication, openURL url: NSURL, options: [String : AnyO
 }
 ```
 
-![Routing Deep Link](http://i.giphy.com/1iTWYM8tm1eTVIWs.gif)
+![Routing Deep Link](http://i.giphy.com/3o6ZtoFBVCKafruVMs.gif)
 
 An example of other routes in an application may look like this.
 
@@ -88,7 +88,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'Routing', '~> 1.0.0'
+pod 'Routing', '~> 1.0.1'
 ```
 
 ### Carthage
@@ -142,6 +142,21 @@ router.open(url) // - or - to search all routes...
 
 ### Route Owner
 
+Routes may have a RouteOwner specified when using #map or #proxy. When the RouteOwner is deallocated, the route is removed from the Routing instance.
+
+```swift
+public protocol RouteOwner: class {}
+
+class PrivilegedInfoViewController: UIViewController, RouteOwner {
+    override func viewDidLoad() {
+        router.map("routingexample://secret",
+                   owner: self,
+                   source: .Storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
+                   style: .Push(animated: true))
+    }
+}
+```
+
 ### Callback Queues
 
 A queue may be passed to maps or proxies. This queue will be the queue that a RouteHandler or ProxyHandler closure is called back on. By default, maps that are used for view controller navigation are called back on the main queue.
@@ -182,7 +197,7 @@ indirect public enum PresentationStyle {
 }
 ```
 
-The above presentation styles are made available. The recursive **.InNavigationController(PresentationStyle)** enumeration will result in the view controller being wrapped in a navigation controller before being presented in whatever fashion. There is also the ability to provide custom presentation styles.
+The above presentation styles are made available. The recursive .InNavigationController(PresentationStyle) enumeration will result in the view controller being wrapped in a navigation controller before being presented in whatever fashion. There is also the ability to provide custom presentation styles.
 
 ### View Controller Sources
 

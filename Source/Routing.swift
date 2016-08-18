@@ -41,8 +41,9 @@ public final class Routing: RouteOwner {
      ```
      
      - Parameter pattern:  A String pattern
-     - Parameter queue:  A dispatch queue for the callback
      - Parameter tag:  A tag to reference when subscripting a Routing object
+     - Parameter owner: The routes owner. If deallocated the route will be removed.
+     - Parameter queue:  A dispatch queue for the callback
      - Parameter handler:  A MapHandler
      */
     
@@ -70,8 +71,9 @@ public final class Routing: RouteOwner {
      ```
      
      - Parameter pattern:  A String pattern
-     - Parameter queue:  A dispatch queue for the callback
      - Parameter tag:  A tag to reference when subscripting a Routing object
+     - Parameter owner: The routes owner. If deallocated the route will be removed.
+     - Parameter queue:  A dispatch queue for the callback
      - Parameter handler:  A ProxyHandler
      */
     
