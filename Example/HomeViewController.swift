@@ -32,7 +32,7 @@ extension HomeViewController {
             authenticated = false
             self.tableView.reloadData()
         case .AccountInfo:
-            router["Views"].open("routingexample://push/accountinfo")
+            router["Views"].open("routingexample://push/privilegedinfo")
         case .Settings:
             router["Views"].open("routingexample://push/settings")
         }

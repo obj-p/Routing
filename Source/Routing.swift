@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class Routing {
+public final class Routing: RouteOwner {
     private var routes: [Route] = [Route]()
     private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_SERIAL)
     private var routingQueue = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
@@ -49,9 +49,10 @@ public final class Routing {
     public func map(pattern: String,
                     tags: [String] = [],
                     queue: dispatch_queue_t = dispatch_get_main_queue(),
+                    owner: RouteOwner? = nil,
                     handler: RouteHandler) -> Void {
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: handler), atIndex: 0)
+            self.routes.insert(Route(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler), atIndex: 0)
         }
     }
     
@@ -76,10 +77,11 @@ public final class Routing {
     
     public func proxy(pattern: String,
                       tags: [String] = [],
+                      owner: RouteOwner? = nil,
                       queue: dispatch_queue_t = dispatch_get_main_queue(),
                       handler: ProxyHandler) -> Void {
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: handler), atIndex: 0)
+            self.routes.insert(Route(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler), atIndex: 0)
         }
     }
     
@@ -116,6 +118,7 @@ public final class Routing {
         var currentRoutes: [Route]!
         var route: Route!
         dispatch_sync(accessQueue) {
+            self.routes = self.routes.filter { $0.owner != nil }
             currentRoutes = self.routes
             let handlers = currentRoutes.map { $0.handler }
             for case let (matchedRoute, .Route(handler)) in zip(currentRoutes, handlers)
