@@ -8,6 +8,10 @@
 
 import Foundation
 
+public protocol RouteOwner: class {}
+
+public typealias RouteUUID = String
+
 public typealias Parameters = [String: String]
 
 /**
@@ -39,13 +43,15 @@ internal struct Route {
         case Proxy(ProxyHandler)
     }
     
+    internal let uuid = { NSUUID().UUIDString }()
     internal let pattern: String
     internal let tags: [String]
+    internal weak var owner: RouteOwner?
     internal let queue: dispatch_queue_t
     internal let handler: HandlerType
     private let dynamicSegments: [String]
     
-    private init(_ pattern: String, tags: [String], queue: dispatch_queue_t, handler: HandlerType) {
+    private init(_ pattern: String, tags: [String], owner: RouteOwner, queue: dispatch_queue_t, handler: HandlerType) {
         var pattern = pattern
         var dynamicSegments = [String]()
         let options: NSStringCompareOptions = [.RegularExpressionSearch, .CaseInsensitiveSearch]
@@ -58,17 +64,18 @@ internal struct Route {
         
         self.pattern = pattern
         self.tags = tags
+        self.owner = owner
         self.queue = queue
         self.handler = handler
         self.dynamicSegments = dynamicSegments
     }
     
-    internal init(_ pattern: String, tags: [String], queue: dispatch_queue_t, handler: RouteHandler) {
-        self.init(pattern, tags: tags, queue: queue, handler: .Route(handler))
+    internal init(_ pattern: String, tags: [String], owner: RouteOwner, queue: dispatch_queue_t, handler: RouteHandler) {
+        self.init(pattern, tags: tags, owner: owner, queue: queue, handler: .Route(handler))
     }
     
-    internal init(_ pattern: String, tags: [String], queue: dispatch_queue_t, handler: ProxyHandler) {
-        self.init(pattern, tags: tags, queue: queue, handler: .Proxy(handler))
+    internal init(_ pattern: String, tags: [String], owner: RouteOwner, queue: dispatch_queue_t, handler: ProxyHandler) {
+        self.init(pattern, tags: tags, owner: owner, queue: queue, handler: .Proxy(handler))
     }
     
     internal func matches(route: String) -> Bool {

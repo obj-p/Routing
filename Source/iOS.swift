@@ -125,16 +125,19 @@ public extension Routing {
      
      - Parameter pattern:  A String pattern
      - Parameter tag:  A tag to reference when subscripting a Routing object
+     - Parameter owner: The routes owner. If deallocated the route will be removed.
      - Parameter source: The source of the view controller instance
      - Parameter style:  The presentation style in presenting the view controller
      - Parameter setup:  A closure provided for additional setup
+     - Returns:  The RouteUUID
      */
     
     public func map(pattern: String,
                     tags: [String] = ["Views"],
+                    owner: RouteOwner? = nil,
                     source: ControllerSource,
                     style: PresentationStyle = .Show,
-                    setup: PresentationSetup? = nil) {
+                    setup: PresentationSetup? = nil) -> RouteUUID {
         let routeHandler: RouteHandler = { [unowned self] (route, parameters, completed) in
             guard let root = UIApplication.sharedApplication().keyWindow?.rootViewController else {
                 completed()
@@ -154,7 +157,7 @@ public extension Routing {
             strongSelf.showController(vc, from: presenter, with: style, completion: completed)
         }
         
-        self.map(pattern, tags: tags, queue: dispatch_get_main_queue(), handler: routeHandler)
+        return self.map(pattern, tags: tags, owner: owner, queue: dispatch_get_main_queue(), handler: routeHandler)
     }
     
     private func controller(from source: ControllerSource) -> UIViewController {

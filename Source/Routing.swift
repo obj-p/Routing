@@ -8,7 +8,7 @@
 
 import Foundation
 
-public final class Routing {
+public final class Routing: RouteOwner {
     private var routes: [Route] = [Route]()
     private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_SERIAL)
     private var routingQueue = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
@@ -41,18 +41,23 @@ public final class Routing {
      ```
      
      - Parameter pattern:  A String pattern
-     - Parameter queue:  A dispatch queue for the callback
      - Parameter tag:  A tag to reference when subscripting a Routing object
+     - Parameter owner: The routes owner. If deallocated the route will be removed.
+     - Parameter queue:  A dispatch queue for the callback
      - Parameter handler:  A MapHandler
+     - Returns:  The RouteUUID
      */
     
     public func map(pattern: String,
                     tags: [String] = [],
                     queue: dispatch_queue_t = dispatch_get_main_queue(),
-                    handler: RouteHandler) -> Void {
+                    owner: RouteOwner? = nil,
+                    handler: RouteHandler) -> RouteUUID {
+        let route = Route(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler)
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: handler), atIndex: 0)
+            self.routes.insert(route, atIndex: 0)
         }
+        return route.uuid
     }
     
     /**
@@ -69,18 +74,23 @@ public final class Routing {
      ```
      
      - Parameter pattern:  A String pattern
-     - Parameter queue:  A dispatch queue for the callback
      - Parameter tag:  A tag to reference when subscripting a Routing object
+     - Parameter owner: The routes owner. If deallocated the route will be removed.
+     - Parameter queue:  A dispatch queue for the callback
      - Parameter handler:  A ProxyHandler
+     - Returns:  The RouteUUID
      */
     
     public func proxy(pattern: String,
                       tags: [String] = [],
+                      owner: RouteOwner? = nil,
                       queue: dispatch_queue_t = dispatch_get_main_queue(),
-                      handler: ProxyHandler) -> Void {
+                      handler: ProxyHandler) -> RouteUUID {
+        let route = Route(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler)
         dispatch_async(accessQueue) {
-            self.routes.insert(Route(pattern, tags: tags, queue: queue, handler: handler), atIndex: 0)
+            self.routes.insert(route, atIndex: 0)
         }
+        return route.uuid
     }
     
     /**
@@ -116,6 +126,7 @@ public final class Routing {
         var currentRoutes: [Route]!
         var route: Route!
         dispatch_sync(accessQueue) {
+            self.routes = self.routes.filter { $0.owner != nil }
             currentRoutes = self.routes
             let handlers = currentRoutes.map { $0.handler }
             for case let (matchedRoute, .Route(handler)) in zip(currentRoutes, handlers)
@@ -139,6 +150,18 @@ public final class Routing {
         }
         
         return true
+    }
+    
+    /**
+     Removes the route with the given RouteUUID.
+     
+     - Parameter route:  A RouteUUID
+     */
+    
+    public func disposeOf(route: RouteUUID) {
+        dispatch_async(accessQueue) {
+            self.routes = self.routes.filter { $0.uuid != route }
+        }
     }
     
     private func process(searchPath: String,

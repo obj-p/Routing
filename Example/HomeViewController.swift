@@ -12,7 +12,7 @@ class HomeViewController: UITableViewController {
     private enum Row: Int {
         case Login
         case Logout
-        case AccountInfo
+        case PrivilegedInfo
         case Settings
     }
     
@@ -31,8 +31,8 @@ extension HomeViewController {
         case .Logout:
             authenticated = false
             self.tableView.reloadData()
-        case .AccountInfo:
-            router["Views"].open("routingexample://push/accountinfo")
+        case .PrivilegedInfo:
+            router["Views"].open("routingexample://push/privilegedinfo")
         case .Settings:
             router["Views"].open("routingexample://push/settings")
         }

@@ -27,12 +27,12 @@ public func registerRoutes() {
                style: .InNavigationController(.Present(animated: true)),
                setup: presentationSetup)
     
-    router.map("routingexample://push/accountinfo",
-               source: .Storyboard(storyboard: "Main", identifier: "AccountInfoViewController", bundle: nil),
+    router.map("routingexample://push/privilegedinfo",
+               source: .Storyboard(storyboard: "Main", identifier: "PrivilegedInfoViewController", bundle: nil),
                style: .Push(animated: true))
     
-    router.map("routingexample://present/accountinfo",
-               source: .Storyboard(storyboard: "Main", identifier: "AccountInfoViewController", bundle: nil),
+    router.map("routingexample://present/privilegedinfo",
+               source: .Storyboard(storyboard: "Main", identifier: "PrivilegedInfoViewController", bundle: nil),
                style: .InNavigationController(.Present(animated: true)),
                setup: presentationSetup)
     
@@ -54,7 +54,7 @@ public func registerRoutes() {
         }
     }
     
-    router.proxy("/*/accountinfo", tags: ["Views"]) { route, parameters, next in
+    router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, next in
         if authenticated {
             next(nil, nil)
         } else {
