@@ -116,7 +116,7 @@ router.map("routingexample://route/:argument") { route, parameters, completed in
 A router instance may proxy any string pattern. The closure will also have three parameters. The route it matched, the parameters, and a next closure. The next closure accepts two optional arguments for the route and parameters. If nil is passed to both arguments then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a route or parameters to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to #open. 
 
 ```swift
-router.proxy("routingexample://route/one") { (route, parameters, next) -> Void in
+router.proxy("routingexample://route/one") { route, parameters, next -> Void in
     next("routingexample://route/two", parameters)
 }
 ```
@@ -163,8 +163,8 @@ When a route is added via #map or #proxy, a RouteUUID is returned. This RouteUUI
 
 ```swift
 routeUUID = router.map("routingexample://present/secret",
-                               source: .Storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
-                               style: .InNavigationController(.Present(animated: true))) 
+                       source: .Storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
+                       style: .InNavigationController(.Present(animated: true))) 
                                
 router.disposeOf(routeUUID)
 ```
