@@ -102,7 +102,7 @@ github "jwalapr/Routing"
 
 ### Map
 
-A router instance may map a string pattern to view controller navigation, as covered in the [Usage](#usage) section above, or just a closure as presented below. The closure will have three parameters. The route it matched, the parameters (both query and segments in the URL), and a completion closure that must be called or the router will halt all subsequent calls to #open.
+A router instance may map a string pattern to view controller navigation, as covered in the [Usage](#usage) section above, or just a closure as presented below. The closure will have four parameters. The route it matched, the parameters (both query and segments in the URL), any data passed through open, and a completion closure that must be called or the router will halt all subsequent calls to #open.
 
 ```swift
 router.map("routingexample://route/:argument") { route, parameters, data, completed in
@@ -113,7 +113,7 @@ router.map("routingexample://route/:argument") { route, parameters, data, comple
 
 ### Proxy
 
-A router instance may proxy any string pattern. The closure will also have three parameters. The route it matched, the parameters, and a next closure. The next closure accepts two optional arguments for the route and parameters. If nil is passed to both arguments then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a route or parameters to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to #open. 
+A router instance may proxy any string pattern. The closure will also have four parameters. The route it matched, the parameters, any data passed, and a next closure. The next closure accepts three optional arguments for the route, parameters, and data. If nil is passed to all arguments then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a route, parameters, or data to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to #open. 
 
 ```swift
 router.proxy("routingexample://route/one") { route, parameters, data, next -> Void in
