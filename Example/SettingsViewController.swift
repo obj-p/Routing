@@ -16,7 +16,7 @@ class SettingsViewController: UITableViewController {
         super.viewDidLoad()
         self.presentViewControllers.setOn(shouldPresentViewControllers, animated: false)
     }
-    
+
     @IBAction func presentViewControllersChanged(sender: UISwitch) {
         shouldPresentViewControllers = sender.on
     }

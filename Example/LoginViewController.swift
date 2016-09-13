@@ -15,24 +15,24 @@ class LoginViewController: UIViewController, RoutingPresentationSetup {
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
     var callback: String?
-    
-    func setup(route: String, parameters: Parameters) {
+
+    func setup(route: String, parameters: Parameters, data: Data?) {
         if let callbackURL = parameters["callback"] {
             self.callback = callbackURL
         }
     }
-    
+
     @IBAction func login() {
         guard let username = username.text, let password = password.text where username != "" && password != ""  else {
             return
         }
-        
+
         let completion = {
             if let callback = self.callback {
-                router.open(callback)
+                router.open(callback, data: ["opened from login": NSDate()])
             }
         }
-        
+
         authenticated = true
         if isModal {
             self.dismissViewControllerAnimated(true, completion: completion)

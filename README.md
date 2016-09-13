@@ -25,11 +25,11 @@ override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPat
 Perhaps the privileged information is only available after a user authenticates with the service. After logging in we want the privileged information presented to the user right away. Without changing the above implementation we may proxy the intent and display a log in view, after which, a call back may present the privileged information screen.
 
 ```swift
-router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, next in
+router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, data, next in
     if authenticated {
-        next(nil, nil)
+        next(nil, nil, nil)
     } else {
-        next("routingexample://present/login?callback=\(route)", parameters)
+        next("routingexample://present/login?callback=\(route)", parameters, data)
     }
 }
 ```
@@ -49,7 +49,7 @@ func application(app: UIApplication, openURL url: NSURL, options: [String : AnyO
 An example of other routes in an application may look like this.
 
 ```swift
-let presentationSetup: PresentationSetup = { vc, _ in
+let presentationSetup: PresentationSetup = { vc, _, _ in
     vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, 
                                                           target: vc, 
                                                           action: #selector(vc.cancel))
@@ -69,9 +69,9 @@ router.map("routingexample://present/settings",
            style: .InNavigationController(.Present(animated: true)),
            setup: presentationSetup)
     
-router.proxy("/*", tags: ["Views"]) { route, parameters, next in
-    print("opened: route (\(route)) with parameters (\(parameters))")
-    next(nil, nil)
+router.proxy("/*", tags: ["Views"]) { route, parameters, data, next in
+    print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
+    next(nil, nil, nil)
 }
 ```
 
@@ -88,7 +88,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'Routing', '~> 1.0.1'
+pod 'Routing', '~> 1.1.0'
 ```
 
 ### Carthage
@@ -102,10 +102,10 @@ github "jwalapr/Routing"
 
 ### Map
 
-A router instance may map a string pattern to view controller navigation, as covered in the [Usage](#usage) section above, or just a closure as presented below. The closure will have three parameters. The route it matched, the parameters (both query and segments in the URL), and a completion closure that must be called or the router will halt all subsequent calls to #open.
+A router instance may map a string pattern to view controller navigation, as covered in the [Usage](#usage) section above, or just a closure as presented below. The closure will have four parameters. The route it matched, the parameters (both query and segments in the URL), any data passed through open, and a completion closure that must be called or the router will halt all subsequent calls to #open.
 
 ```swift
-router.map("routingexample://route/:argument") { route, parameters, completed in
+router.map("routingexample://route/:argument") { route, parameters, data, completed in
     argument = parameters["argument"]
     completed()
 }
@@ -113,11 +113,11 @@ router.map("routingexample://route/:argument") { route, parameters, completed in
 
 ### Proxy
 
-A router instance may proxy any string pattern. The closure will also have three parameters. The route it matched, the parameters, and a next closure. The next closure accepts two optional arguments for the route and parameters. If nil is passed to both arguments then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a route or parameters to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to #open. 
+A router instance may proxy any string pattern. The closure will also have four parameters. The route it matched, the parameters, any data passed, and a next closure. The next closure accepts three optional arguments for the route, parameters, and data. If nil is passed to all arguments then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a route, parameters, or data to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to #open. 
 
 ```swift
-router.proxy("routingexample://route/one") { route, parameters, next -> Void in
-    next("routingexample://route/two", parameters)
+router.proxy("routingexample://route/one") { route, parameters, data, next -> Void in
+    next("routingexample://route/two", parameters, data)
 }
 ```
 
@@ -130,14 +130,17 @@ In general, the last call to register a map or proxy to the router will be first
 A tag may be passed to maps or proxies. The default tag for maps to view controller navigation is "Views". Tags allow for the router to be subscripted to a specific context. If a router is subscripted with "Views", then it will only attempt to find routes that are tagged as such.
 
 ```swift
-router.proxy("/*", tags: ["Views, Logs"]) { route, parameters, next in
-    print("opened: route (\(route)) with parameters (\(parameters))")
-    next(nil, nil)
+router.proxy("/*", tags: ["Views, Logs"]) { route, parameters, data, next in
+    print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
+    next(nil, nil, nil)
 }
 
 router["Views", "Logs", "Actions"].open(url)
 
+router["Views"].open(url, data: NSDate()) // pass any data if needed
+
 router.open(url) // - or - to search all routes...
+
 ```
 
 ### Route Owner
@@ -174,8 +177,8 @@ router.disposeOf(routeUUID)
 A queue may be passed to maps or proxies. This queue will be the queue that a RouteHandler or ProxyHandler closure is called back on. By default, maps that are used for view controller navigation are called back on the main queue.
 
 ```swift
-let callbackQueue = dispatch_queue_create("Testing Call Back Queue", DISPATCH_QUEUE_SERIAL) 
-router.map("routingexample://route", queue: callbackQueue) { (_, _, completed) in
+let callbackQueue = dispatch_queue_create("Call Back Queue", DISPATCH_QUEUE_SERIAL) 
+router.map("routingexample://route", queue: callbackQueue) { (_, _, _, completed) in
     completed()
 }
 ```
@@ -188,9 +191,13 @@ View controllers mapped to the router will have the opportunity to be informed o
 class LoginViewController: UIViewController, RoutingPresentationSetup {
     var callback: String?
     
-    func setup(route: String, parameters: Parameters) {
+    func setup(route: String, parameters: Parameters, data: Data) {
         if let callbackURL = parameters["callback"] {
             self.callback = callbackURL
+        }
+        
+        if let date = data as? NSDate {
+            self.passedDate = date
         }
     }
 }
