@@ -26,10 +26,10 @@ public indirect enum PresentationStyle {
     case InNavigationController(PresentationStyle)
 }
 
-public typealias PresentationSetup = (UIViewController, Parameters) -> Void
+public typealias PresentationSetup = (UIViewController, Parameters, Data?) -> Void
 
 public protocol RoutingPresentationSetup {
-    func setup(route: String, parameters: Parameters)
+    func setup(route: String, parameters: Parameters, data: Data?)
 }
 
 public extension UINavigationController {
@@ -38,7 +38,7 @@ public extension UINavigationController {
             self.pushViewController(vc, animated: animated)
         }
     }
-    
+
     public func popViewControllerAnimated(animated: Bool, completion: Completed) -> UIViewController? {
         var vc: UIViewController?
         self.commit(completion) {
@@ -46,7 +46,7 @@ public extension UINavigationController {
         }
         return vc
     }
-    
+
     public func popToViewControllerAnimated(viewController: UIViewController, animated: Bool, completion: Completed) -> [UIViewController]? {
         var vc: [UIViewController]?
         self.commit(completion) {
@@ -54,7 +54,7 @@ public extension UINavigationController {
         }
         return vc
     }
-    
+
     public func popToRootViewControllerAnimated(animated: Bool, completion: Completed) -> [UIViewController]? {
         var vc: [UIViewController]?
         self.commit(completion) {
@@ -70,13 +70,13 @@ public extension UIViewController {
             self.showViewController(vc, sender: sender)
         }
     }
-    
+
     public func showDetailViewController(vc: UIViewController, sender: AnyObject?, completion: Completed) {
         self.commit(completion) {
             self.showDetailViewController(vc, sender: sender)
         }
     }
-    
+
     private func commit(completed: Completed, transition: () -> Void) {
         CATransaction.begin()
         CATransaction.setCompletionBlock(completed)
@@ -112,7 +112,7 @@ public extension Routing {
      Associates a view controller presentation to a string pattern. A Routing instance present the
      view controller in the event of a matching URL using #open. Routing will only execute the first
      matching mapped route. This will be the last route added with #map.
-     
+
      ```code
      let router = Routing()
      router.map("routingexample://route",
@@ -122,7 +122,7 @@ public extension Routing {
      return vc
      }
      ```
-     
+
      - Parameter pattern:  A String pattern
      - Parameter tag:  A tag to reference when subscripting a Routing object
      - Parameter owner: The routes owner. If deallocated the route will be removed.
@@ -131,47 +131,47 @@ public extension Routing {
      - Parameter setup:  A closure provided for additional setup
      - Returns:  The RouteUUID
      */
-    
+
     public func map(pattern: String,
                     tags: [String] = ["Views"],
                     owner: RouteOwner? = nil,
                     source: ControllerSource,
                     style: PresentationStyle = .Show,
                     setup: PresentationSetup? = nil) -> RouteUUID {
-        let routeHandler: RouteHandler = { [unowned self] (route, parameters, completed) in
+        let routeHandler: RouteHandler = { [unowned self] (route, parameters, data, completed) in
             guard let root = UIApplication.sharedApplication().keyWindow?.rootViewController else {
                 completed()
                 return
             }
-            
+
             let strongSelf = self
             let vc = strongSelf.controller(from: source)
-            (vc as? RoutingPresentationSetup)?.setup(route, parameters: parameters)
-            setup?(vc, parameters)
-            
+            (vc as? RoutingPresentationSetup)?.setup(route, parameters: parameters, data: data)
+            setup?(vc, parameters, data)
+
             var presenter = root
             while let nextVC = presenter.nextViewController() {
                 presenter = nextVC
             }
-            
+
             strongSelf.showController(vc, from: presenter, with: style, completion: completed)
         }
-        
+
         return self.map(pattern, tags: tags, owner: owner, queue: dispatch_get_main_queue(), handler: routeHandler)
     }
-    
+
     private func controller(from source: ControllerSource) -> UIViewController {
         switch source {
         case let .Storyboard(storyboard, identifier, bundle):
             let storyboard = UIStoryboard(name: storyboard, bundle: bundle)
             return storyboard.instantiateViewControllerWithIdentifier(identifier)
-        case let .Nib(controller , name, bundle):
+        case let .Nib(controller, name, bundle):
             return controller.init(nibName: name, bundle: bundle)
         case let .Provided(provider):
             return provider()
         }
     }
-    
+
     private func showController(presented: UIViewController,
                                 from presenting: UIViewController,
                                      with style: PresentationStyle,

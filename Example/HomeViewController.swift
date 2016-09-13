@@ -15,7 +15,7 @@ class HomeViewController: UITableViewController {
         case PrivilegedInfo
         case Settings
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
@@ -32,7 +32,7 @@ extension HomeViewController {
             authenticated = false
             self.tableView.reloadData()
         case .PrivilegedInfo:
-            router["Views"].open("routingexample://push/privilegedinfo")
+            router["Views"].open("routingexample://push/privilegedinfo", data: ["opened from the home view": NSDate()])
         case .Settings:
             router["Views"].open("routingexample://push/settings")
         }
