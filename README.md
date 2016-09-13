@@ -25,11 +25,11 @@ override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPat
 Perhaps the privileged information is only available after a user authenticates with the service. After logging in we want the privileged information presented to the user right away. Without changing the above implementation we may proxy the intent and display a log in view, after which, a call back may present the privileged information screen.
 
 ```swift
-router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, next in
+router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, data, next in
     if authenticated {
-        next(nil, nil)
+        next(nil, nil, nil)
     } else {
-        next("routingexample://present/login?callback=\(route)", parameters)
+        next("routingexample://present/login?callback=\(route)", parameters, data)
     }
 }
 ```
@@ -49,7 +49,7 @@ func application(app: UIApplication, openURL url: NSURL, options: [String : AnyO
 An example of other routes in an application may look like this.
 
 ```swift
-let presentationSetup: PresentationSetup = { vc, _ in
+let presentationSetup: PresentationSetup = { vc, _, _ in
     vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, 
                                                           target: vc, 
                                                           action: #selector(vc.cancel))
@@ -177,7 +177,7 @@ router.disposeOf(routeUUID)
 A queue may be passed to maps or proxies. This queue will be the queue that a RouteHandler or ProxyHandler closure is called back on. By default, maps that are used for view controller navigation are called back on the main queue.
 
 ```swift
-let callbackQueue = dispatch_queue_create("Testing Call Back Queue", DISPATCH_QUEUE_SERIAL) 
+let callbackQueue = dispatch_queue_create("Call Back Queue", DISPATCH_QUEUE_SERIAL) 
 router.map("routingexample://route", queue: callbackQueue) { (_, _, _, completed) in
     completed()
 }
