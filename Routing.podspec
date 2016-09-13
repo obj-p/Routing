@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Routing"
-  s.version          = "1.0.1"
+  s.version          = "1.1.0"
   s.summary          = "A Swift router implementation"
   s.description      = <<-DESC
                         Routing allows for routing URLs matched by string patterns to associated closures.
