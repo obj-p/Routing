@@ -98,6 +98,7 @@ public final class Routing: RouteOwner {
      are read in a last to be mapped first executed order.
 
      - Parameter string:  A string represeting a URL
+     - Parameter data: Any data that will be passed with a routing
      - Returns:  A Bool. True if the string is a valid URL and it can open the URL, false otherwise
      */
 
