@@ -71,7 +71,7 @@ router.map("routingexample://present/settings",
     
 router.proxy("/*", tags: ["Views"]) { route, parameters, data, next in
     print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
-    next(nil, nil)
+    next(nil, nil, nil)
 }
 ```
 
@@ -132,7 +132,7 @@ A tag may be passed to maps or proxies. The default tag for maps to view control
 ```swift
 router.proxy("/*", tags: ["Views, Logs"]) { route, parameters, data, next in
     print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
-    next(nil, nil)
+    next(nil, nil, nil)
 }
 
 router["Views", "Logs", "Actions"].open(url)
