@@ -39,7 +39,8 @@ public typealias Completed = () -> Void
  */
 
 public typealias ProxyHandler = (String, Parameters, Data?, Next) -> Void
-public typealias Next = (String?, Parameters?, Data?) -> Void
+public typealias ProxyCommit = (route: String?, parameters: Parameters?, data: Data?)
+public typealias Next = (ProxyCommit?) -> Void
 
 internal struct Route {
     internal enum HandlerType {
