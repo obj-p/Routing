@@ -169,7 +169,7 @@ public final class Routing: RouteOwner {
 
     private func process(searchPath: String,
                          parameters: Parameters,
-                         data: Data,
+                         data: Data?,
                          matching route: Route,
                                   within routes: [Route]) {
         let semaphore = dispatch_semaphore_create(0)
