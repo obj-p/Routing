@@ -48,7 +48,7 @@ public func registerRoutes() {
     router.proxy("routingexample://*", tags: ["Views"]) { route, _, _, next in
         if shouldPresentViewControllers {
             let route = route.stringByReplacingOccurrencesOfString("push", withString: "present")
-            next((route, nil, nil))
+            next((route, Parameters(), nil))
         } else {
             next(nil)
         }
