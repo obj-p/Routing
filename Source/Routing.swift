@@ -11,7 +11,7 @@ import Foundation
 public final class Routing: RouteOwner {
     fileprivate var routes: [Route] = [Route]()
     fileprivate var accessQueue = DispatchQueue(label: "Routing Access Queue", attributes: [])
-    fileprivate var routingQueue = DispatchQueue(label: "Routing Queue", attributes: [])
+    fileprivate var routingQueue: DispatchQueue
     
     public subscript(tags: String...) -> Routing {
         get {
@@ -20,12 +20,13 @@ public final class Routing: RouteOwner {
         }
     }
     
-    public init() {}
+    public init() {
+        routingQueue = DispatchQueue(label: "Routing Queue", attributes: [])
+    }
     
-    fileprivate convenience init(routes: [Route], targetQueue: DispatchQueue) {
-        self.init()
+    fileprivate init(routes: [Route], targetQueue: DispatchQueue) {
+        routingQueue = DispatchQueue(label: "Routing Queue", attributes: [], target: targetQueue)
         self.routes = routes
-        self.routingQueue.setTarget(queue: targetQueue)
     }
     
     /**
