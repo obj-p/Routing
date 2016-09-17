@@ -140,7 +140,38 @@ class RoutingOpenTests: XCTestCase {
     }
     
     func testRouterIsAbleToOpenDespiteConcurrentReadWriteAccesses() {
+        router.map("routingexample://route") { (_, _, _, completed) in completed() }
         
+        testingQueue.async {
+            for i in 1...1000 {
+                self.router.map("\(i)") { (_, _, _, completed) in completed() }
+            }
+        }
+        
+        testingQueue.async {
+            for i in 1...1000 {
+                self.router.map("\(i)") { (_, _, _, completed) in completed() }
+            }
+        }
+        
+        XCTAssertTrue(router.open("routingexample://route"))
+    }
+    
+    func testShouldAllowTheSettingOfARouteHandlerCallbackQueue() {
+        let expect = expectation(description: "Should allow setting of RouteHandler callback queue.")
+        
+        let callbackQueue = DispatchQueue(label: "Testing Call Back Queue", attributes: [])
+        let key = DispatchSpecificKey<Void>()
+        callbackQueue.setSpecific(key:key, value:())
+        router.map("routingexample://route", queue: callbackQueue) { (_, _, _, completed) in
+            if let _ = DispatchQueue.getSpecific(key: key) {
+                expect.fulfill()
+            }
+            completed()
+        }
+        
+        router.open("routingexample://route")
+        waitForExpectations(timeout: 0.1, handler: nil)
     }
     
 }
