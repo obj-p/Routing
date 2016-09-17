@@ -1,14 +1,8 @@
 language: objective-c
 osx_image: xcode7.3
 
-before_install:
-  - brew update
-  - brew install carthage || brew outdated carthage || brew upgrade carthage
-  - carthage version
-
 install:
   - gem install xcpretty
-  - carthage bootstrap --no-use-binaries --platform ios,mac
 
 env:
   global:

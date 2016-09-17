@@ -378,7 +378,6 @@
 				D295F41A1C6C2612003CAC2F /* Sources */,
 				D295F41B1C6C2612003CAC2F /* Frameworks */,
 				D295F41C1C6C2612003CAC2F /* Resources */,
-				D295F4481C6C26EA003CAC2F /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -415,7 +414,6 @@
 				D295F4361C6C265D003CAC2F /* Sources */,
 				D295F4371C6C265D003CAC2F /* Frameworks */,
 				D295F4381C6C265D003CAC2F /* Resources */,
-				D295F4491C6C2719003CAC2F /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -572,41 +570,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		D295F4481C6C26EA003CAC2F /* Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Quick.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Nimble.framework",
-			);
-			name = Carthage;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-		D295F4491C6C2719003CAC2F /* Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/Mac/Quick.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/Nimble.framework",
-			);
-			name = Carthage;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		92FCF9FC1BB963CD00DF05C3 /* Sources */ = {
