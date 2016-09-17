@@ -15,13 +15,13 @@ class PrivilegedInfoViewController: UIViewController, RouteOwner {
     override func viewDidLoad() {
         router.map("routingexample://push/secret",
                    owner: self,
-                   source: .Storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
-                   style: .Push(animated: true))
+                   source: .storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
+                   style: .push(animated: true))
 
         routeUUID = router.map("routingexample://present/secret",
-                               source: .Storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
-                               style: .InNavigationController(.Present(animated: true))) { vc, _, _ in
-                                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel,
+                               source: .storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
+                               style: .inNavigationController(.present(animated: true))) { vc, _, _ in
+                                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
                                                                                       target: vc,
                                                                                       action: #selector(vc.cancel))
         }
@@ -34,9 +34,9 @@ class PrivilegedInfoViewController: UIViewController, RouteOwner {
 
 extension PrivilegedInfoViewController: RoutingPresentationSetup {
 
-    func setup(route: String, parameters: Parameters, data: Data?) {
-        if let data = data as? [String: NSDate] {
-            print("Passed date: \(data)")
+    func setup(_ route: String, with parameters: Parameters, passing any: Any?) {
+        if let any = any as? [String: Date] {
+            print("Passed date: \(any)")
         }
     }
 

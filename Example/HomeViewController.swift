@@ -9,14 +9,14 @@
 import UIKit
 
 class HomeViewController: UITableViewController {
-    private enum Row: Int {
-        case Login
-        case Logout
-        case PrivilegedInfo
-        case Settings
+    fileprivate enum Row: Int {
+        case login
+        case logout
+        case privilegedInfo
+        case settings
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
@@ -24,16 +24,16 @@ class HomeViewController: UITableViewController {
 
 // MARK: Table View Delegate
 extension HomeViewController {
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        switch Row(rawValue: indexPath.row)! {
-        case .Login:
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch Row(rawValue: (indexPath as NSIndexPath).row)! {
+        case .login:
             router["Views"].open("routingexample://push/login")
-        case .Logout:
+        case .logout:
             authenticated = false
             self.tableView.reloadData()
-        case .PrivilegedInfo:
-            router["Views"].open("routingexample://push/privilegedinfo", data: ["opened from the home view": NSDate()])
-        case .Settings:
+        case .privilegedInfo:
+            router["Views"].open("routingexample://push/privilegedinfo", passing: ["opened from the home view": Date()])
+        case .settings:
             router["Views"].open("routingexample://push/settings")
         }
     }
@@ -41,10 +41,10 @@ extension HomeViewController {
 
 // MARK: Table View Datasource
 extension HomeViewController {
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        switch Row(rawValue: indexPath.row)! {
-        case .Login where authenticated == true: fallthrough
-        case .Logout where authenticated == false:
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch Row(rawValue: (indexPath as NSIndexPath).row)! {
+        case .login where authenticated == true: fallthrough
+        case .logout where authenticated == false:
             return 0.0
         default:
             return 44.0

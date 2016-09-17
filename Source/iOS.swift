@@ -10,44 +10,46 @@ import UIKit
 import QuartzCore
 
 public enum ControllerSource {
-    case Storyboard(storyboard: String, identifier: String, bundle: NSBundle?)
-    case Nib(controller: UIViewController.Type, name: String?, bundle: NSBundle?)
-    case Provided(() -> UIViewController)
+    case storyboard(storyboard: String, identifier: String, bundle: Bundle?)
+    case nib(controller: UIViewController.Type, name: String?, bundle: Bundle?)
+    case provided(() -> UIViewController)
 }
 
 public indirect enum PresentationStyle {
-    case Show
-    case ShowDetail
-    case Present(animated: Bool)
-    case Push(animated: Bool)
-    case Custom(custom: (presenting: UIViewController,
-        presented: UIViewController,
-        completed: Completed) -> Void)
-    case InNavigationController(PresentationStyle)
+    case show
+    case showDetail
+    case present(animated: Bool)
+    case push(animated: Bool)
+    case custom(custom: (_ presenting: UIViewController,
+        _ presented: UIViewController,
+        _ completed: Completed) -> Void)
+    case inNavigationController(PresentationStyle)
 }
 
-public typealias PresentationSetup = (UIViewController, Parameters, Data?) -> Void
+public typealias PresentationSetup = (UIViewController, Parameters, Any?) -> Void
 
 public protocol RoutingPresentationSetup {
-    func setup(route: String, parameters: Parameters, data: Data?)
+    func setup(_ route: String, with parameters: Parameters, passing any: Any?)
 }
 
 public extension UINavigationController {
-    public func pushViewController(vc: UIViewController, animated: Bool, completion: Completed) {
+    public func pushViewController(_ vc: UIViewController, animated: Bool, completion: @escaping Completed) {
         self.commit(completion) {
             self.pushViewController(vc, animated: animated)
         }
     }
 
-    public func popViewControllerAnimated(animated: Bool, completion: Completed) -> UIViewController? {
+    @discardableResult
+    public func popViewControllerAnimated(_ animated: Bool, completion: @escaping Completed) -> UIViewController? {
         var vc: UIViewController?
         self.commit(completion) {
-            vc = self.popViewControllerAnimated(animated)
+            vc = self.popViewController(animated: animated)
         }
         return vc
     }
 
-    public func popToViewControllerAnimated(viewController: UIViewController, animated: Bool, completion: Completed) -> [UIViewController]? {
+    @discardableResult
+    public func popToViewControllerAnimated(_ viewController: UIViewController, animated: Bool, completion: @escaping Completed) -> [UIViewController]? {
         var vc: [UIViewController]?
         self.commit(completion) {
             vc = self.popToViewController(viewController, animated: animated)
@@ -55,29 +57,30 @@ public extension UINavigationController {
         return vc
     }
 
-    public func popToRootViewControllerAnimated(animated: Bool, completion: Completed) -> [UIViewController]? {
+    @discardableResult
+    public func popToRootViewControllerAnimated(_ animated: Bool, completion: @escaping Completed) -> [UIViewController]? {
         var vc: [UIViewController]?
         self.commit(completion) {
-            vc = self.popToRootViewControllerAnimated(animated)
+            vc = self.popToRootViewController(animated: animated)
         }
         return vc
     }
 }
 
 public extension UIViewController {
-    public func showViewController(vc: UIViewController, sender: AnyObject?, completion: Completed) {
+    public func showViewController(_ vc: UIViewController, sender: AnyObject?, completion: @escaping Completed) {
         self.commit(completion) {
-            self.showViewController(vc, sender: sender)
+            self.show(vc, sender: sender)
         }
     }
 
-    public func showDetailViewController(vc: UIViewController, sender: AnyObject?, completion: Completed) {
+    public func showDetailViewController(_ vc: UIViewController, sender: AnyObject?, completion: @escaping Completed) {
         self.commit(completion) {
             self.showDetailViewController(vc, sender: sender)
         }
     }
 
-    private func commit(completed: Completed, transition: () -> Void) {
+    fileprivate func commit(_ completed: @escaping Completed, transition: () -> Void) {
         CATransaction.begin()
         CATransaction.setCompletionBlock(completed)
         transition()
@@ -132,22 +135,23 @@ public extension Routing {
      - Returns:  The RouteUUID
      */
 
-    public func map(pattern: String,
+    @discardableResult
+    public func map(_ pattern: String,
                     tags: [String] = ["Views"],
                     owner: RouteOwner? = nil,
                     source: ControllerSource,
-                    style: PresentationStyle = .Show,
+                    style: PresentationStyle = .show,
                     setup: PresentationSetup? = nil) -> RouteUUID {
-        let routeHandler: RouteHandler = { [unowned self] (route, parameters, data, completed) in
-            guard let root = UIApplication.sharedApplication().keyWindow?.rootViewController else {
+        let routeHandler: RouteHandler = { [unowned self] (route, parameters, any, completed) in
+            guard let root = UIApplication.shared.keyWindow?.rootViewController else {
                 completed()
                 return
             }
 
             let strongSelf = self
             let vc = strongSelf.controller(from: source)
-            (vc as? RoutingPresentationSetup)?.setup(route, parameters: parameters, data: data)
-            setup?(vc, parameters, data)
+            (vc as? RoutingPresentationSetup)?.setup(route, with: parameters, passing: any)
+            setup?(vc, parameters, any)
 
             var presenter = root
             while let nextVC = presenter.nextViewController() {
@@ -157,45 +161,45 @@ public extension Routing {
             strongSelf.showController(vc, from: presenter, with: style, completion: completed)
         }
 
-        return self.map(pattern, tags: tags, owner: owner, queue: dispatch_get_main_queue(), handler: routeHandler)
+        return map(pattern, tags: tags, queue: DispatchQueue.main, owner: owner, handler: routeHandler)
     }
 
-    private func controller(from source: ControllerSource) -> UIViewController {
+    fileprivate func controller(from source: ControllerSource) -> UIViewController {
         switch source {
-        case let .Storyboard(storyboard, identifier, bundle):
+        case let .storyboard(storyboard, identifier, bundle):
             let storyboard = UIStoryboard(name: storyboard, bundle: bundle)
-            return storyboard.instantiateViewControllerWithIdentifier(identifier)
-        case let .Nib(controller, name, bundle):
+            return storyboard.instantiateViewController(withIdentifier: identifier)
+        case let .nib(controller, name, bundle):
             return controller.init(nibName: name, bundle: bundle)
-        case let .Provided(provider):
+        case let .provided(provider):
             return provider()
         }
     }
 
-    private func showController(presented: UIViewController,
+    fileprivate func showController(_ presented: UIViewController,
                                 from presenting: UIViewController,
                                      with style: PresentationStyle,
-                                          completion: Completed) {
+                                          completion: @escaping Completed) {
         switch style {
-        case .Show:
+        case .show:
             presenting.showViewController(presented, sender: self, completion: completion)
             break
-        case .ShowDetail:
+        case .showDetail:
             presenting.showDetailViewController(presented, sender: self, completion:  completion)
             break
-        case let .Present(animated):
-            presenting.presentViewController(presented, animated: animated, completion: completion)
+        case let .present(animated):
+            presenting.present(presented, animated: animated, completion: completion)
             break
-        case let .Push(animated):
+        case let .push(animated):
             if let presenting = presenting as? UINavigationController {
                 presenting.pushViewController(presented, animated: animated, completion: completion)
             } else {
                 presenting.navigationController?.pushViewController(presented, animated: animated, completion: completion)
             }
-        case let .Custom(custom):
-            custom(presenting: presenting, presented: presented, completed: completion)
+        case let .custom(custom):
+            custom(presenting, presented, completion)
             break
-        case let .InNavigationController(style):
+        case let .inNavigationController(style):
             showController(UINavigationController(rootViewController: presented),
                            from: presenting,
                            with: style,

@@ -18,10 +18,10 @@ class RoutingSpec: QuickSpec {
         describe("Routing") {
             
             var router: Routing!
-            var testingQueue: dispatch_queue_t!
+            var testingQueue: DispatchQueue!
             beforeEach {
                 router = Routing()
-                testingQueue = dispatch_queue_create("Testing Queue", DISPATCH_QUEUE_CONCURRENT)
+                testingQueue = DispatchQueue(label: "Testing Queue", attributes: DispatchQueue.Attributes.concurrent)
             }
             
             context("#open") {
@@ -29,16 +29,16 @@ class RoutingSpec: QuickSpec {
                 it("should return true if it can open the route") {
                     router.map("routingexample://route") { (_, _, _, completed) in completed() }
                     
-                    expect(router.open(NSURL(string: "routingexample://route/")!)).to(equal(true))
+                    expect(router.open(URL(string: "routingexample://route/")!)).to(equal(true))
                 }
                 
                 it("should return false if it cannot open the route due to no routes registered") {
-                    expect(router.open(NSURL(string: "routingexample://route/")!)).to(equal(false))
+                    expect(router.open(URL(string: "routingexample://route/")!)).to(equal(false))
                 }
                 
                 it("should return false if it cannot open the route due to no match") {
                     router.map("routingexample://route") { (_, _, _, completed) in completed() }
-                    expect(router.open(NSURL(string: "routingexample://incorrectroute/")!)).to(equal(false))
+                    expect(router.open(URL(string: "routingexample://incorrectroute/")!)).to(equal(false))
                 }
                 
                 it("should call the binded closure corresponding to the opened route") {
@@ -48,7 +48,7 @@ class RoutingSpec: QuickSpec {
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route")!)
+                    router.open(URL(string: "routingexample://route")!)
                     expect(isOpened).toEventually(equal(true))
                 }
                 
@@ -64,7 +64,7 @@ class RoutingSpec: QuickSpec {
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route")!)
+                    router.open(URL(string: "routingexample://route")!)
                     expect(routeCalled).toEventually(equal(4))
                 }
                 
@@ -75,7 +75,7 @@ class RoutingSpec: QuickSpec {
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route")!)
+                    router.open(URL(string: "routingexample://route")!)
                     expect(matched).toEventually(equal("routingexample://route"))
                 }
                 
@@ -86,7 +86,7 @@ class RoutingSpec: QuickSpec {
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route/expected")!)
+                    router.open(URL(string: "routingexample://route/expected")!)
                     expect(argument).toEventually(equal("expected"))
                 }
                 
@@ -97,7 +97,7 @@ class RoutingSpec: QuickSpec {
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route?param=expected")!)
+                    router.open(URL(string: "routingexample://route?param=expected")!)
                     expect(param).toEventually(equal("expected"))
                 }
                 
@@ -115,32 +115,32 @@ class RoutingSpec: QuickSpec {
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route/one")!)
-                    router.open(NSURL(string: "routingexample://route/two/two")!)
+                    router.open(URL(string: "routingexample://route/one")!)
+                    router.open(URL(string: "routingexample://route/two/two")!)
                     expect(results).toEventually(equal(["one", "two"]), timeout: 1.5)
                 }
                 
                 it("should be able to open the route despite concurrent read right accesses") {
                     router.map("routingexample://route") { (_, _, _, completed) in completed() }
                     
-                    dispatch_async(testingQueue) {
+                    testingQueue.async {
                         for i in 1...1000 {
                             router.map("\(i)") { (_, _, _, completed) in completed() }
                         }
                     }
                     
-                    dispatch_async(testingQueue) {
+                    testingQueue.async {
                         for i in 1...1000 {
                             router.map("\(i)") { (_, _, _, completed) in completed() }
                         }
                     }
                     
-                    expect(router.open(NSURL(string: "routingexample://route")!)).toEventually(equal(true))
+                    expect(router.open(URL(string: "routingexample://route")!)).toEventually(equal(true))
                 }
 
                 it("should allow to set the callback queue of the route") {
-                    let callbackQueue = dispatch_queue_create("Testing Call Back Queue", DISPATCH_QUEUE_SERIAL)
-                    let expectedQueue: UnsafePointer<Int8> = dispatch_queue_get_label(callbackQueue)
+                    let callbackQueue = DispatchQueue(label: "Testing Call Back Queue", attributes: [])
+                    let expectedQueue: UnsafePointer<Int8> = callbackQueue.label
                     
                     var actualQueue: UnsafePointer<Int8>?
                     router.map("routingexample://route", queue: callbackQueue) { (_, _, _, completed) in
@@ -148,7 +148,7 @@ class RoutingSpec: QuickSpec {
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route")!)
+                    router.open(URL(string: "routingexample://route")!)
                     expect(actualQueue).toEventually(equal(expectedQueue))
                 }
                 
@@ -169,7 +169,7 @@ class RoutingSpec: QuickSpec {
                         next(("routingexample://route/two", parameters, data))
                     }
                     
-                    router.open(NSURL(string: "routingexample://route/one")!)
+                    router.open(URL(string: "routingexample://route/one")!)
                     expect(routeCalled).toEventually(equal(4))
                 }
                 
@@ -181,7 +181,7 @@ class RoutingSpec: QuickSpec {
                         isProxied = true
                     }
                     
-                    router.open(NSURL(string: "routingexample://route/one")!)
+                    router.open(URL(string: "routingexample://route/one")!)
                     expect(isProxied).toEventually(equal(true))
                 }
                 
@@ -198,7 +198,7 @@ class RoutingSpec: QuickSpec {
                         next((route, parameters, data))
                     }
                     
-                    router.open(NSURL(string: "routingexample://route/one")!)
+                    router.open(URL(string: "routingexample://route/one")!)
                     expect(argument).toEventually(equal("two"))
                 }
                 
@@ -215,7 +215,7 @@ class RoutingSpec: QuickSpec {
                         next((route, parameters, data))
                     }
                     
-                    router.open(NSURL(string: "routingexample://route?query=foo")!)
+                    router.open(URL(string: "routingexample://route?query=foo")!)
                     expect(query).toEventually(equal("bar"))
                 }
                 
@@ -238,7 +238,7 @@ class RoutingSpec: QuickSpec {
                         next(nil)
                     }
                     
-                    router.open(NSURL(string: "routingexample://route")!)
+                    router.open(URL(string: "routingexample://route")!)
                     expect(results).toEventually(equal(["one", "two"]))
                 }
                 
@@ -261,26 +261,26 @@ class RoutingSpec: QuickSpec {
                         next(nil)
                     }
                     
-                    router.open(NSURL(string: "routingexample://route")!)
+                    router.open(URL(string: "routingexample://route")!)
                     expect(results).toEventually(equal(["one", "two"]))
                 }
                 
                 it("should be able to open the route despite concurrent read right accesses") {
                     router.map("routingexample://route") { (_, _, _, completed) in completed() }
                     
-                    dispatch_async(testingQueue) {
+                    testingQueue.async {
                         for i in 1...1000 {
                             router.proxy("\(i)") { (route, parameters, data, next) in next((route, parameters, data)) }
                         }
                     }
                     
-                    dispatch_async(testingQueue) {
+                    testingQueue.async {
                         for i in 1...1000 {
                             router.proxy("\(i)") { (route, parameters, data, next) in next((route, parameters, data)) }
                         }
                     }
                     
-                    expect(router.open(NSURL(string: "routingexample://route")!)).toEventually(equal(true))
+                    expect(router.open(URL(string: "routingexample://route")!)).toEventually(equal(true))
                 }
                 
                 it("should maintain the parameters throughout the proxy and the mapped route") {
@@ -296,7 +296,7 @@ class RoutingSpec: QuickSpec {
                         completed()
                     }
                     
-                    router.open(NSURL(string: "routingexample://route/foo?query=bar")!)
+                    router.open(URL(string: "routingexample://route/foo?query=bar")!)
                     expect(proxiedArgument).toEventually(equal("foo"))
                     expect(argument).toEventually(equal("foo"))
                     expect(proxiedQuery).toEventually(equal("bar"))
@@ -304,8 +304,8 @@ class RoutingSpec: QuickSpec {
                 }
                 
                 it("should allow to set the callback queue of the proxy") {
-                    let callbackQueue = dispatch_queue_create("Testing Callback Queue", DISPATCH_QUEUE_SERIAL)
-                    let expectedQueue: UnsafePointer<Int8> = dispatch_queue_get_label(callbackQueue)
+                    let callbackQueue = DispatchQueue(label: "Testing Callback Queue", attributes: [])
+                    let expectedQueue: UnsafePointer<Int8> = callbackQueue.label
                     
                     router.map("routingexample://route") { (_, _, _, completed) in completed() }
                     
@@ -315,7 +315,7 @@ class RoutingSpec: QuickSpec {
                         next((route, parameters, data))
                     }
                     
-                    router.open(NSURL(string: "routingexample://route")!)
+                    router.open(URL(string: "routingexample://route")!)
                     expect(actualQueue).toEventually(equal(expectedQueue))
                 }
                 
