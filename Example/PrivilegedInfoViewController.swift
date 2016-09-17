@@ -28,7 +28,7 @@ class PrivilegedInfoViewController: UIViewController, RouteOwner {
     }
 
     deinit {
-        router.disposeOf(routeUUID)
+        router.dispose(of: routeUUID)
     }
 }
 
