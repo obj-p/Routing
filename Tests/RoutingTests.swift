@@ -139,4 +139,8 @@ class RoutingOpenTests: XCTestCase {
         XCTAssert(results == ["one", "two"])
     }
     
+    func testRouterIsAbleToOpenDespiteConcurrentReadWriteAccesses() {
+        
+    }
+    
 }
