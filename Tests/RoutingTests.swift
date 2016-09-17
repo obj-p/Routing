@@ -86,7 +86,7 @@ class RoutingOpenTests: XCTestCase {
         XCTAssert(matched == "routingexample://route")
     }
     
-    func testURLArgumentsPassedInParameters() {
+    func testURLArgumentsArePassedToRouteHandler() {
         let expect = expectation(description: "URL Arguments are passed to RouteHandler.")
         var argument: String?
         router.map("routingexample://route/:argument") { (_, parameters, _, completed) in
@@ -98,6 +98,45 @@ class RoutingOpenTests: XCTestCase {
         router.open("routingexample://route/expected")
         waitForExpectations(timeout: 0.1, handler: nil)
         XCTAssert(argument == "expected")
+    }
+    
+    func testQueryParametersArePassedToRouteHandler() {
+        let expect = expectation(description: "Query param is passed to RouteHandler.")
+        
+        var param: String?
+        router.map("routingexample://route") { (_, parameters, _, completed) in
+            param = parameters["param"]
+            expect.fulfill()
+            completed()
+        }
+        
+        router.open("routingexample://route?param=expected")
+        waitForExpectations(timeout: 0.1, handler: nil)
+        XCTAssert(param == "expected")
+    }
+    
+    func testRouteHandlersAreCalledInSerialOrder() {
+        let expect = expectation(description: "RouteHandlers are called in serial order.")
+        
+        var results = [String]()
+        router.map("routingexample://route/:append") { (_, parameters, _, completed) in
+            results.append(parameters["append"]!)
+            
+            self.testingQueue.asyncAfter(deadline: .now() + 1) {
+                completed()
+            }
+        }
+        
+        router.map("routingexample://route/two/:append") { (_, parameters, _, completed) in
+            results.append(parameters["append"]!)
+            expect.fulfill()
+            completed()
+        }
+        
+        router.open(URL(string: "routingexample://route/one")!)
+        router.open(URL(string: "routingexample://route/two/two")!)
+        waitForExpectations(timeout: 1.5, handler: nil)
+        XCTAssert(results == ["one", "two"])
     }
     
 }
