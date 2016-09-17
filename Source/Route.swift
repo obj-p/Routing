@@ -38,21 +38,19 @@ public typealias ProxyHandler = (String, Parameters, Any?, @escaping Next) -> Vo
 public typealias ProxyCommit = (route: String, parameters: Parameters, data: Any?)
 public typealias Next = (ProxyCommit?) -> Void
 
-internal struct Route {
-    internal enum HandlerType {
-        case route(RouteHandler)
-        case proxy(ProxyHandler)
-    }
+internal typealias Route = Routable<RouteHandler>
+internal typealias Proxy = Routable<ProxyHandler>
 
+internal struct Routable<T> {
     internal let uuid = { UUID().uuidString }()
     internal let pattern: String
     internal let tags: [String]
     internal weak var owner: RouteOwner?
     internal let queue: DispatchQueue
-    internal let handler: HandlerType
-    fileprivate let dynamicSegments: [String]
-
-    fileprivate init(_ pattern: String, tags: [String], owner: RouteOwner, queue: DispatchQueue, handler: HandlerType) {
+    internal let handler: T
+    internal let dynamicSegments: [String]
+    
+    init(_ pattern: String, tags: [String], owner: RouteOwner, queue: DispatchQueue, handler: T) {
         var pattern = pattern
         var dynamicSegments = [String]()
         let options: NSString.CompareOptions = [.regularExpression, .caseInsensitive]
@@ -62,46 +60,12 @@ internal struct Route {
             dynamicSegments.append(segment)
             pattern.replaceSubrange(range, with: "([^/]+)")
         }
-
+        
         self.pattern = pattern
         self.tags = tags
         self.owner = owner
         self.queue = queue
         self.handler = handler
         self.dynamicSegments = dynamicSegments
-    }
-
-    internal init(_ pattern: String, tags: [String], owner: RouteOwner, queue: DispatchQueue, handler: @escaping RouteHandler) {
-        self.init(pattern, tags: tags, owner: owner, queue: queue, handler: .route(handler))
-    }
-
-    internal init(_ pattern: String, tags: [String], owner: RouteOwner, queue: DispatchQueue, handler: @escaping ProxyHandler) {
-        self.init(pattern, tags: tags, owner: owner, queue: queue, handler: .proxy(handler))
-    }
-
-    internal func matches(_ route: String) -> Bool {
-        return _matches(route) != nil
-    }
-
-    internal func matches(_ route: String, parameters: inout Parameters) -> Bool {
-        guard let matches = _matches(route) else {
-            return false
-        }
-
-        if dynamicSegments.count > 0 && dynamicSegments.count == matches.numberOfRanges - 1 {
-            for i in (1 ..< matches.numberOfRanges) {
-                parameters[dynamicSegments[i-1]] = (route as NSString)
-                    .substring(with: matches.rangeAt(i))
-            }
-        }
-
-        return true
-    }
-
-    fileprivate func _matches(_ route: String) -> NSTextCheckingResult? {
-        return (try? NSRegularExpression(pattern: pattern, options: .caseInsensitive))
-            .flatMap {
-                $0.matches(in: route, options: [], range: NSMakeRange(0, route.characters.count))
-            }?.first
     }
 }

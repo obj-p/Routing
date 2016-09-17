@@ -8,15 +8,31 @@
 
 import Foundation
 
+fileprivate struct RoutableWork {
+    var routes: [Route] = [Route]()
+    var proxies: [Proxy] = [Proxy]()
+    var initialRoute: Route? = nil
+    var searchPath: String = ""
+    var parameters: Parameters = Parameters()
+    var passedAny: Any? = nil
+}
+
 public final class Routing: RouteOwner {
     fileprivate var routes: [Route] = [Route]()
+    fileprivate var proxies: [Proxy] = [Proxy]()
     fileprivate var accessQueue = DispatchQueue(label: "Routing Access Queue", attributes: [])
     fileprivate var routingQueue: DispatchQueue
     
     public subscript(tags: String...) -> Routing {
         get {
             let set = Set(tags)
-            return Routing(routes: self.routes.filter({ set.intersection($0.tags).isEmpty == false }), targetQueue: self.routingQueue)
+            var sub: Routing!
+            accessQueue.sync {
+                sub = Routing(routes: self.routes.filter({ set.intersection($0.tags).isEmpty == false }),
+                              proxies: self.proxies.filter({ set.intersection($0.tags).isEmpty == false }),
+                              targetQueue: self.routingQueue)
+            }
+            return sub
         }
     }
     
@@ -24,9 +40,10 @@ public final class Routing: RouteOwner {
         routingQueue = DispatchQueue(label: "Routing Queue", attributes: [])
     }
     
-    fileprivate init(routes: [Route], targetQueue: DispatchQueue) {
+    fileprivate init(routes: [Route], proxies: [Proxy], targetQueue: DispatchQueue) {
         routingQueue = DispatchQueue(label: "Routing Queue", attributes: [], target: targetQueue)
         self.routes = routes
+        self.proxies = proxies
     }
     
     /**
@@ -89,11 +106,11 @@ public final class Routing: RouteOwner {
                       owner: RouteOwner? = nil,
                       queue: DispatchQueue = DispatchQueue.main,
                       handler: @escaping ProxyHandler) -> RouteUUID {
-        let route = Route(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler)
+        let proxy = Proxy(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler)
         accessQueue.async {
-            self.routes.insert(route, at: 0)
+            self.proxies.insert(proxy, at: 0)
         }
-        return route.uuid
+        return proxy.uuid
     }
     
     /**
@@ -125,35 +142,30 @@ public final class Routing: RouteOwner {
     
     @discardableResult
     public func open(_ URL: Foundation.URL, passing any: Any? = nil) -> Bool {
-        var parameters = Parameters()
-        guard let searchPath = searchPath(URL, with: &parameters) else {
+        var work = RoutableWork()
+        guard let searchPath = searchPath(from: URL, with: &work.parameters) else {
             return false
         }
+        work.searchPath = searchPath
         
-        var currentRoutes: [Route]!
-        var route: Route!
         accessQueue.sync {
-            self.routes = self.routes.filter { $0.owner != nil }
-            currentRoutes = self.routes
-            let handlers = currentRoutes.map { $0.handler }
-            for case let (matchedRoute, .route(handler)) in zip(currentRoutes, handlers)
-                where matchedRoute.matches(searchPath, parameters: &parameters) {
-                    route = matchedRoute
-                    break
+            routes = routes.filter { $0.owner != nil }
+            proxies = proxies.filter { $0.owner != nil }
+            work.routes = routes
+            work.proxies = proxies
+            for route in work.routes where self.searchPath(work.searchPath, matches: route, parameters: &work.parameters) {
+                work.initialRoute = route
+                break
             }
         }
         
-        if route == nil {
+        if work.initialRoute == nil {
             return false
         }
         
         defer {
             routingQueue.async {
-                self.process(searchPath,
-                             parameters: parameters,
-                             any: any,
-                             matching: route,
-                             within: currentRoutes)
+                self.process(work: work)
             }
         }
         
@@ -166,73 +178,63 @@ public final class Routing: RouteOwner {
      - Parameter route:  A RouteUUID
      */
     
-    public func disposeOf(_ route: RouteUUID) {
+    public func dispose(of uuid: RouteUUID) {
         accessQueue.async {
-            self.routes = self.routes.filter { $0.uuid != route }
+            self.routes = self.routes.filter { $0.uuid != uuid }
+            self.proxies = self.proxies.filter { $0.uuid != uuid }
         }
     }
     
-    fileprivate func process(_ searchPath: String,
-                             parameters: Parameters,
-                             any: Any?,
-                             matching route: Route,
-                             within routes: [Route]) {
+    fileprivate func process(work: RoutableWork) {
         let semaphore = DispatchSemaphore(value: 0)
         var proxyCommit: ProxyCommit?
-        let zipped = zip(routes, routes.map { $0.handler })
-        for case let (proxy, .proxy(handler)) in zipped
-            where proxy.matches(searchPath) {
-                proxy.queue.async {
-                    handler(searchPath, parameters, any) { commit in
-                        proxyCommit = commit
-                        semaphore.signal()
-                    }
-                }
-                _ = semaphore.wait(timeout: DispatchTime.distantFuture)
-                if proxyCommit != nil {
-                    break
-                }
-        }
-        
-        var parameters = parameters
-        if let newParameters = proxyCommit?.parameters {
-            newParameters.forEach {
-                parameters[$0.0] = $0.1
-            }
-        }
-        
-        var searchPath = searchPath
-        var newRoute: Route? = route
-        if let newSearchPath = proxyCommit?.route {
-            searchPath = self.searchPath(newSearchPath, with: &parameters) ?? ""
-            newRoute = nil
-            for case let (proxiedRoute, .route(_)) in zipped
-                where proxiedRoute.matches(searchPath) {
-                    newRoute = proxiedRoute
-                    break
-            }
-        }
-        
-        guard let route = newRoute else {
-            return
-        }
-        
-        var any = any
-        if let newAny = proxyCommit?.data {
-            any = newAny
-        }
-        
-        if case let .route(handler) = route.handler {
-            route.queue.async {
-                handler(searchPath, parameters, any) {
+        for proxy in work.proxies where searchPath(work.searchPath, matches: proxy) {
+            proxy.queue.async {
+                proxy.handler(work.searchPath, work.parameters, work.passedAny) { commit in
+                    proxyCommit = commit
                     semaphore.signal()
                 }
             }
+            semaphore.wait()
+            if proxyCommit != nil {
+                break
+            }
         }
-        _ = semaphore.wait(timeout: DispatchTime.distantFuture)
+        
+        var work = work
+        var proxiedRoute: Route?
+        // TODO: Commit route confusing with Routable route
+        if let proxied = proxyCommit?.route {
+            work.searchPath = searchPath(from: proxied, with: &work.parameters) ?? ""
+            proxiedRoute = nil
+            for route in work.routes where searchPath(work.searchPath, matches: route) {
+                proxiedRoute = route
+                break
+            }
+        } else {
+            proxiedRoute = work.initialRoute
+        }
+        
+        guard let resultingRoute = proxiedRoute else {
+            return
+        }
+        
+        if let commit = proxyCommit {
+            commit.parameters.forEach {
+                work.parameters[$0.0] = $0.1
+            }
+            work.passedAny = commit.data
+        }
+        
+        resultingRoute.queue.async {
+            resultingRoute.handler(work.searchPath, work.parameters, work.passedAny) {
+                semaphore.signal()
+            }
+        }
+        semaphore.wait()
     }
     
-    fileprivate func searchPath(_ URL: Foundation.URL, with parameters: inout Parameters) -> String? {
+    fileprivate func searchPath(from URL: URL, with parameters: inout Parameters) -> String? {
         guard var components = URLComponents(url: URL, resolvingAgainstBaseURL: false) else {
             return nil
         }
@@ -245,7 +247,33 @@ public final class Routing: RouteOwner {
         return components.string
     }
     
-    fileprivate func searchPath(_ URL: String, with parameters: inout Parameters) -> String? {
-        return Foundation.URL(string: URL).flatMap { return searchPath($0, with: &parameters) }
+    fileprivate func searchPath(from URLString: String, with parameters: inout Parameters) -> String? {
+        return URL(string: URLString).flatMap { return searchPath(from: $0, with: &parameters) }
+    }
+    
+    fileprivate func searchPath<T>(_ URLString: String, matches routable: Routable<T>) -> Bool {
+        return _searchPath(URLString, matches: routable.pattern) != nil
+    }
+    
+    fileprivate func searchPath<T>(_ URLString: String, matches routable: Routable<T>, parameters: inout Parameters) -> Bool {
+        guard let matches = _searchPath(URLString, matches: routable.pattern) else {
+            return false
+        }
+        
+        if routable.dynamicSegments.count > 0 && routable.dynamicSegments.count == matches.numberOfRanges - 1 {
+            for i in (1 ..< matches.numberOfRanges) {
+                parameters[routable.dynamicSegments[i-1]] = (URLString as NSString)
+                    .substring(with: matches.rangeAt(i))
+            }
+        }
+        
+        return true
+    }
+    
+    fileprivate func _searchPath(_ URLString: String, matches pattern: String) -> NSTextCheckingResult? {
+        return (try? NSRegularExpression(pattern: pattern, options: .caseInsensitive))
+            .flatMap {
+                $0.matches(in: URLString, options: [], range: NSMakeRange(0, URLString.characters.count))
+            }?.first
     }
 }
