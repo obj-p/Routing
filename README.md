@@ -88,7 +88,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'Routing', '~> 1.1.0'
+pod 'Routing', '~> 1.2.0'
 ```
 
 ### Carthage

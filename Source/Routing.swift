@@ -169,30 +169,28 @@ public final class Routing: RouteOwner {
 
     private func process(searchPath: String,
                          parameters: Parameters,
-                         data: Data,
+                         data: Data?,
                          matching route: Route,
                                   within routes: [Route]) {
         let semaphore = dispatch_semaphore_create(0)
-        var newSearchPath: String?, newParameters: Parameters?, newData: Data?
+        var proxyCommit: ProxyCommit?
         let zipped = zip(routes, routes.map { $0.handler })
         for case let (proxy, .Proxy(handler)) in zipped
             where proxy.matches(searchPath) {
                 dispatch_async(proxy.queue) {
-                    handler(searchPath, parameters, data) { (proxiedPath, proxiedParameters, proxiedData) in
-                        newSearchPath = proxiedPath
-                        newParameters = proxiedParameters
-                        newData = proxiedData
+                    handler(searchPath, parameters, data) { commit in
+                        proxyCommit = commit
                         dispatch_semaphore_signal(semaphore)
                     }
                 }
                 dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-                if (newSearchPath != nil || newParameters != nil || newData != nil) {
+                if proxyCommit != nil {
                     break
                 }
         }
 
         var parameters = parameters
-        if let newParameters = newParameters {
+        if let newParameters = proxyCommit?.parameters {
             newParameters.forEach {
                 parameters[$0.0] = $0.1
             }
@@ -200,7 +198,7 @@ public final class Routing: RouteOwner {
 
         var searchPath = searchPath
         var newRoute: Route? = route
-        if let newSearchPath = newSearchPath {
+        if let newSearchPath = proxyCommit?.route {
             searchPath = self.searchPath(newSearchPath, with: &parameters) ?? ""
             newRoute = nil
             for case let (proxiedRoute, .Route(_)) in zipped
@@ -214,6 +212,11 @@ public final class Routing: RouteOwner {
             return
         }
 
+        var data = data
+        if let newData = proxyCommit?.data {
+            data = newData
+        }
+        
         if case let .Route(handler) = route.handler {
             dispatch_async(route.queue) {
                 handler(searchPath, parameters, data) {

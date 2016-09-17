@@ -48,23 +48,23 @@ public func registerRoutes() {
     router.proxy("routingexample://*", tags: ["Views"]) { route, _, _, next in
         if shouldPresentViewControllers {
             let route = route.stringByReplacingOccurrencesOfString("push", withString: "present")
-            next(route, nil, nil)
+            next((route, Parameters(), nil))
         } else {
-            next(nil, nil, nil)
+            next(nil)
         }
     }
 
     router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, data, next in
         if authenticated {
-            next(nil, nil, nil)
+            next(nil)
         } else {
-            next("routingexample://present/login?callback=\(route)", parameters, data)
+            next(("routingexample://present/login?callback=\(route)", parameters, data))
         }
     }
 
     router.proxy("/*", tags: ["Views"]) { route, parameters, data, next in
         print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
-        next(nil, nil, nil)
+        next(nil)
     }
 }
 

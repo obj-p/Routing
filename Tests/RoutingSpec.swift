@@ -166,7 +166,7 @@ class RoutingSpec: QuickSpec {
                     }
                     
                     router.proxy("routingexample://route/one") { (route, parameters, data, next) -> Void in
-                        next("routingexample://route/two", parameters, data)
+                        next(("routingexample://route/two", parameters, data))
                     }
                     
                     router.open(NSURL(string: "routingexample://route/one")!)
@@ -195,7 +195,7 @@ class RoutingSpec: QuickSpec {
                     router.proxy("routingexample://route/:argument") { (route, parameters, data, next) -> Void in
                         var parameters = parameters
                         parameters["argument"] = "two"
-                        next(route, parameters, data)
+                        next((route, parameters, data))
                     }
                     
                     router.open(NSURL(string: "routingexample://route/one")!)
@@ -212,7 +212,7 @@ class RoutingSpec: QuickSpec {
                     router.proxy("routingexample://route") { (route, parameters, data, next) -> Void in
                         var parameters = parameters
                         parameters["query"] = "bar"
-                        next(route, parameters, data)
+                        next((route, parameters, data))
                     }
                     
                     router.open(NSURL(string: "routingexample://route?query=foo")!)
@@ -225,17 +225,17 @@ class RoutingSpec: QuickSpec {
                     var results = [String]()
                     router.proxy("routingexample://route") { (route, parameters, _, next) in
                         results.append("three")
-                        next(nil, nil, nil)
+                        next(nil)
                     }
                     
                     router.proxy("routingexample://route") { (route, parameters, _, next) in
                         results.append("two")
-                        next(route, nil, nil)
+                        next((route, Parameters(), nil))
                     }
                     
                     router.proxy("routingexample://route") { (route, parameters, _, next) in
                         results.append("one")
-                        next(nil, nil, nil)
+                        next(nil)
                     }
                     
                     router.open(NSURL(string: "routingexample://route")!)
@@ -248,17 +248,17 @@ class RoutingSpec: QuickSpec {
                     var results = [String]()
                     router.proxy("routingexample://route") { (route, parameters, _, next) in
                         results.append("three")
-                        next(nil, nil, nil)
+                        next(nil)
                     }
                     
                     router.proxy("routingexample://route") { (route, parameters, data, next) in
                         results.append("two")
-                        next(nil, parameters, nil)
+                        next(("", parameters, nil))
                     }
                     
                     router.proxy("routingexample://route") { (route, parameters, _, next) in
                         results.append("one")
-                        next(nil, nil ,nil)
+                        next(nil)
                     }
                     
                     router.open(NSURL(string: "routingexample://route")!)
@@ -270,13 +270,13 @@ class RoutingSpec: QuickSpec {
                     
                     dispatch_async(testingQueue) {
                         for i in 1...1000 {
-                            router.proxy("\(i)") { (route, parameters, data, next) in next(route, parameters, data) }
+                            router.proxy("\(i)") { (route, parameters, data, next) in next((route, parameters, data)) }
                         }
                     }
                     
                     dispatch_async(testingQueue) {
                         for i in 1...1000 {
-                            router.proxy("\(i)") { (route, parameters, data, next) in next(route, parameters, data) }
+                            router.proxy("\(i)") { (route, parameters, data, next) in next((route, parameters, data)) }
                         }
                     }
                     
@@ -287,7 +287,7 @@ class RoutingSpec: QuickSpec {
                     var proxiedArgument, proxiedQuery: String?
                     router.proxy("routingexample://route/:argument") { (route, parameters, data, next) in
                         (proxiedArgument, proxiedQuery) = (parameters["argument"], parameters["query"])
-                        next(route, parameters, data)
+                        next((route, parameters, data))
                     }
                     
                     var argument, query: String?
@@ -312,7 +312,7 @@ class RoutingSpec: QuickSpec {
                     var actualQueue: UnsafePointer<Int8>?
                     router.proxy("routingexample://route", queue: callbackQueue) { (route, parameters, data, next) in
                         actualQueue = dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)
-                        next(route, parameters, data)
+                        next((route, parameters, data))
                     }
                     
                     router.open(NSURL(string: "routingexample://route")!)
