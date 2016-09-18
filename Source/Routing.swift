@@ -163,6 +163,7 @@ public final class Routing: RouteOwner {
             return false
         }
         
+        work.passedAny = any
         defer {
             routingQueue.async {
                 self.process(work: work)
