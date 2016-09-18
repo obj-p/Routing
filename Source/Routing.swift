@@ -8,38 +8,56 @@
 
 import Foundation
 
-public final class Routing: RouteOwner {
-    private var routes: [Route] = [Route]()
-    private var accessQueue = dispatch_queue_create("Routing Access Queue", DISPATCH_QUEUE_SERIAL)
-    private var routingQueue = dispatch_queue_create("Routing Queue", DISPATCH_QUEUE_SERIAL)
+fileprivate struct RoutableWork {
+    var routes: [Route] = [Route]()
+    var proxies: [Proxy] = [Proxy]()
+    var initialRoute: Route? = nil
+    var searchPath: String = ""
+    var parameters: Parameters = Parameters()
+    var passedAny: Any? = nil
+}
 
+public final class Routing: RouteOwner {
+    fileprivate var routes: [Route] = [Route]()
+    fileprivate var proxies: [Proxy] = [Proxy]()
+    fileprivate var accessQueue = DispatchQueue(label: "Routing Access Queue", attributes: [])
+    fileprivate var routingQueue: DispatchQueue
+    
     public subscript(tags: String...) -> Routing {
         get {
             let set = Set(tags)
-            return Routing(routes: self.routes.filter({ set.intersect($0.tags).isEmpty == false }), targetQueue: self.routingQueue)
+            var sub: Routing!
+            accessQueue.sync {
+                sub = Routing(routes: self.routes.filter({ set.intersection($0.tags).isEmpty == false }),
+                              proxies: self.proxies.filter({ set.intersection($0.tags).isEmpty == false }),
+                              targetQueue: self.routingQueue)
+            }
+            return sub
         }
     }
-
-    public init() {}
-
-    private convenience init(routes: [Route], targetQueue: dispatch_queue_t) {
-        self.init()
-        self.routes = routes
-        dispatch_set_target_queue(self.routingQueue, targetQueue)
+    
+    public init() {
+        routingQueue = DispatchQueue(label: "Routing Queue", attributes: [])
     }
-
+    
+    fileprivate init(routes: [Route], proxies: [Proxy], targetQueue: DispatchQueue) {
+        routingQueue = DispatchQueue(label: "Routing Queue", attributes: [], target: targetQueue)
+        self.routes = routes
+        self.proxies = proxies
+    }
+    
     /**
      Associates a closure to a string pattern. A Routing instance will execute the closure in the
      event of a matching URL using #open. Routing will only execute the first matching mapped route.
      This will be the last route added with #map.
-
+     
      ```code
      let router = Routing()
      router.map("routing://route") { parameters, completed in
      completed() // Must call completed or the router will halt!
      }
      ```
-
+     
      - Parameter pattern:  A String pattern
      - Parameter tag:  A tag to reference when subscripting a Routing object
      - Parameter owner: The routes owner. If deallocated the route will be removed.
@@ -47,24 +65,25 @@ public final class Routing: RouteOwner {
      - Parameter handler:  A MapHandler
      - Returns:  The RouteUUID
      */
-
-    public func map(pattern: String,
+    
+    @discardableResult
+    public func map(_ pattern: String,
                     tags: [String] = [],
-                    queue: dispatch_queue_t = dispatch_get_main_queue(),
+                    queue: DispatchQueue = DispatchQueue.main,
                     owner: RouteOwner? = nil,
-                    handler: RouteHandler) -> RouteUUID {
+                    handler: @escaping RouteHandler) -> RouteUUID {
         let route = Route(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler)
-        dispatch_async(accessQueue) {
-            self.routes.insert(route, atIndex: 0)
+        accessQueue.async {
+            self.routes.insert(route, at: 0)
         }
         return route.uuid
     }
-
+    
     /**
      Associates a closure to a string pattern. A Routing instance will execute the closure in the
      event of a matching URL using #open. Routing will execute all proxies unless #next() is called
      with non nil arguments.
-
+     
      ```code
      let router = Routing()
      router.proxy("routing://route") { route, parameters, next in
@@ -72,7 +91,7 @@ public final class Routing: RouteOwner {
      /* alternatively, next(nil, nil) allowing additional proxies to execute */
      }
      ```
-
+     
      - Parameter pattern:  A String pattern
      - Parameter tag:  A tag to reference when subscripting a Routing object
      - Parameter owner: The routes owner. If deallocated the route will be removed.
@@ -80,167 +99,182 @@ public final class Routing: RouteOwner {
      - Parameter handler:  A ProxyHandler
      - Returns:  The RouteUUID
      */
-
-    public func proxy(pattern: String,
+    
+    @discardableResult
+    public func proxy(_ pattern: String,
                       tags: [String] = [],
                       owner: RouteOwner? = nil,
-                      queue: dispatch_queue_t = dispatch_get_main_queue(),
-                      handler: ProxyHandler) -> RouteUUID {
-        let route = Route(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler)
-        dispatch_async(accessQueue) {
-            self.routes.insert(route, atIndex: 0)
+                      queue: DispatchQueue = DispatchQueue.main,
+                      handler: @escaping ProxyHandler) -> RouteUUID {
+        let proxy = Proxy(pattern, tags: tags, owner: owner ?? self, queue: queue, handler: handler)
+        accessQueue.async {
+            self.proxies.insert(proxy, at: 0)
         }
-        return route.uuid
+        return proxy.uuid
     }
-
+    
     /**
      Will execute the first mapped closure and any proxies with matching patterns. Mapped closures
      are read in a last to be mapped first executed order.
-
+     
      - Parameter string:  A string represeting a URL
-     - Parameter data: Any data that will be passed with a routing
+     - Parameter passing: Any data that will be passed with a routing
      - Returns:  A Bool. True if the string is a valid URL and it can open the URL, false otherwise
      */
-
-    public func open(string: String, data: Data? = nil) -> Bool {
-        guard let URL = NSURL(string: string) else {
+    
+    @discardableResult
+    public func open(_ string: String, passing any: Any? = nil) -> Bool {
+        guard let URL = URL(string: string) else {
             return false
         }
-
-        return open(URL, data: data)
+        
+        return open(URL, passing: any)
     }
-
+    
     /**
      Will execute the first mapped closure and any proxies with matching patterns. Mapped closures
      are read in a last to be mapped first executed order.
-
+     
      - Parameter URL:  A URL
-     - Parameter data: Any data that will be passed with a routing
+     - Parameter passing: Any data that will be passed with a routing
      - Returns:  A Bool. True if it can open the URL, false otherwise
      */
-
-    public func open(URL: NSURL, data: Data? = nil) -> Bool {
-        var parameters = Parameters()
-        guard let searchPath = searchPath(URL, with: &parameters) else {
+    
+    @discardableResult
+    public func open(_ URL: Foundation.URL, passing any: Any? = nil) -> Bool {
+        var work = RoutableWork()
+        guard let searchPath = searchPath(from: URL, with: &work.parameters) else {
             return false
         }
-
-        var currentRoutes: [Route]!
-        var route: Route!
-        dispatch_sync(accessQueue) {
-            self.routes = self.routes.filter { $0.owner != nil }
-            currentRoutes = self.routes
-            let handlers = currentRoutes.map { $0.handler }
-            for case let (matchedRoute, .Route(handler)) in zip(currentRoutes, handlers)
-                where matchedRoute.matches(searchPath, parameters: &parameters) {
-                    route = matchedRoute
-                    break
+        work.searchPath = searchPath
+        
+        accessQueue.sync {
+            routes = routes.filter { $0.owner != nil }
+            proxies = proxies.filter { $0.owner != nil }
+            work.routes = routes
+            work.proxies = proxies
+            for route in work.routes where self.searchPath(work.searchPath, matches: route, parameters: &work.parameters) {
+                work.initialRoute = route
+                break
             }
-        }
-
-        if route == nil {
-            return false
-        }
-
-        defer {
-            dispatch_async(routingQueue) {
-                self.process(searchPath,
-                             parameters: parameters,
-                             data: data,
-                             matching: route,
-                             within: currentRoutes)
-            }
-        }
-
-        return true
-    }
-
-    /**
-     Removes the route with the given RouteUUID.
-
-     - Parameter route:  A RouteUUID
-     */
-
-    public func disposeOf(route: RouteUUID) {
-        dispatch_async(accessQueue) {
-            self.routes = self.routes.filter { $0.uuid != route }
-        }
-    }
-
-    private func process(searchPath: String,
-                         parameters: Parameters,
-                         data: Data?,
-                         matching route: Route,
-                                  within routes: [Route]) {
-        let semaphore = dispatch_semaphore_create(0)
-        var proxyCommit: ProxyCommit?
-        let zipped = zip(routes, routes.map { $0.handler })
-        for case let (proxy, .Proxy(handler)) in zipped
-            where proxy.matches(searchPath) {
-                dispatch_async(proxy.queue) {
-                    handler(searchPath, parameters, data) { commit in
-                        proxyCommit = commit
-                        dispatch_semaphore_signal(semaphore)
-                    }
-                }
-                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
-                if proxyCommit != nil {
-                    break
-                }
-        }
-
-        var parameters = parameters
-        if let newParameters = proxyCommit?.parameters {
-            newParameters.forEach {
-                parameters[$0.0] = $0.1
-            }
-        }
-
-        var searchPath = searchPath
-        var newRoute: Route? = route
-        if let newSearchPath = proxyCommit?.route {
-            searchPath = self.searchPath(newSearchPath, with: &parameters) ?? ""
-            newRoute = nil
-            for case let (proxiedRoute, .Route(_)) in zipped
-                where proxiedRoute.matches(searchPath) {
-                    newRoute = proxiedRoute
-                    break
-            }
-        }
-
-        guard let route = newRoute else {
-            return
-        }
-
-        var data = data
-        if let newData = proxyCommit?.data {
-            data = newData
         }
         
-        if case let .Route(handler) = route.handler {
-            dispatch_async(route.queue) {
-                handler(searchPath, parameters, data) {
-                    dispatch_semaphore_signal(semaphore)
-                }
+        if work.initialRoute == nil {
+            return false
+        }
+        
+        work.passedAny = any
+        defer {
+            routingQueue.async {
+                self.process(work: work)
             }
         }
-        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER)
+        
+        return true
     }
-
-    private func searchPath(URL: NSURL, inout with parameters: Parameters) -> String? {
-        guard let components = NSURLComponents(URL: URL, resolvingAgainstBaseURL: false) else {
+    
+    /**
+     Removes the route with the given RouteUUID.
+     
+     - Parameter of:  A RouteUUID
+     */
+    
+    public func dispose(of uuid: RouteUUID) {
+        accessQueue.async {
+            self.routes = self.routes.filter { $0.uuid != uuid }
+            self.proxies = self.proxies.filter { $0.uuid != uuid }
+        }
+    }
+    
+    fileprivate func process(work: RoutableWork) {
+        let semaphore = DispatchSemaphore(value: 0)
+        var proxyCommit: ProxyCommit?
+        for proxy in work.proxies where searchPath(work.searchPath, matches: proxy) {
+            proxy.queue.async {
+                proxy.handler(work.searchPath, work.parameters, work.passedAny) { commit in
+                    proxyCommit = commit
+                    semaphore.signal()
+                }
+            }
+            semaphore.wait()
+            if proxyCommit != nil {
+                break
+            }
+        }
+        
+        var work = work
+        var proxiedRoute: Route?
+        // TODO: Commit route confusing with Routable route
+        if let proxied = proxyCommit?.route {
+            work.searchPath = searchPath(from: proxied, with: &work.parameters) ?? ""
+            proxiedRoute = nil
+            for route in work.routes where searchPath(work.searchPath, matches: route) {
+                proxiedRoute = route
+                break
+            }
+        } else {
+            proxiedRoute = work.initialRoute
+        }
+        
+        guard let resultingRoute = proxiedRoute else {
+            return
+        }
+        
+        if let commit = proxyCommit {
+            commit.parameters.forEach {
+                work.parameters[$0.0] = $0.1
+            }
+            work.passedAny = commit.data
+        }
+        
+        resultingRoute.queue.async {
+            resultingRoute.handler(work.searchPath, work.parameters, work.passedAny) {
+                semaphore.signal()
+            }
+        }
+        semaphore.wait()
+    }
+    
+    fileprivate func searchPath(from URL: URL, with parameters: inout Parameters) -> String? {
+        guard var components = URLComponents(url: URL, resolvingAgainstBaseURL: false) else {
             return nil
         }
-
+        
         components.queryItems?.forEach {
             parameters[$0.name] = ($0.value ?? "")
         }
         components.query = nil
-
+        
         return components.string
     }
-
-    private func searchPath(URL: String, inout with parameters: Parameters) -> String? {
-        return NSURL(string: URL).flatMap { return searchPath($0, with: &parameters) }
+    
+    fileprivate func searchPath(from URLString: String, with parameters: inout Parameters) -> String? {
+        return URL(string: URLString).flatMap { return searchPath(from: $0, with: &parameters) }
+    }
+    
+    fileprivate func searchPath<T>(_ URLString: String, matches routable: Routable<T>) -> Bool {
+        return _searchPath(URLString, matches: routable.pattern) != nil
+    }
+    
+    fileprivate func searchPath<T>(_ URLString: String, matches routable: Routable<T>, parameters: inout Parameters) -> Bool {
+        guard let matches = _searchPath(URLString, matches: routable.pattern) else {
+            return false
+        }
+        
+        if routable.dynamicSegments.count > 0 && routable.dynamicSegments.count == matches.numberOfRanges - 1 {
+            for i in (1 ..< matches.numberOfRanges) {
+                parameters[routable.dynamicSegments[i-1]] = (URLString as NSString)
+                    .substring(with: matches.rangeAt(i))
+            }
+        }
+        
+        return true
+    }
+    
+    fileprivate func _searchPath(_ URLString: String, matches pattern: String) -> NSTextCheckingResult? {
+        return (try? NSRegularExpression(pattern: pattern, options: .caseInsensitive))
+            .flatMap {
+                $0.matches(in: URLString, options: [], range: NSMakeRange(0, URLString.characters.count))
+            }?.first
     }
 }
