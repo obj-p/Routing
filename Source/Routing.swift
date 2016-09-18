@@ -11,17 +11,17 @@ import Foundation
 fileprivate struct RoutableWork {
     var routes: [Route] = [Route]()
     var proxies: [Proxy] = [Proxy]()
-    var initialRoute: Route? = nil
-    var searchPath: String = ""
+    var initialRoutable: Route? = nil
+    var searchRoute: String = ""
     var parameters: Parameters = Parameters()
     var passedAny: Any? = nil
 }
 
 public final class Routing: RouteOwner {
-    fileprivate var routes: [Route] = [Route]()
-    fileprivate var proxies: [Proxy] = [Proxy]()
-    fileprivate var accessQueue = DispatchQueue(label: "Routing Access Queue", attributes: [])
-    fileprivate var routingQueue: DispatchQueue
+    private var routes: [Route] = [Route]()
+    private var proxies: [Proxy] = [Proxy]()
+    private var accessQueue = DispatchQueue(label: "Routing Access Queue", attributes: [])
+    private var routingQueue: DispatchQueue
     
     public subscript(tags: String...) -> Routing {
         get {
@@ -40,7 +40,7 @@ public final class Routing: RouteOwner {
         routingQueue = DispatchQueue(label: "Routing Queue", attributes: [])
     }
     
-    fileprivate init(routes: [Route], proxies: [Proxy], targetQueue: DispatchQueue) {
+    private init(routes: [Route], proxies: [Proxy], targetQueue: DispatchQueue) {
         routingQueue = DispatchQueue(label: "Routing Queue", attributes: [], target: targetQueue)
         self.routes = routes
         self.proxies = proxies
@@ -143,23 +143,23 @@ public final class Routing: RouteOwner {
     @discardableResult
     public func open(_ URL: Foundation.URL, passing any: Any? = nil) -> Bool {
         var work = RoutableWork()
-        guard let searchPath = searchPath(from: URL, with: &work.parameters) else {
+        guard let searchRoute = searchRoute(from: URL, with: &work.parameters) else {
             return false
         }
-        work.searchPath = searchPath
+        work.searchRoute = searchRoute
         
         accessQueue.sync {
             routes = routes.filter { $0.owner != nil }
             proxies = proxies.filter { $0.owner != nil }
             work.routes = routes
             work.proxies = proxies
-            for route in work.routes where self.searchPath(work.searchPath, matches: route, parameters: &work.parameters) {
-                work.initialRoute = route
+            for route in work.routes where self.searchRoute(work.searchRoute, matches: route, updating: &work.parameters) {
+                work.initialRoutable = route
                 break
             }
         }
         
-        if work.initialRoute == nil {
+        if work.initialRoutable == nil {
             return false
         }
         
@@ -186,12 +186,12 @@ public final class Routing: RouteOwner {
         }
     }
     
-    fileprivate func process(work: RoutableWork) {
+    private func process(work: RoutableWork) {
         let semaphore = DispatchSemaphore(value: 0)
         var proxyCommit: ProxyCommit?
-        for proxy in work.proxies where searchPath(work.searchPath, matches: proxy) {
+        for proxy in work.proxies where searchRoute(work.searchRoute, matches: proxy) {
             proxy.queue.async {
-                proxy.handler(work.searchPath, work.parameters, work.passedAny) { commit in
+                proxy.handler(work.searchRoute, work.parameters, work.passedAny) { commit in
                     proxyCommit = commit
                     semaphore.signal()
                 }
@@ -203,39 +203,34 @@ public final class Routing: RouteOwner {
         }
         
         var work = work
-        var proxiedRoute: Route?
-        // TODO: Commit route confusing with Routable route
-        if let proxied = proxyCommit?.route {
-            work.searchPath = searchPath(from: proxied, with: &work.parameters) ?? ""
-            proxiedRoute = nil
-            for route in work.routes where searchPath(work.searchPath, matches: route) {
-                proxiedRoute = route
+        var resultingRoute: Route?
+        if let commit = proxyCommit {
+            work.searchRoute = searchRoute(from: commit.route, updating: &work.parameters) ?? ""
+            resultingRoute = nil
+            for route in work.routes where searchRoute(work.searchRoute, matches: route) {
+                resultingRoute = route
                 break
             }
-        } else {
-            proxiedRoute = work.initialRoute
-        }
-        
-        guard let resultingRoute = proxiedRoute else {
-            return
-        }
-        
-        if let commit = proxyCommit {
+            
             commit.parameters.forEach {
                 work.parameters[$0.0] = $0.1
             }
             work.passedAny = commit.data
+        } else {
+            resultingRoute = work.initialRoutable
         }
         
-        resultingRoute.queue.async {
-            resultingRoute.handler(work.searchPath, work.parameters, work.passedAny) {
-                semaphore.signal()
+        if let resultingRoute = resultingRoute {
+            resultingRoute.queue.async {
+                resultingRoute.handler(work.searchRoute, work.parameters, work.passedAny) {
+                    semaphore.signal()
+                }
             }
+            semaphore.wait()
         }
-        semaphore.wait()
     }
     
-    fileprivate func searchPath(from URL: URL, with parameters: inout Parameters) -> String? {
+    private func searchRoute(from URL: URL, with parameters: inout Parameters) -> String? {
         guard var components = URLComponents(url: URL, resolvingAgainstBaseURL: false) else {
             return nil
         }
@@ -248,16 +243,16 @@ public final class Routing: RouteOwner {
         return components.string
     }
     
-    fileprivate func searchPath(from URLString: String, with parameters: inout Parameters) -> String? {
-        return URL(string: URLString).flatMap { return searchPath(from: $0, with: &parameters) }
+    private func searchRoute(from URLString: String, updating parameters: inout Parameters) -> String? {
+        return URL(string: URLString).flatMap { return searchRoute(from: $0, with: &parameters) }
     }
     
-    fileprivate func searchPath<T>(_ URLString: String, matches routable: Routable<T>) -> Bool {
-        return _searchPath(URLString, matches: routable.pattern) != nil
+    private func searchRoute<T>(_ URLString: String, matches routable: Routable<T>) -> Bool {
+        return _searchRoute(URLString, matches: routable.pattern) != nil
     }
     
-    fileprivate func searchPath<T>(_ URLString: String, matches routable: Routable<T>, parameters: inout Parameters) -> Bool {
-        guard let matches = _searchPath(URLString, matches: routable.pattern) else {
+    private func searchRoute<T>(_ URLString: String, matches routable: Routable<T>, updating parameters: inout Parameters) -> Bool {
+        guard let matches = _searchRoute(URLString, matches: routable.pattern) else {
             return false
         }
         
@@ -271,7 +266,7 @@ public final class Routing: RouteOwner {
         return true
     }
     
-    fileprivate func _searchPath(_ URLString: String, matches pattern: String) -> NSTextCheckingResult? {
+    private func _searchRoute(_ URLString: String, matches pattern: String) -> NSTextCheckingResult? {
         return (try? NSRegularExpression(pattern: pattern, options: .caseInsensitive))
             .flatMap {
                 $0.matches(in: URLString, options: [], range: NSMakeRange(0, URLString.characters.count))
