@@ -118,7 +118,7 @@ public final class Routing: RouteOwner {
      are read in a last to be mapped first executed order.
      
      - Parameter string:  A string represeting a URL
-     - Parameter data: Any data that will be passed with a routing
+     - Parameter passing: Any data that will be passed with a routing
      - Returns:  A Bool. True if the string is a valid URL and it can open the URL, false otherwise
      */
     
@@ -136,7 +136,7 @@ public final class Routing: RouteOwner {
      are read in a last to be mapped first executed order.
      
      - Parameter URL:  A URL
-     - Parameter data: Any data that will be passed with a routing
+     - Parameter passing: Any data that will be passed with a routing
      - Returns:  A Bool. True if it can open the URL, false otherwise
      */
     
@@ -176,7 +176,7 @@ public final class Routing: RouteOwner {
     /**
      Removes the route with the given RouteUUID.
      
-     - Parameter route:  A RouteUUID
+     - Parameter of:  A RouteUUID
      */
     
     public func dispose(of uuid: RouteUUID) {

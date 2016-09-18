@@ -16,7 +16,7 @@ public typealias Parameters = [String: String]
  The closure type associated with #map
 
  - Parameter Parameters:  Any query parameters or dynamic segments found in the URL
- - Parameter Data: Any data that could be passed with a routing
+ - Parameter Any: Any data that could be passed with a routing
  - Parameter Completed: Must be called for Routing to continue processing other routes with #open
  */
 
@@ -28,7 +28,7 @@ public typealias Completed = () -> Void
 
  - Parameter String:  The route being opened
  - Parameter Parameters:  Any query parameters or dynamic segments found in the URL
- - Parameter Data: Any data that could be passed with a routing
+ - Parameter Any: Any data that could be passed with a routing
  - Parameter Next: Must be called for Routing to continue processing. Calling #Next with
  nil arguments will continue executing other matching proxies. Calling #Next with non nil
  arguments will continue to process the route.
