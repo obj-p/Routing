@@ -33,32 +33,32 @@ public protocol RoutingPresentationSetup {
 }
 
 public extension UINavigationController {
-    public func pushViewController(_ vc: UIViewController, animated: Bool, completion: @escaping Completed) {
+    func pushViewController(_ vc: UIViewController, animated: Bool, completion: @escaping Completed) {
         self.commit(completion) {
             self.pushViewController(vc, animated: animated)
         }
     }
-
+    
     @discardableResult
-    public func popViewControllerAnimated(_ animated: Bool, completion: @escaping Completed) -> UIViewController? {
+    func popViewControllerAnimated(_ animated: Bool, completion: @escaping Completed) -> UIViewController? {
         var vc: UIViewController?
         self.commit(completion) {
             vc = self.popViewController(animated: animated)
         }
         return vc
     }
-
+    
     @discardableResult
-    public func popToViewControllerAnimated(_ viewController: UIViewController, animated: Bool, completion: @escaping Completed) -> [UIViewController]? {
+    func popToViewControllerAnimated(_ viewController: UIViewController, animated: Bool, completion: @escaping Completed) -> [UIViewController]? {
         var vc: [UIViewController]?
         self.commit(completion) {
             vc = self.popToViewController(viewController, animated: animated)
         }
         return vc
     }
-
+    
     @discardableResult
-    public func popToRootViewControllerAnimated(_ animated: Bool, completion: @escaping Completed) -> [UIViewController]? {
+    func popToRootViewControllerAnimated(_ animated: Bool, completion: @escaping Completed) -> [UIViewController]? {
         var vc: [UIViewController]?
         self.commit(completion) {
             vc = self.popToRootViewController(animated: animated)
@@ -68,18 +68,18 @@ public extension UINavigationController {
 }
 
 public extension UIViewController {
-    public func showViewController(_ vc: UIViewController, sender: AnyObject?, completion: @escaping Completed) {
+    func showViewController(_ vc: UIViewController, sender: AnyObject?, completion: @escaping Completed) {
         self.commit(completion) {
             self.show(vc, sender: sender)
         }
     }
-
-    public func showDetailViewController(_ vc: UIViewController, sender: AnyObject?, completion: @escaping Completed) {
+    
+    func showDetailViewController(_ vc: UIViewController, sender: AnyObject?, completion: @escaping Completed) {
         self.commit(completion) {
             self.showDetailViewController(vc, sender: sender)
         }
     }
-
+    
     fileprivate func commit(_ completed: @escaping Completed, transition: () -> Void) {
         CATransaction.begin()
         CATransaction.setCompletionBlock(completed)
@@ -115,7 +115,7 @@ public extension Routing {
      Associates a view controller presentation to a string pattern. A Routing instance present the
      view controller in the event of a matching URL using #open. Routing will only execute the first
      matching mapped route. This will be the last route added with #map.
-
+     
      ```code
      let router = Routing()
      router.map("routingexample://route",
@@ -125,7 +125,7 @@ public extension Routing {
      return vc
      }
      ```
-
+     
      - Parameter pattern:  A String pattern
      - Parameter tag:  A tag to reference when subscripting a Routing object
      - Parameter owner: The routes owner. If deallocated the route will be removed.
@@ -134,37 +134,37 @@ public extension Routing {
      - Parameter setup:  A closure provided for additional setup
      - Returns:  The RouteUUID
      */
-
+    
     @discardableResult
-    public func map(_ pattern: String,
-                    tags: [String] = ["Views"],
-                    owner: RouteOwner? = nil,
-                    source: ControllerSource,
-                    style: PresentationStyle = .show,
-                    setup: PresentationSetup? = nil) -> RouteUUID {
+    func map(_ pattern: String,
+             tags: [String] = ["Views"],
+             owner: RouteOwner? = nil,
+             source: ControllerSource,
+             style: PresentationStyle = .show,
+             setup: PresentationSetup? = nil) -> RouteUUID {
         let routeHandler: RouteHandler = { [unowned self] (route, parameters, any, completed) in
             guard let root = UIApplication.shared.keyWindow?.rootViewController else {
                 completed()
                 return
             }
-
+            
             let strongSelf = self
             let vc = strongSelf.controller(from: source)
             (vc as? RoutingPresentationSetup)?.setup(route, with: parameters, passing: any)
             setup?(vc, parameters, any)
-
+            
             var presenter = root
             while let nextVC = presenter.nextViewController() {
                 presenter = nextVC
             }
-
+            
             strongSelf.showController(vc, from: presenter, with: style, completion: completed)
         }
-
+        
         return map(pattern, tags: tags, queue: DispatchQueue.main, owner: owner, handler: routeHandler)
     }
-
-    fileprivate func controller(from source: ControllerSource) -> UIViewController {
+    
+    private func controller(from source: ControllerSource) -> UIViewController {
         switch source {
         case let .storyboard(storyboard, identifier, bundle):
             let storyboard = UIStoryboard(name: storyboard, bundle: bundle)
@@ -175,11 +175,11 @@ public extension Routing {
             return provider()
         }
     }
-
-    fileprivate func showController(_ presented: UIViewController,
+    
+    private func showController(_ presented: UIViewController,
                                 from presenting: UIViewController,
-                                     with style: PresentationStyle,
-                                          completion: @escaping Completed) {
+                                with style: PresentationStyle,
+                                completion: @escaping Completed) {
         switch style {
         case .show:
             presenting.showViewController(presented, sender: self, completion: completion)

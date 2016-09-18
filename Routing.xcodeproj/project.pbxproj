@@ -10,10 +10,10 @@
 		92FCFA051BB963CD00DF05C3 /* Routing.h in Headers */ = {isa = PBXBuildFile; fileRef = 92FCFA041BB963CD00DF05C3 /* Routing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
 		92FCFA1C1BB9658D00DF05C3 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
-		D24501A21D146B2F006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
-		D24501A31D14D1AF006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
-		D24501A41D14D1B0006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
-		D24501A51D14D1B1006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
+		D24501A21D146B2F006BBDC8 /* Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Routable.swift */; };
+		D24501A31D14D1AF006BBDC8 /* Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Routable.swift */; };
+		D24501A41D14D1B0006BBDC8 /* Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Routable.swift */; };
+		D24501A51D14D1B1006BBDC8 /* Routable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Routable.swift */; };
 		D253AA411D8DE2C300F35644 /* RoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D253AA401D8DE2C300F35644 /* RoutingTests.swift */; };
 		D253AA421D8DE2C300F35644 /* RoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D253AA401D8DE2C300F35644 /* RoutingTests.swift */; };
 		D253AA431D8DE2D700F35644 /* RoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D253AA401D8DE2C300F35644 /* RoutingTests.swift */; };
@@ -98,7 +98,7 @@
 		92FCFA121BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92FCFA1B1BB9658D00DF05C3 /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
 		D2204C7F1C8FE1B400ABA4E5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		D24501A11D146B2F006BBDC8 /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
+		D24501A11D146B2F006BBDC8 /* Routable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routable.swift; sourceTree = "<group>"; };
 		D253AA401D8DE2C300F35644 /* RoutingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutingTests.swift; sourceTree = "<group>"; };
 		D253AA441D8DE34000F35644 /* iOSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSTests.swift; sourceTree = "<group>"; };
 		D273364D1CFE78970004A92A /* iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOS.swift; sourceTree = "<group>"; };
@@ -216,7 +216,7 @@
 			children = (
 				92FCFA041BB963CD00DF05C3 /* Routing.h */,
 				D273364D1CFE78970004A92A /* iOS.swift */,
-				D24501A11D146B2F006BBDC8 /* Route.swift */,
+				D24501A11D146B2F006BBDC8 /* Routable.swift */,
 				92FCFA1B1BB9658D00DF05C3 /* Routing.swift */,
 				92FCFA061BB963CD00DF05C3 /* Info.plist */,
 			);
@@ -577,7 +577,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D24501A21D146B2F006BBDC8 /* Route.swift in Sources */,
+				D24501A21D146B2F006BBDC8 /* Routable.swift in Sources */,
 				D273364E1CFE78980004A92A /* iOS.swift in Sources */,
 				92FCFA1C1BB9658D00DF05C3 /* Routing.swift in Sources */,
 			);
@@ -597,7 +597,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D295F44C1C6C27B4003CAC2F /* Routing.swift in Sources */,
-				D24501A51D14D1B1006BBDC8 /* Route.swift in Sources */,
+				D24501A51D14D1B1006BBDC8 /* Routable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -606,7 +606,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D295F44A1C6C27B1003CAC2F /* Routing.swift in Sources */,
-				D24501A41D14D1B0006BBDC8 /* Route.swift in Sources */,
+				D24501A41D14D1B0006BBDC8 /* Routable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -623,7 +623,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D295F44B1C6C27B2003CAC2F /* Routing.swift in Sources */,
-				D24501A31D14D1AF006BBDC8 /* Route.swift in Sources */,
+				D24501A31D14D1AF006BBDC8 /* Routable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

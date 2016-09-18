@@ -1,5 +1,5 @@
 //
-//  Route.swift
+//  Routable.swift
 //  Routing
 //
 //  Created by Jason Prasad on 6/17/16.
@@ -42,13 +42,13 @@ internal typealias Route = Routable<RouteHandler>
 internal typealias Proxy = Routable<ProxyHandler>
 
 internal struct Routable<T> {
-    internal let uuid = { UUID().uuidString }()
-    internal let pattern: String
-    internal let tags: [String]
-    internal weak var owner: RouteOwner?
-    internal let queue: DispatchQueue
-    internal let handler: T
-    internal let dynamicSegments: [String]
+    let uuid = { UUID().uuidString }()
+    let pattern: String
+    let tags: [String]
+    weak var owner: RouteOwner?
+    let queue: DispatchQueue
+    let handler: T
+    let dynamicSegments: [String]
     
     init(_ pattern: String, tags: [String], owner: RouteOwner, queue: DispatchQueue, handler: T) {
         var pattern = pattern
