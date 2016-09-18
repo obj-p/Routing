@@ -203,12 +203,12 @@ public final class Routing: RouteOwner {
         }
         
         var work = work
-        var resultingRoute: Route?
+        var resultingRoutable: Route?
         if let commit = proxyCommit {
             work.searchRoute = searchRoute(from: commit.route, updating: &work.parameters) ?? ""
-            resultingRoute = nil
+            resultingRoutable = nil
             for route in work.routes where searchRoute(work.searchRoute, matches: route) {
-                resultingRoute = route
+                resultingRoutable = route
                 break
             }
             
@@ -217,10 +217,10 @@ public final class Routing: RouteOwner {
             }
             work.passedAny = commit.data
         } else {
-            resultingRoute = work.initialRoutable
+            resultingRoutable = work.initialRoutable
         }
         
-        if let resultingRoute = resultingRoute {
+        if let resultingRoute = resultingRoutable {
             resultingRoute.queue.async {
                 resultingRoute.handler(work.searchRoute, work.parameters, work.passedAny) {
                     semaphore.signal()
