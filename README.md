@@ -50,27 +50,27 @@ An example of other routes in an application may look like this.
 
 ```swift
 let presentationSetup: PresentationSetup = { vc, _, _ in
-    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, 
+    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, 
                                                           target: vc, 
                                                           action: #selector(vc.cancel))
 }
 
 router.map("routingexample://present/login",
-           source: .Storyboard(storyboard: "Main", identifier: "LoginViewController", bundle: nil),
-           style: .InNavigationController(.Present(animated: true)),
+           source: .storyboard(storyboard: "Main", identifier: "LoginViewController", bundle: nil),
+           style: .inNavigationController(.present(animated: true)),
            setup: presentationSetup)
     
 router.map("routingexample://push/privilegedinfo",
-           source: .Storyboard(storyboard: "Main", identifier: "PrivilegedInfoViewController", bundle: nil),
-           style: .Push(animated: true))
+           source: .storyboard(storyboard: "Main", identifier: "PrivilegedInfoViewController", bundle: nil),
+           style: .push(animated: true))
     
 router.map("routingexample://present/settings",
-           source: .Storyboard(storyboard: "Main", identifier: "SettingsViewController", bundle: nil),
-           style: .InNavigationController(.Present(animated: true)),
+           source: .storyboard(storyboard: "Main", identifier: "SettingsViewController", bundle: nil),
+           style: .inNavigationController(.present(animated: true)),
            setup: presentationSetup)
     
 router.proxy("/*", tags: ["Views"]) { route, parameters, any, next in
-    print("opened: route (\(route)) with parameters (\(parameters)) & any (\(any))")
+    print("opened: route (\(route)) with parameters (\(parameters)) & passing (\(any))")
     next(nil)
 }
 ```
@@ -130,14 +130,14 @@ In general, the last call to register a map or proxy to the router will be first
 A tag may be passed to maps or proxies. The default tag for maps to view controller navigation is *"Views"*. Tags allow for the router to be subscripted to a specific context. If a router is subscripted with *"Views"*, then it will only attempt to find routes that are tagged as such.
 
 ```swift
-router.proxy("/*", tags: ["Views, Logs"]) { route, parameters, data, next in
-    print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
+router.proxy("/*", tags: ["Views, Logs"]) { route, parameters, any, next in
+    print("opened: route (\(route)) with parameters (\(parameters)) & passing (\(any))")
     next(nil)
 }
 
 router["Views", "Logs", "Actions"].open(url)
 
-router["Views"].open(url, data: NSDate()) // pass any data if needed
+router["Views"].open(url, passing: NSDate()) // pass any data if needed
 
 router.open(url) // - or - to search all routes...
 
@@ -154,8 +154,8 @@ class PrivilegedInfoViewController: UIViewController, RouteOwner {
     override func viewDidLoad() {
         router.map("routingexample://secret",
                    owner: self,
-                   source: .Storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
-                   style: .Push(animated: true))
+                   source: .storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
+                   style: .push(animated: true))
     }
 }
 ```
@@ -166,8 +166,8 @@ When a route is added via *#map* or *#proxy*, a *RouteUUID* is returned. This *R
 
 ```swift
 routeUUID = router.map("routingexample://present/secret",
-                       source: .Storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
-                       style: .InNavigationController(.Present(animated: true))) 
+                       source: .storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
+                       style: .inNavigationController(.present(animated: true))) 
                                
 router.dispose(of: routeUUID)
 ```
@@ -177,7 +177,7 @@ router.dispose(of: routeUUID)
 A queue may be passed to maps or proxies. This queue will be the queue that a *RouteHandler* or *ProxyHandler* closure is called back on. By default, maps that are used for view controller navigation are called back on the main queue.
 
 ```swift
-let callbackQueue = dispatch_queue_create("Call Back Queue", DISPATCH_QUEUE_SERIAL) 
+let callbackQueue = DispatchQueue(label: "Call Back Queue", attributes: [])
 router.map("routingexample://route", queue: callbackQueue) { (_, _, _, completed) in
     completed()
 }
@@ -207,12 +207,12 @@ class LoginViewController: UIViewController, RoutingPresentationSetup {
 
 ```swift
 indirect public enum PresentationStyle {
-    case Show
-    case ShowDetail
-    case Present(animated: Bool)
-    case Push(animated: Bool)
-    case Custom(custom: (presenting: UIViewController, presented: UIViewController, completed: Routing.Completed) -> Void)
-    case InNavigationController(Routing.PresentationStyle)
+    case show
+    case showDetail
+    case present(animated: Bool)
+    case push(animated: Bool)
+    case custom(custom: (presenting: UIViewController, presented: UIViewController, completed: Routing.Completed) -> Void)
+    case inNavigationController(Routing.PresentationStyle)
 }
 ```
 
@@ -224,9 +224,9 @@ The following view controller sources are utilized.
 
 ```swift
 public enum ControllerSource {
-    case Storyboard(storyboard: String, identifier: String, bundle: NSBundle?)
-    case Nib(controller: UIViewController.Type, name: String?, bundle: NSBundle?)
-    case Provided(() -> UIViewController)
+    case storyboard(storyboard: String, identifier: String, bundle: NSBundle?)
+    case nib(controller: UIViewController.Type, name: String?, bundle: NSBundle?)
+    case provided(() -> UIViewController)
 }
 ```
 
