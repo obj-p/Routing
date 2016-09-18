@@ -9,8 +9,6 @@
 import XCTest
 @testable import Routing
 
-// TODO: Test passing of data and proxying
-
 class RoutingOpenTests: XCTestCase {
     var router: Routing!
     var testingQueue: DispatchQueue!
@@ -196,7 +194,6 @@ class RoutingOpenTests: XCTestCase {
 }
 
 class RoutingProxyTests: XCTestCase {
-    
     var router: Routing!
     var testingQueue: DispatchQueue!
     override func setUp() {
@@ -337,5 +334,94 @@ class RoutingProxyTests: XCTestCase {
         router.open(URL(string: "routingexample://route")!)
         waitForExpectations(timeout: 0.1, handler: nil)
         XCTAssert(results == ["one", "two"])
+    }
+    
+    func testRouterIsAbleToOpenDespiteConcurrentReadWriteAccesses() {
+        router.map("routingexample://route") { (_, _, _, completed) in completed() }
+        
+        testingQueue.async {
+            for i in 1...1000 {
+                self.router.proxy("\(i)") { route, parameters, any, next in next((route, parameters, any)) }
+            }
+        }
+        
+        testingQueue.async {
+            for i in 1...1000 {
+                self.router.proxy("\(i)") { route, parameters, any, next in next((route, parameters, any)) }
+            }
+        }
+        
+        XCTAssertTrue(router.open("routingexample://route"))
+    }
+    
+    func testParametersAreMaintainedThroughProxyAndRouteHandlers() {
+        let expect = expectation(description: "Parameters are maintained through proxy and route handlers.")
+        
+        var proxiedArgument, proxiedQuery: String?
+        router.proxy("routingexample://route/:argument") { route, parameters, any, next in
+            (proxiedArgument, proxiedQuery) = (parameters["argument"], parameters["query"])
+            next((route, parameters, any))
+        }
+        
+        var argument, query: String?
+        router.map("routingexample://route/:argument") { _, parameters, _, completed in
+            (argument, query) = (parameters["argument"], parameters["query"])
+            expect.fulfill()
+            completed()
+        }
+        
+        router.open("routingexample://route/foo?query=bar")
+        waitForExpectations(timeout: 0.1, handler: nil)
+        XCTAssert(proxiedArgument == "foo")
+        XCTAssert(argument == "foo")
+        XCTAssert(proxiedQuery == "bar")
+        XCTAssert(query == "bar")
+    }
+    
+    func testPassedAnyIsMaintainedThroughProxyAndRouteHandlers() {
+        let expect = expectation(description: "Passed any is maintained through proxy and route handlers.")
+        
+        var proxiedPassed: Any?
+        router.proxy("routingexample://route") { route, parameters, any, next in
+            proxiedPassed = any
+            next((route, parameters, any))
+        }
+        
+        var passed: Any?
+        router.map("routingexample://route") { _, _, any, completed in
+            passed = any
+            expect.fulfill()
+            completed()
+        }
+        
+        router.open("routingexample://route", passing: "any")
+        waitForExpectations(timeout: 0.1, handler: nil)
+        
+        if let proxiedPassed = proxiedPassed as? String, let passed = passed as? String {
+            XCTAssert(proxiedPassed == "any")
+            XCTAssert(passed == "any")
+        } else {
+            XCTFail()
+        }
+    }
+    
+    func testShouldAllowTheSettingOfAProxyHandlerCallbackQueue() {
+        let expect = expectation(description: "Should allow setting of ProxyHandler callback queue.")
+        
+        let callbackQueue = DispatchQueue(label: "Testing Call Back Queue", attributes: [])
+        let key = DispatchSpecificKey<Void>()
+        callbackQueue.setSpecific(key:key, value:())
+        
+        router.map("routingexample://route") { (_, _, _, completed) in completed() }
+        
+        router.proxy("routingexample://route", queue: callbackQueue) { route, parameters, any, next in
+            if let _ = DispatchQueue.getSpecific(key: key) {
+                expect.fulfill()
+            }
+            next((route, parameters, any))
+        }
+        
+        router.open("routingexample://route")
+        waitForExpectations(timeout: 0.1, handler: nil)
     }
 }
