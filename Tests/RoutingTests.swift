@@ -512,4 +512,80 @@ class RoutingTagTests: XCTestCase {
         router = Routing()
         testingQueue = DispatchQueue(label: "Testing Queue", attributes: DispatchQueue.Attributes.concurrent)
     }
+    
+    func testSubscriptingRouterOpen() {
+        let expect = expectation(description: "When subscripted first #mapped RouteHandler is called.")
+        
+        var routeCalled = 0
+        router.map("routingexample://route", tags: ["First"]) { _, _, _, completed in
+            routeCalled = 1
+            expect.fulfill()
+            completed()
+        }
+        
+        router.map("routingexample://route") { _, _, _, completed in
+            routeCalled = 2
+            expect.fulfill()
+            completed()
+        }
+        
+        router["First"].open("routingexample://route")
+        waitForExpectations(timeout: 0.1, handler: nil)
+        XCTAssert(routeCalled == 1)
+
+    }
+    
+    func testSubscriptingRouterTargetQueue() {
+        let expect = expectation(description: "When subscripted order is still preserved due to target queue.")
+        
+        var results = [String]()
+        router.map("routingexample://route", tags: ["First"]) { _, _, _, completed in
+            results.append("one")
+            completed()
+        }
+        
+        router.map("routingexample://route", tags: ["Second"]) { _, _, _, completed in
+            expect.fulfill()
+            results.append("two")
+            completed()
+        }
+        
+        router["First"].open("routingexample://route")
+        router["Second"].open("routingexample://route")
+        waitForExpectations(timeout: 0.1, handler: nil)
+        XCTAssert(results == ["one", "two"])
+    }
+}
+
+class RoutingPerformanceTests: XCTestCase {
+    var router: Routing!
+    var testingQueue: DispatchQueue!
+    override func setUp() {
+        super.setUp()
+        router = Routing()
+        testingQueue = DispatchQueue(label: "Testing Queue", attributes: DispatchQueue.Attributes.concurrent)
+    }
+    
+    func testPerfomance() {
+        // NOTE: 1000 takes ~8 seconds seems exponential
+        let num = 100
+        for i in 1...num {
+            print("\(i)")
+            router.map("\(i)") { _, _, _, completed in completed() }
+        }
+        
+        measure {
+            let expect = self.expectation(description: "Waiting on num + 1.")
+            let uuid = self.router.map("\(num + 1)") { _, _, _, completed in
+                expect.fulfill()
+                completed()
+            }
+            
+            for i in 1...(num + 1) {
+                self.router.open("\(i)")
+            }
+            self.waitForExpectations(timeout: 5, handler: nil)
+            self.router.dispose(of: uuid)
+        }
+    }
 }
