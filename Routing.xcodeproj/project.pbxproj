@@ -9,30 +9,26 @@
 /* Begin PBXBuildFile section */
 		92FCFA051BB963CD00DF05C3 /* Routing.h in Headers */ = {isa = PBXBuildFile; fileRef = 92FCFA041BB963CD00DF05C3 /* Routing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
-		92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
 		92FCFA1C1BB9658D00DF05C3 /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
-		D24099D31D55959C009A3FD4 /* iOSSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCC6271D559407005C474B /* iOSSpec.swift */; };
 		D24501A21D146B2F006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
 		D24501A31D14D1AF006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
 		D24501A41D14D1B0006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
 		D24501A51D14D1B1006BBDC8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D24501A11D146B2F006BBDC8 /* Route.swift */; };
+		D253AA411D8DE2C300F35644 /* RoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D253AA401D8DE2C300F35644 /* RoutingTests.swift */; };
+		D253AA421D8DE2C300F35644 /* RoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D253AA401D8DE2C300F35644 /* RoutingTests.swift */; };
+		D253AA431D8DE2D700F35644 /* RoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D253AA401D8DE2C300F35644 /* RoutingTests.swift */; };
+		D253AA451D8DE34000F35644 /* iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D253AA441D8DE34000F35644 /* iOSTests.swift */; };
 		D273364E1CFE78980004A92A /* iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = D273364D1CFE78970004A92A /* iOS.swift */; };
 		D295F41F1C6C2612003CAC2F /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D295F4151C6C2612003CAC2F /* Routing.framework */; };
 		D295F43B1C6C265D003CAC2F /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D295F4311C6C265D003CAC2F /* Routing.framework */; };
 		D295F44A1C6C27B1003CAC2F /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
 		D295F44B1C6C27B2003CAC2F /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
 		D295F44C1C6C27B4003CAC2F /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA1B1BB9658D00DF05C3 /* Routing.swift */; };
-		D295F44E1C6C27BE003CAC2F /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
-		D295F4501C6C29F5003CAC2F /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D295F44F1C6C29F5003CAC2F /* Quick.framework */; };
-		D295F4521C6C29F7003CAC2F /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D295F4511C6C29F7003CAC2F /* Nimble.framework */; };
 		D2A0FCF51D652D5E007BF1F8 /* SecretViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A0FCF41D652D5E007BF1F8 /* SecretViewController.swift */; };
 		D2B653961D5799B300A38633 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B653951D5799B300A38633 /* HomeViewController.swift */; };
 		D2B6539A1D57AB8C00A38633 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B653991D57AB8C00A38633 /* LoginViewController.swift */; };
 		D2B6539C1D57ACE300A38633 /* PrivilegedInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B6539B1D57ACE300A38633 /* PrivilegedInfoViewController.swift */; };
 		D2B6539E1D57AE1200A38633 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B6539D1D57AE1200A38633 /* SettingsViewController.swift */; };
-		D2F5D0561C570ECB00317401 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F5D0551C570ECB00317401 /* Nimble.framework */; };
-		D2F5D0581C570ECF00317401 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2F5D0571C570ECF00317401 /* Quick.framework */; };
-		D2F926981C8E4400007783EA /* RoutingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */; };
 		D2FCC6081D5593D5005C474B /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; };
 		D2FCC6091D5593D5005C474B /* Routing.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 92FCFA011BB963CD00DF05C3 /* Routing.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D2FCC61B1D5593F0005C474B /* AppRoutes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCC60D1D5593F0005C474B /* AppRoutes.swift */; };
@@ -99,26 +95,23 @@
 		92FCFA041BB963CD00DF05C3 /* Routing.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Routing.h; sourceTree = "<group>"; };
 		92FCFA061BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92FCFA0B1BB963CD00DF05C3 /* Routing iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Routing iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingSpec.swift; sourceTree = "<group>"; };
 		92FCFA121BB963CD00DF05C3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92FCFA1B1BB9658D00DF05C3 /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
 		D2204C7F1C8FE1B400ABA4E5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D24501A11D146B2F006BBDC8 /* Route.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
+		D253AA401D8DE2C300F35644 /* RoutingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutingTests.swift; sourceTree = "<group>"; };
+		D253AA441D8DE34000F35644 /* iOSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSTests.swift; sourceTree = "<group>"; };
 		D273364D1CFE78970004A92A /* iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOS.swift; sourceTree = "<group>"; };
 		D295F4081C6C25ED003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D295F4151C6C2612003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D295F41E1C6C2612003CAC2F /* Routing tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Routing tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D295F4311C6C265D003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D295F43A1C6C265D003CAC2F /* Routing OSX Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Routing OSX Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D295F44F1C6C29F5003CAC2F /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/Mac/Quick.framework; sourceTree = "<group>"; };
-		D295F4511C6C29F7003CAC2F /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/Mac/Nimble.framework; sourceTree = "<group>"; };
 		D2A0FCF41D652D5E007BF1F8 /* SecretViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecretViewController.swift; sourceTree = "<group>"; };
 		D2B653951D5799B300A38633 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		D2B653991D57AB8C00A38633 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		D2B6539B1D57ACE300A38633 /* PrivilegedInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrivilegedInfoViewController.swift; sourceTree = "<group>"; };
 		D2B6539D1D57AE1200A38633 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		D2F5D0551C570ECB00317401 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
-		D2F5D0571C570ECF00317401 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		D2FCC5F61D5593BF005C474B /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2FCC60D1D5593F0005C474B /* AppRoutes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppRoutes.swift; sourceTree = "<group>"; };
 		D2FCC60E1D5593F0005C474B /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -126,7 +119,6 @@
 		D2FCC6171D5593F0005C474B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D2FCC6181D5593F0005C474B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D2FCC61A1D5593F0005C474B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D2FCC6271D559407005C474B /* iOSSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSSpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,8 +134,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				92FCFA0C1BB963CD00DF05C3 /* Routing.framework in Frameworks */,
-				D2F5D0561C570ECB00317401 /* Nimble.framework in Frameworks */,
-				D2F5D0581C570ECF00317401 /* Quick.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,8 +171,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D295F43B1C6C265D003CAC2F /* Routing.framework in Frameworks */,
-				D295F4501C6C29F5003CAC2F /* Quick.framework in Frameworks */,
-				D295F4521C6C29F7003CAC2F /* Nimble.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,8 +226,8 @@
 		92FCFA0F1BB963CD00DF05C3 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				92FCFA101BB963CD00DF05C3 /* RoutingSpec.swift */,
-				D2FCC6271D559407005C474B /* iOSSpec.swift */,
+				D253AA401D8DE2C300F35644 /* RoutingTests.swift */,
+				D253AA441D8DE34000F35644 /* iOSTests.swift */,
 				92FCFA121BB963CD00DF05C3 /* Info.plist */,
 			);
 			path = Tests;
@@ -249,10 +237,6 @@
 			isa = PBXGroup;
 			children = (
 				D2204C7F1C8FE1B400ABA4E5 /* UIKit.framework */,
-				D2F5D0571C570ECF00317401 /* Quick.framework */,
-				D295F44F1C6C29F5003CAC2F /* Quick.framework */,
-				D295F4511C6C29F7003CAC2F /* Nimble.framework */,
-				D2F5D0551C570ECB00317401 /* Nimble.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -335,7 +319,6 @@
 				92FCFA071BB963CD00DF05C3 /* Sources */,
 				92FCFA081BB963CD00DF05C3 /* Frameworks */,
 				92FCFA091BB963CD00DF05C3 /* Resources */,
-				D2A0660F1C57159E000F4DC8 /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -391,7 +374,6 @@
 				D295F41A1C6C2612003CAC2F /* Sources */,
 				D295F41B1C6C2612003CAC2F /* Frameworks */,
 				D295F41C1C6C2612003CAC2F /* Resources */,
-				D295F4481C6C26EA003CAC2F /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -428,7 +410,6 @@
 				D295F4361C6C265D003CAC2F /* Sources */,
 				D295F4371C6C265D003CAC2F /* Frameworks */,
 				D295F4381C6C265D003CAC2F /* Resources */,
-				D295F4491C6C2719003CAC2F /* Carthage */,
 			);
 			buildRules = (
 			);
@@ -466,33 +447,41 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Routing;
 				TargetAttributes = {
 					92FCFA001BB963CD00DF05C3 = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0800;
 					};
 					92FCFA0A1BB963CD00DF05C3 = {
 						CreatedOnToolsVersion = 7.0;
+						LastSwiftMigration = 0800;
 						TestTargetID = D2FCC5F51D5593BF005C474B;
 					};
 					D295F4071C6C25ED003CAC2F = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					D295F4141C6C2612003CAC2F = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					D295F41D1C6C2612003CAC2F = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					D295F4301C6C265D003CAC2F = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					D295F4391C6C265D003CAC2F = {
 						CreatedOnToolsVersion = 7.2.1;
+						LastSwiftMigration = 0800;
 					};
 					D2FCC5F51D5593BF005C474B = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -583,57 +572,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		D295F4481C6C26EA003CAC2F /* Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Quick.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Nimble.framework",
-			);
-			name = Carthage;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-		D295F4491C6C2719003CAC2F /* Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/Mac/Quick.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/Nimble.framework",
-			);
-			name = Carthage;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-		D2A0660F1C57159E000F4DC8 /* Carthage */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Quick.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Nimble.framework",
-			);
-			name = Carthage;
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		92FCF9FC1BB963CD00DF05C3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -649,8 +587,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				92FCFA111BB963CD00DF05C3 /* RoutingSpec.swift in Sources */,
-				D24099D31D55959C009A3FD4 /* iOSSpec.swift in Sources */,
+				D253AA411D8DE2C300F35644 /* RoutingTests.swift in Sources */,
+				D253AA451D8DE34000F35644 /* iOSTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -676,7 +614,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2F926981C8E4400007783EA /* RoutingSpec.swift in Sources */,
+				D253AA431D8DE2D700F35644 /* RoutingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -693,7 +631,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D295F44E1C6C27BE003CAC2F /* RoutingSpec.swift in Sources */,
+				D253AA421D8DE2C300F35644 /* RoutingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -774,8 +712,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -822,8 +762,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -843,6 +785,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -854,6 +797,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -865,6 +809,7 @@
 				PRODUCT_NAME = Routing;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -872,6 +817,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -882,20 +828,19 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = Routing;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
 		92FCFA191BB963CD00DF05C3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
 			name = Debug;
@@ -903,14 +848,12 @@
 		92FCFA1A1BB963CD00DF05C3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
 			name = Release;
@@ -919,6 +862,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -930,6 +874,7 @@
 				PRODUCT_NAME = Routing;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.1;
 			};
@@ -939,6 +884,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -950,6 +896,7 @@
 				PRODUCT_NAME = Routing;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.1;
 			};
@@ -958,6 +905,7 @@
 		D295F4271C6C2612003CAC2F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -969,6 +917,7 @@
 				PRODUCT_NAME = Routing;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
@@ -977,6 +926,7 @@
 		D295F4281C6C2612003CAC2F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -988,6 +938,7 @@
 				PRODUCT_NAME = Routing;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
@@ -1001,6 +952,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_VERSION = 3.0;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
 			name = Debug;
@@ -1013,6 +965,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
+				SWIFT_VERSION = 3.0;
 				TVOS_DEPLOYMENT_TARGET = 9.1;
 			};
 			name = Release;
@@ -1020,7 +973,7 @@
 		D295F4431C6C265D003CAC2F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1035,13 +988,14 @@
 				PRODUCT_NAME = Routing;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		D295F4441C6C265D003CAC2F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1056,6 +1010,7 @@
 				PRODUCT_NAME = Routing;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1064,16 +1019,14 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1082,44 +1035,44 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
 		D2FCC6051D5593BF005C474B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
 		D2FCC6061D5593BF005C474B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = Example/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.routing.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
