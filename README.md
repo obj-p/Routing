@@ -29,7 +29,7 @@ router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, any, nex
     if authenticated {
         next(nil)
     } else {
-        next("routingexample://present/login?callback=\(route)", parameters, any)
+        next(("routingexample://present/login?callback=\(route)", parameters, any))
     }
 }
 ```
@@ -69,8 +69,8 @@ router.map("routingexample://present/settings",
            style: .InNavigationController(.Present(animated: true)),
            setup: presentationSetup)
     
-router.proxy("/*", tags: ["Views"]) { route, parameters, data, next in
-    print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
+router.proxy("/*", tags: ["Views"]) { route, parameters, any, next in
+    print("opened: route (\(route)) with parameters (\(parameters)) & any (\(any))")
     next(nil)
 }
 ```
@@ -102,10 +102,10 @@ github "jwalapr/Routing"
 
 ### Map
 
-A router instance may map a string pattern to view controller navigation, as covered in the [Usage](#usage) section above, or just a closure as presented below. The closure will have four parameters. The route it matched, the parameters (both query and segments in the URL), any data passed through open, and a completion closure that must be called or the router will halt all subsequent calls to #open.
+A router instance may map a string pattern to view controller navigation, as covered in the [Usage](#usage) section above, or just a closure as presented below. The closure will have four parameters. The route it matched, the parameters (both query and segments in the URL), any data passed through open, and a completion closure that must be called or the router will halt all subsequent calls to *#open*.
 
 ```swift
-router.map("routingexample://route/:argument") { route, parameters, data, completed in
+router.map("routingexample://route/:argument") { route, parameters, any, completed in
     argument = parameters["argument"]
     completed()
 }
@@ -113,7 +113,7 @@ router.map("routingexample://route/:argument") { route, parameters, data, comple
 
 ### Proxy
 
-A router instance may proxy any string pattern. The closure will also have four parameters. The route it matched, the parameters, any data passed, and a next closure. The next closure accepts a *ProxyCommit?* tuple with arguments *String*, *Parameters*, and *Any?*. If nil is passed to *Next* then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a *ProxyCommit* tuple to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to #open. 
+A router instance may proxy any string pattern. The closure will also have four parameters. The route it matched, the parameters, any data passed, and a next closure. The next closure accepts a *ProxyCommit?* tuple with arguments *String*, *Parameters*, and *Any?*. If nil is passed to *Next* then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a *ProxyCommit* tuple to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to *#open*. 
 
 ```swift
 router.proxy("routingexample://route/one") { route, parameters, any, next -> Void in
@@ -127,7 +127,7 @@ In general, the last call to register a map or proxy to the router will be first
 
 ### Tags
 
-A tag may be passed to maps or proxies. The default tag for maps to view controller navigation is "Views". Tags allow for the router to be subscripted to a specific context. If a router is subscripted with "Views", then it will only attempt to find routes that are tagged as such.
+A tag may be passed to maps or proxies. The default tag for maps to view controller navigation is *"Views"*. Tags allow for the router to be subscripted to a specific context. If a router is subscripted with *"Views"*, then it will only attempt to find routes that are tagged as such.
 
 ```swift
 router.proxy("/*", tags: ["Views, Logs"]) { route, parameters, data, next in
@@ -145,7 +145,7 @@ router.open(url) // - or - to search all routes...
 
 ### Route Owner
 
-Routes may have a RouteOwner specified when using #map or #proxy. When the RouteOwner is deallocated, the route is removed from the Routing instance.
+Routes may have a *RouteOwner* specified when using *#map* or *#proxy*. When the *RouteOwner* is deallocated, the route is removed from the *Routing* instance.
 
 ```swift
 public protocol RouteOwner: class {}
@@ -162,7 +162,7 @@ class PrivilegedInfoViewController: UIViewController, RouteOwner {
 
 ### RouteUUID and Disposing of a Route
 
-When a route is added via #map or #proxy, a RouteUUID is returned. This RouteUUID can be used to dispose of the route.
+When a route is added via *#map* or *#proxy*, a *RouteUUID* is returned. This *RouteUUID* can be used to dispose of the route.
 
 ```swift
 routeUUID = router.map("routingexample://present/secret",
@@ -174,7 +174,7 @@ router.dispose(of: routeUUID)
 
 ### Callback Queues
 
-A queue may be passed to maps or proxies. This queue will be the queue that a RouteHandler or ProxyHandler closure is called back on. By default, maps that are used for view controller navigation are called back on the main queue.
+A queue may be passed to maps or proxies. This queue will be the queue that a *RouteHandler* or *ProxyHandler* closure is called back on. By default, maps that are used for view controller navigation are called back on the main queue.
 
 ```swift
 let callbackQueue = dispatch_queue_create("Call Back Queue", DISPATCH_QUEUE_SERIAL) 
@@ -185,7 +185,7 @@ router.map("routingexample://route", queue: callbackQueue) { (_, _, _, completed
 
 ### Presentation Setup
 
-View controllers mapped to the router will have the opportunity to be informed of a opened route through either a closure or the RoutingPresentationSetup protocol. In either implementation, the view controller will have access to the parameters passed through the URL. An example of the closure approach is in the [Usage](#usage) section above. The protocol looks as follows.
+View controllers mapped to the router will have the opportunity to be informed of a opened route through either a closure or the *RoutingPresentationSetup* protocol. In either implementation, the view controller will have access to the parameters passed through the URL. An example of the closure approach is in the [Usage](#usage) section above. The protocol looks as follows.
 
 ```swift
 class LoginViewController: UIViewController, RoutingPresentationSetup {
@@ -216,7 +216,7 @@ indirect public enum PresentationStyle {
 }
 ```
 
-The above presentation styles are made available. The recursive .InNavigationController(PresentationStyle) enumeration will result in the view controller being wrapped in a navigation controller before being presented in whatever fashion. There is also the ability to provide custom presentation styles.
+The above presentation styles are made available. The recursive *.InNavigationController(PresentationStyle)* enumeration will result in the view controller being wrapped in a navigation controller before being presented in whatever fashion. There is also the ability to provide custom presentation styles.
 
 ### View Controller Sources
 

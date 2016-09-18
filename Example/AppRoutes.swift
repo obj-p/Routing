@@ -54,16 +54,16 @@ public func registerRoutes() {
         }
     }
 
-    router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, data, next in
+    router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, any, next in
         if authenticated {
             next(nil)
         } else {
-            next(("routingexample://present/login?callback=\(route)", parameters, data))
+            next(("routingexample://present/login?callback=\(route)", parameters, any))
         }
     }
 
-    router.proxy("/*", tags: ["Views"]) { route, parameters, data, next in
-        print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
+    router.proxy("/*", tags: ["Views"]) { route, parameters, any, next in
+        print("opened: route (\(route)) with parameters (\(parameters)) & any (\(any))")
         next(nil)
     }
 }
