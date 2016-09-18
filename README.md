@@ -25,11 +25,11 @@ override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPat
 Perhaps the privileged information is only available after a user authenticates with the service. After logging in we want the privileged information presented to the user right away. Without changing the above implementation we may proxy the intent and display a log in view, after which, a call back may present the privileged information screen.
 
 ```swift
-router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, data, next in
+router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, any, next in
     if authenticated {
-        next(nil, nil, nil)
+        next(nil)
     } else {
-        next("routingexample://present/login?callback=\(route)", parameters, data)
+        next("routingexample://present/login?callback=\(route)", parameters, any)
     }
 }
 ```
@@ -71,7 +71,7 @@ router.map("routingexample://present/settings",
     
 router.proxy("/*", tags: ["Views"]) { route, parameters, data, next in
     print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
-    next(nil, nil, nil)
+    next(nil)
 }
 ```
 
@@ -88,7 +88,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'Routing', '~> 1.2.0'
+pod 'Routing', '~> 1.3.0'
 ```
 
 ### Carthage
@@ -113,11 +113,11 @@ router.map("routingexample://route/:argument") { route, parameters, data, comple
 
 ### Proxy
 
-A router instance may proxy any string pattern. The closure will also have four parameters. The route it matched, the parameters, any data passed, and a next closure. The next closure accepts three optional arguments for the route, parameters, and data. If nil is passed to all arguments then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a route, parameters, or data to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to #open. 
+A router instance may proxy any string pattern. The closure will also have four parameters. The route it matched, the parameters, any data passed, and a next closure. The next closure accepts a *ProxyCommit?* tuple with arguments *String*, *Parameters*, and *Any?*. If nil is passed to *Next* then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a *ProxyCommit* tuple to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to #open. 
 
 ```swift
-router.proxy("routingexample://route/one") { route, parameters, data, next -> Void in
-    next("routingexample://route/two", parameters, data)
+router.proxy("routingexample://route/one") { route, parameters, any, next -> Void in
+    next(("routingexample://route/two", parameters, any))
 }
 ```
 
@@ -132,7 +132,7 @@ A tag may be passed to maps or proxies. The default tag for maps to view control
 ```swift
 router.proxy("/*", tags: ["Views, Logs"]) { route, parameters, data, next in
     print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
-    next(nil, nil, nil)
+    next(nil)
 }
 
 router["Views", "Logs", "Actions"].open(url)
@@ -169,7 +169,7 @@ routeUUID = router.map("routingexample://present/secret",
                        source: .Storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
                        style: .InNavigationController(.Present(animated: true))) 
                                
-router.disposeOf(routeUUID)
+router.dispose(of: routeUUID)
 ```
 
 ### Callback Queues
@@ -191,12 +191,12 @@ View controllers mapped to the router will have the opportunity to be informed o
 class LoginViewController: UIViewController, RoutingPresentationSetup {
     var callback: String?
     
-    func setup(route: String, parameters: Parameters, data: Data) {
+    func setup(_ route: String, with parameters: Parameters, passing any: Any?) {
         if let callbackURL = parameters["callback"] {
             self.callback = callbackURL
         }
         
-        if let date = data as? NSDate {
+        if let date = any as? NSDate {
             self.passedDate = date
         }
     }
