@@ -178,7 +178,7 @@ A queue may be passed to maps or proxies. This queue will be the queue that a *R
 
 ```swift
 let callbackQueue = DispatchQueue(label: "Call Back Queue", attributes: [])
-router.map("routingexample://route", queue: callbackQueue) { (_, _, _, completed) in
+router.map("routingexample://route", queue: callbackQueue) { _, _, _, completed in
     completed()
 }
 ```
