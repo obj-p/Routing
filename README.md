@@ -25,11 +25,11 @@ override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPat
 Perhaps the privileged information is only available after a user authenticates with the service. After logging in we want the privileged information presented to the user right away. Without changing the above implementation we may proxy the intent and display a log in view, after which, a call back may present the privileged information screen.
 
 ```swift
-router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, data, next in
+router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, any, next in
     if authenticated {
-        next(nil, nil, nil)
+        next(nil)
     } else {
-        next("routingexample://present/login?callback=\(route)", parameters, data)
+        next(("routingexample://present/login?callback=\(route)", parameters, any))
     }
 }
 ```
@@ -50,28 +50,28 @@ An example of other routes in an application may look like this.
 
 ```swift
 let presentationSetup: PresentationSetup = { vc, _, _ in
-    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, 
+    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, 
                                                           target: vc, 
                                                           action: #selector(vc.cancel))
 }
 
 router.map("routingexample://present/login",
-           source: .Storyboard(storyboard: "Main", identifier: "LoginViewController", bundle: nil),
-           style: .InNavigationController(.Present(animated: true)),
+           source: .storyboard(storyboard: "Main", identifier: "LoginViewController", bundle: nil),
+           style: .inNavigationController(.present(animated: true)),
            setup: presentationSetup)
     
 router.map("routingexample://push/privilegedinfo",
-           source: .Storyboard(storyboard: "Main", identifier: "PrivilegedInfoViewController", bundle: nil),
-           style: .Push(animated: true))
+           source: .storyboard(storyboard: "Main", identifier: "PrivilegedInfoViewController", bundle: nil),
+           style: .push(animated: true))
     
 router.map("routingexample://present/settings",
-           source: .Storyboard(storyboard: "Main", identifier: "SettingsViewController", bundle: nil),
-           style: .InNavigationController(.Present(animated: true)),
+           source: .storyboard(storyboard: "Main", identifier: "SettingsViewController", bundle: nil),
+           style: .inNavigationController(.present(animated: true)),
            setup: presentationSetup)
     
-router.proxy("/*", tags: ["Views"]) { route, parameters, data, next in
-    print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
-    next(nil, nil, nil)
+router.proxy("/*", tags: ["Views"]) { route, parameters, any, next in
+    print("opened: route (\(route)) with parameters (\(parameters)) & passing (\(any))")
+    next(nil)
 }
 ```
 
@@ -88,7 +88,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 use_frameworks!
 
-pod 'Routing', '~> 1.2.0'
+pod 'Routing', '~> 1.3.0'
 ```
 
 ### Carthage
@@ -102,10 +102,10 @@ github "jwalapr/Routing"
 
 ### Map
 
-A router instance may map a string pattern to view controller navigation, as covered in the [Usage](#usage) section above, or just a closure as presented below. The closure will have four parameters. The route it matched, the parameters (both query and segments in the URL), any data passed through open, and a completion closure that must be called or the router will halt all subsequent calls to #open.
+A router instance may map a string pattern to view controller navigation, as covered in the [Usage](#usage) section above, or just a closure as presented below. The closure will have four parameters. The route it matched, the parameters (both query and segments in the URL), any data passed through open, and a completion closure that must be called or the router will halt all subsequent calls to *#open*.
 
 ```swift
-router.map("routingexample://route/:argument") { route, parameters, data, completed in
+router.map("routingexample://route/:argument") { route, parameters, any, completed in
     argument = parameters["argument"]
     completed()
 }
@@ -113,11 +113,11 @@ router.map("routingexample://route/:argument") { route, parameters, data, comple
 
 ### Proxy
 
-A router instance may proxy any string pattern. The closure will also have four parameters. The route it matched, the parameters, any data passed, and a next closure. The next closure accepts three optional arguments for the route, parameters, and data. If nil is passed to all arguments then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a route, parameters, or data to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to #open. 
+A router instance may proxy any string pattern. The closure will also have four parameters. The route it matched, the parameters, any data passed, and a next closure. The next closure accepts a *ProxyCommit?* tuple with arguments *String*, *Parameters*, and *Any?*. If nil is passed to *Next* then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a *ProxyCommit* tuple to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to *#open*. 
 
 ```swift
-router.proxy("routingexample://route/one") { route, parameters, data, next -> Void in
-    next("routingexample://route/two", parameters, data)
+router.proxy("routingexample://route/one") { route, parameters, any, next -> Void in
+    next(("routingexample://route/two", parameters, any))
 }
 ```
 
@@ -127,17 +127,17 @@ In general, the last call to register a map or proxy to the router will be first
 
 ### Tags
 
-A tag may be passed to maps or proxies. The default tag for maps to view controller navigation is "Views". Tags allow for the router to be subscripted to a specific context. If a router is subscripted with "Views", then it will only attempt to find routes that are tagged as such.
+A tag may be passed to maps or proxies. The default tag for maps to view controller navigation is *"Views"*. Tags allow for the router to be subscripted to a specific context. If a router is subscripted with *"Views"*, then it will only attempt to find routes that are tagged as such.
 
 ```swift
-router.proxy("/*", tags: ["Views, Logs"]) { route, parameters, data, next in
-    print("opened: route (\(route)) with parameters (\(parameters)) & data (\(data))")
-    next(nil, nil, nil)
+router.proxy("/*", tags: ["Views, Logs"]) { route, parameters, any, next in
+    print("opened: route (\(route)) with parameters (\(parameters)) & passing (\(any))")
+    next(nil)
 }
 
 router["Views", "Logs", "Actions"].open(url)
 
-router["Views"].open(url, data: NSDate()) // pass any data if needed
+router["Views"].open(url, passing: NSDate()) // pass any data if needed
 
 router.open(url) // - or - to search all routes...
 
@@ -145,7 +145,7 @@ router.open(url) // - or - to search all routes...
 
 ### Route Owner
 
-Routes may have a RouteOwner specified when using #map or #proxy. When the RouteOwner is deallocated, the route is removed from the Routing instance.
+Routes may have a *RouteOwner* specified when using *#map* or *#proxy*. When the *RouteOwner* is deallocated, the route is removed from the *Routing* instance.
 
 ```swift
 public protocol RouteOwner: class {}
@@ -154,49 +154,49 @@ class PrivilegedInfoViewController: UIViewController, RouteOwner {
     override func viewDidLoad() {
         router.map("routingexample://secret",
                    owner: self,
-                   source: .Storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
-                   style: .Push(animated: true))
+                   source: .storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
+                   style: .push(animated: true))
     }
 }
 ```
 
 ### RouteUUID and Disposing of a Route
 
-When a route is added via #map or #proxy, a RouteUUID is returned. This RouteUUID can be used to dispose of the route.
+When a route is added via *#map* or *#proxy*, a *RouteUUID* is returned. This *RouteUUID* can be used to dispose of the route.
 
 ```swift
 routeUUID = router.map("routingexample://present/secret",
-                       source: .Storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
-                       style: .InNavigationController(.Present(animated: true))) 
+                       source: .storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
+                       style: .inNavigationController(.present(animated: true))) 
                                
-router.disposeOf(routeUUID)
+router.dispose(of: routeUUID)
 ```
 
 ### Callback Queues
 
-A queue may be passed to maps or proxies. This queue will be the queue that a RouteHandler or ProxyHandler closure is called back on. By default, maps that are used for view controller navigation are called back on the main queue.
+A queue may be passed to maps or proxies. This queue will be the queue that a *RouteHandler* or *ProxyHandler* closure is called back on. By default, maps that are used for view controller navigation are called back on the main queue.
 
 ```swift
-let callbackQueue = dispatch_queue_create("Call Back Queue", DISPATCH_QUEUE_SERIAL) 
-router.map("routingexample://route", queue: callbackQueue) { (_, _, _, completed) in
+let callbackQueue = DispatchQueue(label: "Call Back Queue", attributes: [])
+router.map("routingexample://route", queue: callbackQueue) { _, _, _, completed in
     completed()
 }
 ```
 
 ### Presentation Setup
 
-View controllers mapped to the router will have the opportunity to be informed of a opened route through either a closure or the RoutingPresentationSetup protocol. In either implementation, the view controller will have access to the parameters passed through the URL. An example of the closure approach is in the [Usage](#usage) section above. The protocol looks as follows.
+View controllers mapped to the router will have the opportunity to be informed of a opened route through either a closure or the *RoutingPresentationSetup* protocol. In either implementation, the view controller will have access to the parameters passed through the URL. An example of the closure approach is in the [Usage](#usage) section above. The protocol looks as follows.
 
 ```swift
 class LoginViewController: UIViewController, RoutingPresentationSetup {
     var callback: String?
     
-    func setup(route: String, parameters: Parameters, data: Data) {
+    func setup(_ route: String, with parameters: Parameters, passing any: Any?) {
         if let callbackURL = parameters["callback"] {
             self.callback = callbackURL
         }
         
-        if let date = data as? NSDate {
+        if let date = any as? NSDate {
             self.passedDate = date
         }
     }
@@ -207,16 +207,16 @@ class LoginViewController: UIViewController, RoutingPresentationSetup {
 
 ```swift
 indirect public enum PresentationStyle {
-    case Show
-    case ShowDetail
-    case Present(animated: Bool)
-    case Push(animated: Bool)
-    case Custom(custom: (presenting: UIViewController, presented: UIViewController, completed: Routing.Completed) -> Void)
-    case InNavigationController(Routing.PresentationStyle)
+    case show
+    case showDetail
+    case present(animated: Bool)
+    case push(animated: Bool)
+    case custom(custom: (presenting: UIViewController, presented: UIViewController, completed: Routing.Completed) -> Void)
+    case inNavigationController(Routing.PresentationStyle)
 }
 ```
 
-The above presentation styles are made available. The recursive .InNavigationController(PresentationStyle) enumeration will result in the view controller being wrapped in a navigation controller before being presented in whatever fashion. There is also the ability to provide custom presentation styles.
+The above presentation styles are made available. The recursive *.InNavigationController(PresentationStyle)* enumeration will result in the view controller being wrapped in a navigation controller before being presented in whatever fashion. There is also the ability to provide custom presentation styles.
 
 ### View Controller Sources
 
@@ -224,9 +224,9 @@ The following view controller sources are utilized.
 
 ```swift
 public enum ControllerSource {
-    case Storyboard(storyboard: String, identifier: String, bundle: NSBundle?)
-    case Nib(controller: UIViewController.Type, name: String?, bundle: NSBundle?)
-    case Provided(() -> UIViewController)
+    case storyboard(storyboard: String, identifier: String, bundle: NSBundle?)
+    case nib(controller: UIViewController.Type, name: String?, bundle: NSBundle?)
+    case provided(() -> UIViewController)
 }
 ```
 
