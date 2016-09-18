@@ -45,6 +45,7 @@ public extension UINavigationController {
         self.commit(completion) {
             vc = self.popViewController(animated: animated)
         }
+        
         return vc
     }
     
@@ -54,6 +55,7 @@ public extension UINavigationController {
         self.commit(completion) {
             vc = self.popToViewController(viewController, animated: animated)
         }
+        
         return vc
     }
     
@@ -63,6 +65,7 @@ public extension UINavigationController {
         self.commit(completion) {
             vc = self.popToRootViewController(animated: animated)
         }
+        
         return vc
     }
 }

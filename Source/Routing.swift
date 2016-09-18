@@ -32,6 +32,7 @@ public final class Routing: RouteOwner {
                               proxies: self.proxies.filter({ set.intersection($0.tags).isEmpty == false }),
                               targetQueue: self.routingQueue)
             }
+            
             return sub
         }
     }
@@ -76,6 +77,7 @@ public final class Routing: RouteOwner {
         accessQueue.async {
             self.routes.insert(route, at: 0)
         }
+        
         return route.uuid
     }
     
@@ -110,6 +112,7 @@ public final class Routing: RouteOwner {
         accessQueue.async {
             self.proxies.insert(proxy, at: 0)
         }
+        
         return proxy.uuid
     }
     
