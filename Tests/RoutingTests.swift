@@ -9,7 +9,7 @@
 import XCTest
 @testable import Routing
 
-class RoutingOpenTests: XCTestCase {
+class RoutingMapTests: XCTestCase {
     var router: Routing!
     var testingQueue: DispatchQueue!
     override func setUp() {
@@ -423,5 +423,93 @@ class RoutingProxyTests: XCTestCase {
         
         router.open("routingexample://route")
         waitForExpectations(timeout: 0.1, handler: nil)
+    }
+}
+
+class RoutingDisposeTests: XCTestCase {
+    var router: Routing!
+    var testingQueue: DispatchQueue!
+    override func setUp() {
+        super.setUp()
+        router = Routing()
+        testingQueue = DispatchQueue(label: "Testing Queue", attributes: DispatchQueue.Attributes.concurrent)
+    }
+    
+    func testDisposingOfRouteUUID() {
+        let uuid = router.map("routingexample://route") { _, _, _, completed in completed() }
+        XCTAssertTrue(router.open("routingexample://route"))
+        router.dispose(of: uuid)
+        XCTAssertFalse(router.open("routingexample://route"))
+    }
+    
+    func testDisposingOfProxyUUID() {
+        let expect = expectation(description: "Proxy will be disposed and not redirect opened route.")
+        
+        var routeCalled = 0
+        router.map("routingexample://route/one") { _, _, _, completed in
+            routeCalled = 1
+            expect.fulfill()
+            completed()
+        }
+        
+        router.map("routingexample://route/two") { _, _, _, completed in
+            routeCalled = 2
+            expect.fulfill()
+            completed()
+        }
+        
+        let uuid = router.proxy("routingexample://route/one") { route, parameters, any, next in
+            next(("routingexample://route/two", parameters, any))
+        }
+        router.dispose(of: uuid)
+        router.open("routingexample://route/one")
+        waitForExpectations(timeout: 0.1, handler: nil)
+        XCTAssert(routeCalled == 1)
+    }
+    
+    class testRouteOwner: RouteOwner {}
+    
+    func testDeallocatingOfRouterOwnerDisposesMappedRoute() {
+        var owner: RouteOwner? = testRouteOwner()
+        router.map("routingexample://route", owner: owner) { _, _, _, completed in completed() }
+        XCTAssertTrue(router.open("routingexample://route"))
+        owner = nil
+        XCTAssertFalse(router.open("routingexample://route"))
+    }
+    
+    func testDeallocatingOfRouterOwnerDisposesProxiedRoute() {
+        let expect = expectation(description: "Proxy will be disposed and not redirect opened route.")
+        
+        var routeCalled = 0
+        router.map("routingexample://route/one") { _, _, _, completed in
+            routeCalled = 1
+            expect.fulfill()
+            completed()
+        }
+        
+        router.map("routingexample://route/two") { _, _, _, completed in
+            routeCalled = 2
+            expect.fulfill()
+            completed()
+        }
+        
+        var owner: RouteOwner? = testRouteOwner()
+        router.proxy("routingexample://route/one", owner: owner) { route, parameters, any, next in
+            next(("routingexample://route/two", parameters, any))
+        }
+        owner = nil
+        router.open("routingexample://route/one")
+        waitForExpectations(timeout: 0.1, handler: nil)
+        XCTAssert(routeCalled == 1)
+    }
+}
+
+class RoutingTagTests: XCTestCase {
+    var router: Routing!
+    var testingQueue: DispatchQueue!
+    override func setUp() {
+        super.setUp()
+        router = Routing()
+        testingQueue = DispatchQueue(label: "Testing Queue", attributes: DispatchQueue.Attributes.concurrent)
     }
 }

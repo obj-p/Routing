@@ -17,7 +17,6 @@
 		D253AA411D8DE2C300F35644 /* RoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D253AA401D8DE2C300F35644 /* RoutingTests.swift */; };
 		D253AA421D8DE2C300F35644 /* RoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D253AA401D8DE2C300F35644 /* RoutingTests.swift */; };
 		D253AA431D8DE2D700F35644 /* RoutingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D253AA401D8DE2C300F35644 /* RoutingTests.swift */; };
-		D253AA451D8DE34000F35644 /* iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D253AA441D8DE34000F35644 /* iOSTests.swift */; };
 		D273364E1CFE78980004A92A /* iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = D273364D1CFE78970004A92A /* iOS.swift */; };
 		D295F41F1C6C2612003CAC2F /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D295F4151C6C2612003CAC2F /* Routing.framework */; };
 		D295F43B1C6C265D003CAC2F /* Routing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D295F4311C6C265D003CAC2F /* Routing.framework */; };
@@ -100,7 +99,6 @@
 		D2204C7F1C8FE1B400ABA4E5 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D24501A11D146B2F006BBDC8 /* Routable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routable.swift; sourceTree = "<group>"; };
 		D253AA401D8DE2C300F35644 /* RoutingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutingTests.swift; sourceTree = "<group>"; };
-		D253AA441D8DE34000F35644 /* iOSTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOSTests.swift; sourceTree = "<group>"; };
 		D273364D1CFE78970004A92A /* iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = iOS.swift; sourceTree = "<group>"; };
 		D295F4081C6C25ED003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D295F4151C6C2612003CAC2F /* Routing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Routing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -227,7 +225,6 @@
 			isa = PBXGroup;
 			children = (
 				D253AA401D8DE2C300F35644 /* RoutingTests.swift */,
-				D253AA441D8DE34000F35644 /* iOSTests.swift */,
 				92FCFA121BB963CD00DF05C3 /* Info.plist */,
 			);
 			path = Tests;
@@ -588,7 +585,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D253AA411D8DE2C300F35644 /* RoutingTests.swift in Sources */,
-				D253AA451D8DE34000F35644 /* iOSTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
