@@ -1,7 +1,7 @@
 # Routing
 
-[![Build Status](https://travis-ci.org/jwalapr/Routing.svg?branch=master)](https://travis-ci.org/jwalapr/Routing)
-[![Code coverage status](https://img.shields.io/codecov/c/github/jwalapr/Routing.svg?style=flat-square)](http://codecov.io/github/jwalapr/Routing)
+[![Build Status](https://travis-ci.org/jjgp/Routing.svg?branch=master)](https://travis-ci.org/jjgp/Routing)
+[![Code coverage status](https://img.shields.io/codecov/c/github/jwalapr/Routing.svg?style=flat-square)](http://codecov.io/github/jjgp/Routing)
 [![Platform support](https://img.shields.io/badge/platform-ios%20%7C%20osx%20%7C%20tvos%20%7C%20watchos-lightgrey.svg?style=flat-square)](https://img.shields.io/badge/platform-ios%20%7C%20osx%20%7C%20tvos%20%7C%20watchos-lightgrey.svg?style=flat-square) 
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Routing.svg)](https://cocoapods.org/pods/Routing)
@@ -96,7 +96,7 @@ pod 'Routing', '~> 1.3.0'
 Via [Carthage](https://github.com/Carthage/Carthage):
 
 ```ogdl
-github "jwalapr/Routing"
+github "jjgp/Routing"
 ```
 ## Further Detail
 

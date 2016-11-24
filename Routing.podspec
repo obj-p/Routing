@@ -5,11 +5,11 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
                         Routing allows for routing URLs matched by string patterns to associated closures.
                         DESC
-  s.homepage         = "https://github.com/jwalapr/Routing"
+  s.homepage         = "https://github.com/jjgp/Routing"
   s.license          = { :type => "MIT", :file => "LICENSE" }
   s.author           = { "Jason Prasad" => "jwalapr@gmail.com" }
-  s.source           = { :git => "https://github.com/jwalapr/Routing.git", :tag => s.version.to_s }
-  s.ios.deployment_target = '8.0'  
+  s.source           = { :git => "https://github.com/jjgp/Routing.git", :tag => s.version.to_s }
+  s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.11'
   s.tvos.deployment_target = '9.0'
   s.watchos.deployment_target = '2.1'
