@@ -1,8 +1,8 @@
 # Routing
 
 [![Build Status](https://travis-ci.org/jjgp/Routing.svg?branch=master)](https://travis-ci.org/jjgp/Routing)
-[![Code coverage status](https://img.shields.io/codecov/c/github/jwalapr/Routing.svg?style=flat-square)](http://codecov.io/github/jjgp/Routing)
-[![Platform support](https://img.shields.io/badge/platform-ios%20%7C%20osx%20%7C%20tvos%20%7C%20watchos-lightgrey.svg?style=flat-square)](https://img.shields.io/badge/platform-ios%20%7C%20osx%20%7C%20tvos%20%7C%20watchos-lightgrey.svg?style=flat-square) 
+[![Code coverage status](https://img.shields.io/codecov/c/github/jjgp/Routing.svg?style=flat-square)](http://codecov.io/github/jjgp/Routing)
+[![Platform support](https://img.shields.io/badge/platform-ios%20%7C%20osx%20%7C%20tvos%20%7C%20watchos-lightgrey.svg?style=flat-square)](https://img.shields.io/badge/platform-ios%20%7C%20osx%20%7C%20tvos%20%7C%20watchos-lightgrey.svg?style=flat-square)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/Routing.svg)](https://cocoapods.org/pods/Routing)
 [![License MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/Routing/Routing/blob/master/LICENSE)
@@ -50,8 +50,8 @@ An example of other routes in an application may look like this.
 
 ```swift
 let presentationSetup: PresentationSetup = { vc, _, _ in
-    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, 
-                                                          target: vc, 
+    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
+                                                          target: vc,
                                                           action: #selector(vc.cancel))
 }
 
@@ -59,16 +59,16 @@ router.map("routingexample://present/login",
            source: .storyboard(storyboard: "Main", identifier: "LoginViewController", bundle: nil),
            style: .inNavigationController(.present(animated: true)),
            setup: presentationSetup)
-    
+
 router.map("routingexample://push/privilegedinfo",
            source: .storyboard(storyboard: "Main", identifier: "PrivilegedInfoViewController", bundle: nil),
            style: .push(animated: true))
-    
+
 router.map("routingexample://present/settings",
            source: .storyboard(storyboard: "Main", identifier: "SettingsViewController", bundle: nil),
            style: .inNavigationController(.present(animated: true)),
            setup: presentationSetup)
-    
+
 router.proxy("/*", tags: ["Views"]) { route, parameters, any, next in
     print("opened: route (\(route)) with parameters (\(parameters)) & passing (\(any))")
     next(nil)
@@ -113,7 +113,7 @@ router.map("routingexample://route/:argument") { route, parameters, any, complet
 
 ### Proxy
 
-A router instance may proxy any string pattern. The closure will also have four parameters. The route it matched, the parameters, any data passed, and a next closure. The next closure accepts a *ProxyCommit?* tuple with arguments *String*, *Parameters*, and *Any?*. If nil is passed to *Next* then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a *ProxyCommit* tuple to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to *#open*. 
+A router instance may proxy any string pattern. The closure will also have four parameters. The route it matched, the parameters, any data passed, and a next closure. The next closure accepts a *ProxyCommit?* tuple with arguments *String*, *Parameters*, and *Any?*. If nil is passed to *Next* then the router will continue to another proxy if it exists or subsequently to a mapped route. If a proxy were to pass a *ProxyCommit* tuple to the next closure, the router will skip any subsequent proxy and attempt to match a mapped route. Failure to call next will halt the router and all subsequent calls to *#open*.
 
 ```swift
 router.proxy("routingexample://route/one") { route, parameters, any, next -> Void in
@@ -167,8 +167,8 @@ When a route is added via *#map* or *#proxy*, a *RouteUUID* is returned. This *R
 ```swift
 routeUUID = router.map("routingexample://present/secret",
                        source: .storyboard(storyboard: "Main", identifier: "SecretViewController", bundle: nil),
-                       style: .inNavigationController(.present(animated: true))) 
-                               
+                       style: .inNavigationController(.present(animated: true)))
+
 router.dispose(of: routeUUID)
 ```
 
@@ -190,12 +190,12 @@ View controllers mapped to the router will have the opportunity to be informed o
 ```swift
 class LoginViewController: UIViewController, RoutingPresentationSetup {
     var callback: String?
-    
+
     func setup(_ route: String, with parameters: Parameters, passing any: Any?) {
         if let callbackURL = parameters["callback"] {
             self.callback = callbackURL
         }
-        
+
         if let date = any as? NSDate {
             self.passedDate = date
         }
