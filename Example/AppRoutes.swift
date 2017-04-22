@@ -63,7 +63,7 @@ public func registerRoutes() {
     }
 
     router.proxy("/*", tags: ["Views"]) { route, parameters, any, next in
-        print("opened: route (\(route)) with parameters (\(parameters)) & passing (\(any))")
+        print("opened: route (\(route)) with parameters (\(parameters)) & passing (\(String(describing: any)))")
         next(nil)
     }
 }

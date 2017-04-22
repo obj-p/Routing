@@ -20,8 +20,9 @@ fileprivate struct RoutableWork {
 public final class Routing: RouteOwner {
     private var routes: [Route] = [Route]()
     private var proxies: [Proxy] = [Proxy]()
-    private var accessQueue = DispatchQueue(label: "Routing Access Queue", attributes: [])
-    private var routingQueue: DispatchQueue
+    private var accessQueue: DispatchQueue
+    private var openQueue: DispatchQueue
+    private var processQueue: DispatchQueue
     
     public subscript(tags: String...) -> Routing {
         get {
@@ -30,7 +31,9 @@ public final class Routing: RouteOwner {
             accessQueue.sync {
                 sub = Routing(routes: self.routes.filter({ set.intersection($0.tags).isEmpty == false }),
                               proxies: self.proxies.filter({ set.intersection($0.tags).isEmpty == false }),
-                              targetQueue: self.routingQueue)
+                              accessQueue: self.accessQueue,
+                              openQueue: self.openQueue,
+                              processingQueue: self.processQueue)
             }
             
             return sub
@@ -38,11 +41,19 @@ public final class Routing: RouteOwner {
     }
     
     public init() {
-        routingQueue = DispatchQueue(label: "Routing Queue", attributes: [])
+        accessQueue = DispatchQueue(label: "Routing Access Queue", attributes: [])
+        openQueue = DispatchQueue(label: "Routing Open Queue", attributes: [])
+        processQueue = DispatchQueue(label: "Routing Process Queue", attributes: [])
     }
     
-    private init(routes: [Route], proxies: [Proxy], targetQueue: DispatchQueue) {
-        routingQueue = DispatchQueue(label: "Routing Queue", attributes: [], target: targetQueue)
+    private init(routes: [Route],
+                 proxies: [Proxy],
+                 accessQueue: DispatchQueue,
+                 openQueue: DispatchQueue,
+                 processingQueue: DispatchQueue) {
+        self.accessQueue = accessQueue
+        self.openQueue = openQueue
+        self.processQueue = processingQueue
         self.routes = routes
         self.proxies = proxies
     }
@@ -145,35 +156,36 @@ public final class Routing: RouteOwner {
     
     @discardableResult
     public func open(_ URL: Foundation.URL, passing any: Any? = nil) -> Bool {
-        var work = RoutableWork()
-        guard let searchRoute = searchRoute(from: URL, with: &work.parameters) else {
-            return false
-        }
-        work.searchRoute = searchRoute
+        var result = true
         
-        accessQueue.sync {
-            routes = routes.filter { $0.owner != nil }
-            proxies = proxies.filter { $0.owner != nil }
-            work.routes = routes
-            work.proxies = proxies
-            for route in work.routes where self.searchRoute(work.searchRoute, matches: route, updating: &work.parameters) {
-                work.initialRoutable = route
-                break
+        openQueue.sync {
+            var work = RoutableWork()
+            guard let searchRoute = searchRoute(from: URL, with: &work.parameters) else {
+                result = false
+                return
             }
-        }
-        
-        if work.initialRoutable == nil {
-            return false
-        }
-        
-        work.passedAny = any
-        defer {
-            routingQueue.async {
-                self.process(work: work)
+            work.searchRoute = searchRoute
+            
+            accessQueue.sync {
+                routes = routes.filter { $0.owner != nil }
+                proxies = proxies.filter { $0.owner != nil }
+                work.routes = routes
+                work.proxies = proxies
+                for route in work.routes where self.searchRoute(work.searchRoute, matches: route, updating: &work.parameters) {
+                    work.initialRoutable = route
+                    break
+                }
             }
+            
+            if work.initialRoutable == nil {
+                result = false
+            }
+            
+            work.passedAny = any
+            self.process(work: work)
         }
         
-        return true
+        return result
     }
     
     /**
@@ -190,46 +202,48 @@ public final class Routing: RouteOwner {
     }
     
     private func process(work: RoutableWork) {
-        let semaphore = DispatchSemaphore(value: 0)
-        var proxyCommit: ProxyCommit?
-        for proxy in work.proxies where searchRoute(work.searchRoute, matches: proxy) {
-            proxy.queue.async {
-                proxy.handler(work.searchRoute, work.parameters, work.passedAny) { commit in
-                    proxyCommit = commit
-                    semaphore.signal()
+        processQueue.async {
+            let semaphore = DispatchSemaphore(value: 0)
+            var proxyCommit: ProxyCommit?
+            for proxy in work.proxies where self.searchRoute(work.searchRoute, matches: proxy) {
+                proxy.queue.async {
+                    proxy.handler(work.searchRoute, work.parameters, work.passedAny) { commit in
+                        proxyCommit = commit
+                        semaphore.signal()
+                    }
                 }
-            }
-            semaphore.wait()
-            if proxyCommit != nil {
-                break
-            }
-        }
-        
-        var work = work
-        var resultingRoutable: Route?
-        if let commit = proxyCommit {
-            work.searchRoute = searchRoute(from: commit.route, updating: &work.parameters) ?? ""
-            resultingRoutable = nil
-            for route in work.routes where searchRoute(work.searchRoute, matches: route) {
-                resultingRoutable = route
-                break
+                semaphore.wait()
+                if proxyCommit != nil {
+                    break
+                }
             }
             
-            commit.parameters.forEach {
-                work.parameters[$0.0] = $0.1
-            }
-            work.passedAny = commit.data
-        } else {
-            resultingRoutable = work.initialRoutable
-        }
-        
-        if let resultingRoute = resultingRoutable {
-            resultingRoute.queue.async {
-                resultingRoute.handler(work.searchRoute, work.parameters, work.passedAny) {
-                    semaphore.signal()
+            var work = work
+            var resultingRoutable: Route?
+            if let commit = proxyCommit {
+                work.searchRoute = self.searchRoute(from: commit.route, updating: &work.parameters) ?? ""
+                resultingRoutable = nil
+                for route in work.routes where self.searchRoute(work.searchRoute, matches: route) {
+                    resultingRoutable = route
+                    break
                 }
+                
+                commit.parameters.forEach {
+                    work.parameters[$0.0] = $0.1
+                }
+                work.passedAny = commit.data
+            } else {
+                resultingRoutable = work.initialRoutable
             }
-            semaphore.wait()
+            
+            if let resultingRoute = resultingRoutable {
+                resultingRoute.queue.async {
+                    resultingRoute.handler(work.searchRoute, work.parameters, work.passedAny) {
+                        semaphore.signal()
+                    }
+                }
+                semaphore.wait()
+            }
         }
     }
     

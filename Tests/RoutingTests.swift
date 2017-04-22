@@ -535,8 +535,8 @@ class RoutingTagTests: XCTestCase {
 
     }
     
-    func testSubscriptingRouterTargetQueue() {
-        let expect = expectation(description: "When subscripted order is still preserved due to target queue.")
+    func testSubscriptingRouterQueue() {
+        let expect = expectation(description: "When subscripted order is still preserved.")
         
         var results = [String]()
         router.map("routingexample://route", tags: ["First"]) { _, _, _, completed in
@@ -568,7 +568,7 @@ class RoutingPerformanceTests: XCTestCase {
     
     func testPerfomance() {
         // NOTE: 1000 takes ~8 seconds seems exponential
-        let num = 100
+        let num = 1000
         for i in 1...num {
             print("\(i)")
             router.map("\(i)") { _, _, _, completed in completed() }
