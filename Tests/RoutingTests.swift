@@ -568,7 +568,7 @@ class RoutingPerformanceTests: XCTestCase {
     
     func testPerfomance() {
         // NOTE: 1000 takes ~8 seconds seems exponential
-        let num = 1000
+        let num = 100
         for i in 1...num {
             print("\(i)")
             router.map("\(i)") { _, _, _, completed in completed() }
