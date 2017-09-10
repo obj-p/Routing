@@ -6,7 +6,7 @@ public typealias Parameters = [String: String]
 
 /**
  The closure type associated with #map
-
+ 
  - Parameter Parameters:  Any query parameters or dynamic segments found in the URL
  - Parameter Any: Any data that could be passed with a routing
  - Parameter Completed: Must be called for Routing to continue processing other routes with #open
@@ -17,7 +17,7 @@ public typealias Completed = () -> Void
 
 /**
  The closure type associated with #proxy
-
+ 
  - Parameter String:  The route being opened
  - Parameter Parameters:  Any query parameters or dynamic segments found in the URL
  - Parameter Any: Any data that could be passed with a routing
@@ -30,10 +30,10 @@ public typealias ProxyHandler = (String, Parameters, Any?, @escaping Next) -> Vo
 public typealias ProxyCommit = (route: String, parameters: Parameters, data: Any?)
 public typealias Next = (ProxyCommit?) -> Void
 
-internal typealias Route = Routable<RouteHandler>
-internal typealias Proxy = Routable<ProxyHandler>
+typealias Route = Routable<RouteHandler>
+typealias Proxy = Routable<ProxyHandler>
 
-internal struct Routable<T> {
+struct Routable<T> {
     let uuid = { UUID().uuidString }()
     let pattern: String
     let tags: [String]

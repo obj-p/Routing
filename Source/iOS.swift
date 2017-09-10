@@ -83,24 +83,24 @@ public extension UIViewController {
     }
 }
 
-internal protocol ControllerIterator {
+protocol ControllerIterator {
     func nextViewController() -> UIViewController?
 }
 
 extension UITabBarController {
-    internal override func nextViewController() -> UIViewController? {
+    override func nextViewController() -> UIViewController? {
         return selectedViewController
     }
 }
 
 extension UINavigationController {
-    internal override func nextViewController() -> UIViewController? {
+    override func nextViewController() -> UIViewController? {
         return visibleViewController
     }
 }
 
 extension UIViewController : ControllerIterator {
-    internal func nextViewController() -> UIViewController? {
+    @objc func nextViewController() -> UIViewController? {
         return presentedViewController
     }
 }
@@ -138,7 +138,7 @@ public extension Routing {
              style: PresentationStyle = .show,
              setup: PresentationSetup? = nil) -> RouteUUID {
         let routeHandler: RouteHandler = { [unowned self] (route, parameters, any, completed) in
-            guard let root = UIApplication.shared.keyWindow?.rootViewController else {
+            guard let root = UIApplication.shared.delegate?.window??.rootViewController else {
                 completed()
                 return
             }

@@ -268,7 +268,7 @@ public final class Routing: RouteOwner {
         if routable.dynamicSegments.count > 0 && routable.dynamicSegments.count == matches.numberOfRanges - 1 {
             for i in (1 ..< matches.numberOfRanges) {
                 parameters[routable.dynamicSegments[i-1]] = (URLString as NSString)
-                    .substring(with: matches.rangeAt(i))
+                    .substring(with: matches.range(at: i))
             }
         }
         

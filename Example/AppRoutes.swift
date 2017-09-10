@@ -61,7 +61,7 @@ public func registerRoutes() {
 }
 
 extension UIViewController {
-    func cancel() {
+    @objc func cancel() {
         self.dismiss(animated: true, completion: nil)
     }
 }
