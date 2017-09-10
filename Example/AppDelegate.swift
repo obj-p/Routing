@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  Example
-//
-//  Created by Jason Prasad on 10/1/15.
-//  Copyright © 2015 Routing. All rights reserved.
-//
-
 import UIKit
 import Routing
 

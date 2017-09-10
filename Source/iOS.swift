@@ -1,11 +1,3 @@
-//
-//  iOS.swift
-//  Routing
-//
-//  Created by Jason Prasad on 5/31/16.
-//  Copyright © 2016 Routing. All rights reserved.
-//
-
 import UIKit
 import QuartzCore
 

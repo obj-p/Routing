@@ -1,11 +1,3 @@
-//
-//  Routable.swift
-//  Routing
-//
-//  Created by Jason Prasad on 6/17/16.
-//  Copyright © 2016 Routing. All rights reserved.
-//
-
 import Foundation
 
 public protocol RouteOwner: class {}
