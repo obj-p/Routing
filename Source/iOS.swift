@@ -1,6 +1,11 @@
 import UIKit
 import QuartzCore
 
+public protocol RoutingViewController {
+    var routingIdentifier: String { get }
+    static func viewController(at routingIdentifierPath: [String]) -> UIViewController?
+}
+
 public enum ControllerSource {
     case storyboard(storyboard: String, identifier: String, bundle: Bundle?)
     case nib(controller: UIViewController.Type, name: String?, bundle: Bundle?)
