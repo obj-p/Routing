@@ -12,8 +12,8 @@ public typealias Parameters = [String: String]
  - Parameter Completed: Must be called for Routing to continue processing other routes with #open
  */
 
-public typealias RouteHandler = (String, Parameters, Any?, @escaping Completed) -> Void
-public typealias Completed = () -> Void
+public typealias RouteHandler = (String, Parameters, Any?, @escaping Completion) -> Void
+public typealias Completion = () -> ()
 
 /**
  The closure type associated with #proxy

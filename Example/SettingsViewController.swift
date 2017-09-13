@@ -1,3 +1,4 @@
+import Routing
 import UIKit
 
 var shouldPresentViewControllers = false
@@ -11,5 +12,16 @@ class SettingsViewController: UITableViewController {
 
     @IBAction func presentViewControllersChanged(_ sender: UISwitch) {
         shouldPresentViewControllers = sender.isOn
+    }
+}
+
+extension SettingsViewController: RoutingViewControllerSource {
+    static let viewControllerIdentifier = "settings"
+    
+    static func viewController(at routingIdentifierPath: [String],
+                               with parameters: Parameters,
+                               passing any: Any?) -> UIViewController? {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        return storyboard.instantiateViewController(withIdentifier: "SettingsViewController")
     }
 }

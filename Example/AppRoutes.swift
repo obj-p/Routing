@@ -4,38 +4,31 @@ import Routing
 public let router = Routing()
 
 public func registerRoutes() {
-    let presentationSetup: PresentationSetup = { vc, _, _ in
-        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
-                                                              target: vc,
-                                                              action: #selector(vc.cancel))
-    }
+//    let presentationSetup: PresentationSetup = { vc, _, _ in
+//        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
+//                                                              target: vc,
+//                                                              action: #selector(vc.cancel))
+//    }
 
-    router.map("routingexample://push/login",
-               source: .storyboard(storyboard: "Main", identifier: "LoginViewController", bundle: nil),
-               style: .push(animated: true))
+    router.map(LoginViewController.self)
 
-    router.map("routingexample://present/login",
-               source: .storyboard(storyboard: "Main", identifier: "LoginViewController", bundle: nil),
-               style: .inNavigationController(.present(animated: true)),
-               setup: presentationSetup)
+//    router.map(LoginViewController.self,
+//               style: .inNavigationController(.present(animated: true)),
+//               setup: presentationSetup)
 
-    router.map("routingexample://push/privilegedinfo",
-               source: .storyboard(storyboard: "Main", identifier: "PrivilegedInfoViewController", bundle: nil),
-               style: .push(animated: true))
+    router.map(PrivilegedInfoViewController.self)
 
-    router.map("routingexample://present/privilegedinfo",
-               source: .storyboard(storyboard: "Main", identifier: "PrivilegedInfoViewController", bundle: nil),
-               style: .inNavigationController(.present(animated: true)),
-               setup: presentationSetup)
+//    router.map("routingexample://present/privilegedinfo",
+//               source: .storyboard(storyboard: "Main", identifier: "PrivilegedInfoViewController", bundle: nil),
+//               style: .inNavigationController(.present(animated: true)),
+//               setup: presentationSetup)
 
-    router.map("routingexample://push/settings",
-               source: .storyboard(storyboard: "Main", identifier: "SettingsViewController", bundle: nil),
-               style: .push(animated: true))
+    router.map(SettingsViewController.self)
 
-    router.map("routingexample://present/settings",
-               source: .storyboard(storyboard: "Main", identifier: "SettingsViewController", bundle: nil),
-               style: .inNavigationController(.present(animated: true)),
-               setup: presentationSetup)
+//    router.map("routingexample://present/settings",
+//               source: .storyboard(storyboard: "Main", identifier: "SettingsViewController", bundle: nil),
+//               style: .inNavigationController(.present(animated: true)),
+//               setup: presentationSetup)
 
     router.proxy("routingexample://*", tags: ["Views"]) { route, _, _, next in
         if shouldPresentViewControllers {
@@ -46,11 +39,11 @@ public func registerRoutes() {
         }
     }
 
-    router.proxy("/*/privilegedinfo", tags: ["Views"]) { route, parameters, any, next in
+    router.proxy("/*privilegedinfo", tags: ["Views"]) { route, parameters, any, next in
         if authenticated {
             next(nil)
         } else {
-            next(("routingexample://present/login?callback=\(route)", parameters, any))
+            next(("login?callback=\(route)", parameters, any))
         }
     }
 

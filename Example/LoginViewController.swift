@@ -3,16 +3,10 @@ import Routing
 
 var authenticated = false
 
-class LoginViewController: UIViewController, RoutingPresentationSetup {
+class LoginViewController: UIViewController {
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
     var callback: String?
-    
-    func setup(_ route: String, with parameters: Parameters, passing any: Any?) {
-        if let callbackURL = parameters["callback"] {
-            self.callback = callbackURL
-        }
-    }
     
     @IBAction func login() {
         guard let username = username.text, let password = password.text , username != "" && password != ""  else {
@@ -29,8 +23,25 @@ class LoginViewController: UIViewController, RoutingPresentationSetup {
         if isModal {
             self.dismiss(animated: true, completion: completion)
         } else {
-            _ = self.navigationController?.popViewControllerAnimated(true, completion: completion)
+            _ = self.navigationController?.popViewControllerAnimated(animated: true, completion: completion)
         }
+    }
+}
+
+extension LoginViewController: RoutingViewControllerSource {
+    static let viewControllerIdentifier = "login"
+    
+    static func viewController(at routingIdentifierPath: [String],
+                               with parameters: Parameters,
+                               passing any: Any?) -> UIViewController? {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController
+        
+        if let callbackURL = parameters["callback"] {
+            vc?.callback = callbackURL
+        }
+        
+        return vc
     }
 }
 
