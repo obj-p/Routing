@@ -47,9 +47,7 @@ internal struct Routable<T> {
         var dynamicSegments = [String]()
         let options: NSString.CompareOptions = [.regularExpression, .caseInsensitive]
         while let range = pattern.range(of: ":[a-zA-Z0-9-_]+", options: options) {
-            let segment = pattern
-                .substring(with: pattern.index(range.lowerBound, offsetBy: 1)..<range.upperBound)
-            dynamicSegments.append(segment)
+            dynamicSegments.append(String(pattern[pattern.index(range.lowerBound, offsetBy: 1)..<range.upperBound]))
             pattern.replaceSubrange(range, with: "([^/]+)")
         }
         

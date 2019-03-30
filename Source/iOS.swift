@@ -83,18 +83,18 @@ public extension UIViewController {
     }
 }
 
-internal protocol ControllerIterator {
-    func nextViewController() -> UIViewController?
+@objc internal protocol ControllerIterator {
+    @objc func nextViewController() -> UIViewController?
 }
 
 extension UITabBarController {
-    internal override func nextViewController() -> UIViewController? {
+    @objc internal override func nextViewController() -> UIViewController? {
         return selectedViewController
     }
 }
 
 extension UINavigationController {
-    internal override func nextViewController() -> UIViewController? {
+    @objc internal override func nextViewController() -> UIViewController? {
         return visibleViewController
     }
 }
