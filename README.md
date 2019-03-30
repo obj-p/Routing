@@ -85,10 +85,10 @@ Via [CocoaPods](https://cocoapods.org/pods/Routing):
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '8.0'
+platform :ios, '10.0'
 use_frameworks!
 
-pod 'Routing', '~> 1.3.0'
+pod 'Routing', '~> 1.4.0'
 ```
 
 ### Carthage
